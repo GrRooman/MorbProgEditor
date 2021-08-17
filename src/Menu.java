@@ -5,15 +5,15 @@ import javax.swing.*;
 
 
 class Menu extends JMenuBar {
-    NativeFileConverter nfc;
+
     Menu(){
 
-        JMenu jmF = new JMenu("File");
-        JMenu jmE = new JMenu("Edit");
-        JMenu jmH = new JMenu("Help");
+        JMenu jmF = new JMenu("Файл");
+        JMenu jmE = new JMenu("Правка");
+        JMenu jmH = new JMenu("Помощь");
 
         JMenuItem  jmiOpen  =  new  JMenuItem("Открыть");
-        JMenuItem  jmiSave  =  new  JMenuItem("Пока просто тест **Сохранить");
+        JMenuItem  jmiSave  =  new  JMenuItem("Сохранить");
         JMenuItem  jmiClose  =  new  JMenuItem("Закрыть");
         JMenuItem  jmiExit  =  new  JMenuItem("Выход");
 
@@ -22,16 +22,17 @@ class Menu extends JMenuBar {
         jmF.add(jmiClose);
         jmF.add(jmiExit);
 
+        JMenuItem  jmiAbout  =  new  JMenuItem("О программе");
+
+        jmH.add(jmiAbout);
+
         add(jmF);
         add(jmE);
         add(jmH);
         
         jmiOpen.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-                FileChooser jfc = new FileChooser();
-                File s = jfc.getf().getSelectedFile();
-                nfc = new NativeFileConverter(s);
-                
+                new ReadFile();
             }
         });
         

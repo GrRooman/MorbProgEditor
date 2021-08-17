@@ -1,4 +1,6 @@
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.prefs.Preferences;
 import javax.swing.*;
 import java.awt.*;
@@ -13,18 +15,21 @@ import java.awt.event.WindowEvent;
 class MainWindow {
     private Preferences prefs;
     private JFrame jfrm;
-    JPanel jp;
+    private JPanel jp;
+    private JTextArea ta;
+
     MainWindow() {
         // Создать новый контейнер JFrame
         jp = new JPanel(); 
-        JTextArea ta = new JTextArea(100,100);
+        ta = new JTextArea(8,20);
+        ta.setText("anna");
         // Создать новый контейнер JFrame
-        jfrm = new JFrame("Programm Editor");
+        jfrm = new JFrame("MorbProgEditor");
         jp.add(ta);
         jfrm.add(jp);
         // Здесь мы создаем объект класса Preferences
         prefs = Preferences.userRoot().node("programmeditor");
-        
+
         // Установить начальные размеры фрейма
         setToPreferredSizeFrame();
         
@@ -35,6 +40,7 @@ class MainWindow {
 
         //  Указываем диспечер компановки
         jfrm.setLayout(new FlowLayout());
+
         // Устанавливаем место появления окна программы
         centreWindow(jfrm);
         
