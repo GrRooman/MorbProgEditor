@@ -1,5 +1,13 @@
+#  NetBeans
 nbproject/
 src/resources/Bin/
 build.xml
 config.xml
 manifest.mf
+
+#Intellij IDEA
+out/
+.idea/
+MorbProgEditor.iml
+
+
