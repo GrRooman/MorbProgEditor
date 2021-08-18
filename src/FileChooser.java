@@ -9,13 +9,18 @@ import java.io.File;
  */
 class FileChooser {
     private JFileChooser chooser;
+    String name;
 
     FileChooser() {
         chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File("."));
-        chooser.showOpenDialog(null);
+        int result = chooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION)
+        {
+            name = chooser.getSelectedFile().getPath();
+        }
     }
-    JFileChooser getf(){
-        return chooser;
+    String getf(){
+        return name;
     }
 }

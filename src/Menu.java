@@ -14,11 +14,13 @@ class Menu extends JMenuBar {
 
         JMenuItem  jmiOpen  =  new  JMenuItem("Открыть");
         JMenuItem  jmiSave  =  new  JMenuItem("Сохранить");
+        JMenuItem  jmiSaveAs  =  new  JMenuItem("Сохранить как...");
         JMenuItem  jmiClose  =  new  JMenuItem("Закрыть");
         JMenuItem  jmiExit  =  new  JMenuItem("Выход");
 
         jmF.add(jmiOpen);
         jmF.add(jmiSave);
+        jmF.add(jmiSaveAs);
         jmF.add(jmiClose);
         jmF.add(jmiExit);
 

@@ -12,12 +12,12 @@ import java.nio.file.Paths;
  */
 class NativeFileConverter {
     private ProcessBuilder pb;
-    private File file;
+    private String file;
     private Path path;
     private String nameNativeConverter = "Winxiso.exe";
     private String pathConverter = "\\src\\resources\\Bin\\"+nameNativeConverter;
 
-    public NativeFileConverter(File file) {
+    public NativeFileConverter(String file) {
         this.file = file;
 
         path = Paths.get("").toAbsolutePath();

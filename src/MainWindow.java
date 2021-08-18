@@ -12,55 +12,66 @@ import java.awt.event.WindowEvent;
  * Date: 27.07.21
  * Time: 15:40
  */
-class MainWindow {
+class MainWindow extends JFrame {
     private Preferences prefs;
-    private JFrame jfrm;
     private JPanel jp;
     private JTextArea ta;
 
-    MainWindow() {
-        // Создать новый контейнер JFrame
+    MainWindow(){
+
+        // Test     style
+        UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
+        try
+        {
+            UIManager.setLookAndFeel(infos[0].getClassName());
+            SwingUtilities.updateComponentTreeUI(MainWindow.this);
+            pack();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        //Test    style
+
+        setTitle("MorbProgEditor");
+
         jp = new JPanel(); 
         ta = new JTextArea(8,20);
-        ta.setText("anna");
-        // Создать новый контейнер JFrame
-        jfrm = new JFrame("MorbProgEditor");
+
         jp.add(ta);
-        jfrm.add(jp);
-        // Здесь мы создаем объект класса Preferences
+        add(jp);
+
         prefs = Preferences.userRoot().node("programmeditor");
+
+        // Завершить работу программы, когда пользователь
+        // закрывает приложение
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //  Указываем диспечер компановки
+        setLayout(new FlowLayout());
 
         // Установить начальные размеры фрейма
         setToPreferredSizeFrame();
-        
-        
-        // Завершить работу программы, когда пользователь
-        // закрывает приложение
-        jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //  Указываем диспечер компановки
-        jfrm.setLayout(new FlowLayout());
 
         // Устанавливаем место появления окна программы
-        centreWindow(jfrm);
-        
-        jfrm.addWindowListener(new WindowAdapter() {
+        centreWindow(this);
+
+        addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                prefs.putInt("height", jfrm.getHeight());
-                prefs.putInt("width", jfrm.getWidth()); 
+                prefs.putInt("height", MainWindow.this.getHeight());
+                prefs.putInt("width", MainWindow.this.getWidth());
             }
         });
-        
 
-        jfrm.setJMenuBar(new  Menu());
-        jfrm.setVisible(true);
+        setJMenuBar(new Menu());
+        setVisible(true);
     }
     
      private void setToPreferredSizeFrame(){
         // Получить значение параметров и установить размеры формы
         int height = prefs.getInt("height",300);
         int width = prefs.getInt("width",300);
-        jfrm.setSize(width,height);
+        setSize(width, height);
     }
      
     private void centreWindow(Window frame) {

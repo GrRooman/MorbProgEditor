@@ -14,8 +14,8 @@ public class ReadFile {
 
     ReadFile(){
         jfc = new FileChooser();
-        file = jfc.getf().getSelectedFile();
-        nfc = new NativeFileConverter(file);
+        //file = jfc.getf();
+        nfc = new NativeFileConverter(jfc.getf());
         getDataFromFile(file);
     }
 
