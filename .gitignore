@@ -1,9 +1,3 @@
-#  NetBeans
-nbproject/
-src/resources/Bin/
-build.xml
-config.xml
-manifest.mf
 
 #Intellij IDEA
 out/
@@ -13,4 +7,11 @@ MorbProgEditor.iml
 MorbProgEditor.inf
 MorbProgEditor.lst
 
-
+#  NetBeans
+nbproject/
+src/resources/Bin/
+build.xml
+config.xml
+manifest.mf
+/build/
+/dist/

@@ -5,7 +5,7 @@ import javax.swing.*;
 
 
 class Menu extends JMenuBar {
-
+    FileChooser fc = new FileChooser();
     Menu(){
 
         JMenu jmF = new JMenu("Файл");
@@ -34,7 +34,11 @@ class Menu extends JMenuBar {
         
         jmiOpen.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-                new ReadFile();
+                int result = fc.showOpenDialog(null);
+                    if (result == JFileChooser.APPROVE_OPTION){
+                        String name = fc.getSelectedFile().getPath();
+                        new ReadFile(name);
+                    }
             }
         });
         

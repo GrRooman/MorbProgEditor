@@ -7,28 +7,26 @@ import java.io.*;
  */
 public class ReadFile {
     NativeFileConverter nfc;
-    FileChooser jfc;
-    File file;
-    BufferedReader br;
-    String s;
+    BufferedInputStream br;
+    String s="";
 
-    ReadFile(){
-        jfc = new FileChooser();
-        //file = jfc.getf();
-        nfc = new NativeFileConverter(jfc.getf());
-        getDataFromFile(file);
+    ReadFile(String f){
+        nfc = new NativeFileConverter(f);
+        getDataFromFile(f);
     }
 
-    String getDataFromFile(File f) {
+    String getDataFromFile(String f) {
         try{
-             br = new BufferedReader(new FileReader(f));
+             br = new BufferedInputStream(new FileInputStream(f));
 
         }catch(FileNotFoundException e){};
         try{
-            while( (s = br.readLine()) != null) {
-            s+=s;
+            int i;
+            while((i = br.read()) != -1) {
+                s += (char)i;
             }
         }catch (IOException e) {};
+        System.out.print(s);
         return s;
     }
 }
