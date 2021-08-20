@@ -35,7 +35,7 @@ class MainWindow extends JFrame {
 
         setTitle("MorbProgEditor");
 
-        jp = new JPanel(); 
+        jp = new JPanel();
         ta = new JTextArea(8,20);
 
         jp.add(ta);
@@ -63,21 +63,29 @@ class MainWindow extends JFrame {
             }
         });
 
-        setJMenuBar(new Menu());
+        setJMenuBar(new Menu(MainWindow.this));
         setVisible(true);
     }
-    
+
      private void setToPreferredSizeFrame(){
         // Получить значение параметров и установить размеры формы
         int height = prefs.getInt("height",300);
         int width = prefs.getInt("width",300);
         setSize(width, height);
     }
-     
+
     private void centreWindow(Window frame) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
         frame.setLocation(x, y);
-}
+    }
+
+    void setTextInTextArea(String s){
+        ta.setText(s);
+        pack();
+    }
+    String getTextFromTextArea(){
+        return ta.getText();
+    }
 }

@@ -19,13 +19,20 @@ class NativeFileConverter {
 
     public NativeFileConverter(String file) {
         this.file = file;
-
         path = Paths.get("").toAbsolutePath();
 
         convertPGM_to_XXL();
     }
 
     void convertPGM_to_XXL() {
+        try {
+            pb = new ProcessBuilder(path+pathConverter, file.toString(), "-x", "-l", "-i");
+            pb.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    void convertXXL_to_PGM() {
         try {
             pb = new ProcessBuilder(path+pathConverter, file.toString(), "-x", "-l", "-i");
             pb.start();

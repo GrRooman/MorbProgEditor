@@ -5,14 +5,13 @@ import java.io.*;
  * Date: 17.08.21
  * Time: 14:04
  */
-public class ReadFile {
+class ReadFile {
     NativeFileConverter nfc;
     BufferedInputStream br;
     String s="";
 
     ReadFile(String f){
         nfc = new NativeFileConverter(f);
-        getDataFromFile(f);
     }
 
     String getDataFromFile(String f) {
@@ -26,7 +25,6 @@ public class ReadFile {
                 s += (char)i;
             }
         }catch (IOException e) {};
-        System.out.print(s);
         return s;
     }
 }
