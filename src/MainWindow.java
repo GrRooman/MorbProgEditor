@@ -16,6 +16,9 @@ class MainWindow extends JFrame {
     private Preferences prefs;
     private JPanel jp;
     private JTextArea ta;
+    private JLabel jl;
+
+    JScrollPane jsp;
 
     MainWindow(){
 
@@ -36,9 +39,12 @@ class MainWindow extends JFrame {
         setTitle("MorbProgEditor");
 
         jp = new JPanel();
-        ta = new JTextArea(8,20);
+        ta = new JTextArea(40,30);
+        jsp = new JScrollPane(ta);
+        jl = new JLabel("Test one");
 
-        jp.add(ta);
+        jp.add(jsp,BorderLayout.CENTER);
+        jp.add(jl,BorderLayout.EAST);
         add(jp);
 
         prefs = Preferences.userRoot().node("programmeditor");

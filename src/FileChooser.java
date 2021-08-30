@@ -1,5 +1,6 @@
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 
 /**
@@ -11,6 +12,12 @@ class FileChooser extends JFileChooser{
    
     FileChooser() {
         setCurrentDirectory(new File("."));
-    }
 
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Program files", "xxl", "pgm");
+    setFileFilter(filter);
+
+    setAccessory(new ImagePreviewer(this));
+
+    setFileView(new FileIconView(filter, new ImageIcon("palette.gif")));
+    }
 }

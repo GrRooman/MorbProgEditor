@@ -8,6 +8,8 @@ class Menu extends JMenuBar {
     FileChooser fc = new FileChooser();
     MainWindow mw;
     ReadFile rf;
+    WriteToFile wtf;
+
     Menu(MainWindow jf){
         mw=jf;
 
@@ -16,7 +18,7 @@ class Menu extends JMenuBar {
         JMenu jmH = new JMenu("Помощь");
 
         JMenuItem  jmiOpen  =  new  JMenuItem("Открыть");
-        JMenuItem  jmiSave  =  new  JMenuItem("test Сохранить");
+        JMenuItem  jmiSave  =  new  JMenuItem("Сохранить");
         JMenuItem  jmiSaveAs  =  new  JMenuItem("Сохранить как...");
         JMenuItem  jmiClose  =  new  JMenuItem("Закрыть");
         JMenuItem  jmiExit  =  new  JMenuItem("Выход");
@@ -48,7 +50,7 @@ class Menu extends JMenuBar {
         
         jmiSave.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-                System.out.println(mw.getTextFromTextArea());
+
               
             }
         });
