@@ -1,6 +1,5 @@
 
 import java.awt.event.*;
-import java.io.File;
 import javax.swing.*;
 
 
@@ -57,7 +56,12 @@ class Menu extends JMenuBar {
 
         jmiSaveAs.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-
+                int result = fc.showSaveDialog(mw);
+                 if (result == JFileChooser.APPROVE_OPTION ){
+                     wtf = new WriteToFile();
+                     wtf.saveDataInFile(fc.getSelectedFile().getPath(),mw.getTextFromTextArea());
+                    JOptionPane.showMessageDialog(mw,"Файл '" + fc.getSelectedFile() + " ) сохранен");
+                 }
             }
         });
 

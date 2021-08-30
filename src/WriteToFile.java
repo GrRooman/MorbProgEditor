@@ -1,26 +1,28 @@
+
 import java.io.*;
 
-/**
- * User: Grooman
- * Date: 24.08.21
- * Time: 11:05
- */
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+
+
+
 class WriteToFile {
-    BufferedWriter br;
+    FileOutputStream fos;
     WriteToFile(){
-
-
+        
     }
-    void saveTextInFile(){
-        try(BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("we.txt")))){
-            br.write("sdfsdfsdfsd");
-
-        }catch(IOException e){
+    void saveDataInFile(String fname,String strdata){
+        try{
+            fos = new FileOutputStream(fname);
+            byte[] b = strdata.getBytes();
+            fos.write(b); 
+            
+        } catch(IOException e){
             System.out.println(e);
         }
-       // try{
-
-
-       // }catch (IOException e) {};
+        //finally
     }
+
 }
