@@ -18,6 +18,6 @@ class FileChooser extends JFileChooser{
 
     setAccessory(new ImagePreviewer(this));
 
-    setFileView(new FileIconView(filter, new ImageIcon("palette.gif")));
+    setFileView(new FileIconView(filter, new ImageIcon("src/resources/bmp.png")));
     }
 }
