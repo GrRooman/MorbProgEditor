@@ -1,8 +1,7 @@
 import java.awt.*;
 import java.beans.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.nio.file.Files;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -21,8 +20,9 @@ Image image;
             {
                if (event.getPropertyName() == JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
                {
-                  
                   File f = (File) event.getNewValue();
+                  
+                   
                   if (f == null)
                   {
                      setIcon(null);
@@ -33,7 +33,10 @@ Image image;
                        image = ImageIO.read(f);
                    } catch (IOException ex) {
                        
+                   } finally {
+                       System.out.println(Files.probeContentType(f));
                    }
+                   
                   ImageIcon icon = new ImageIcon(image);
 
                   // Уменьшение размера превью если оно слишком большое

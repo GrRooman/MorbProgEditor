@@ -26,7 +26,7 @@ class MainWindow extends JFrame {
         UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
         try
         {
-            UIManager.setLookAndFeel(infos[0].getClassName());
+            UIManager.setLookAndFeel(infos[3].getClassName());
             SwingUtilities.updateComponentTreeUI(MainWindow.this);
             pack();
         }

@@ -11,13 +11,13 @@ import java.io.File;
 class FileChooser extends JFileChooser{
    
     FileChooser() {
-        setCurrentDirectory(new File("."));
+        setCurrentDirectory(new File("./src/resources"));
 
     FileNameExtensionFilter filter = new FileNameExtensionFilter("Program files", "xxl", "pgm");
     setFileFilter(filter);
 
     setAccessory(new ImagePreviewer(this));
 
-    setFileView(new FileIconView(filter, new ImageIcon("src/resources/bmp.png")));
+    setFileView(new FileIconView(filter));  //
     }
 }
