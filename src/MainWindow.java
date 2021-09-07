@@ -1,51 +1,44 @@
 
-import java.util.prefs.Preferences;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * User: Grooman
- * Date: 27.07.21
- * Time: 15:40
+ * User: Grooman Date: 27.07.21 Time: 15:40
  */
 class MainWindow extends JFrame {
-    private Preferences prefs;
+
+    private UserPreferences up;
     private JPanel jp;
     private JTextArea ta;
     private JLabel jl;
+    private JScrollPane jsp;
 
-    JScrollPane jsp;
-
-    MainWindow(){
+    MainWindow() {
 
         // Test     style
         UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-        try
-        {
+        try {
             UIManager.setLookAndFeel(infos[3].getClassName());
             SwingUtilities.updateComponentTreeUI(MainWindow.this);
             pack();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         //Test    style
 
         setTitle("MorbProgEditor");
 
+        up = new UserPreferences();
         jp = new JPanel();
-        ta = new JTextArea(40,30);
+        ta = new JTextArea(40, 30);
         jsp = new JScrollPane(ta);
         jl = new JLabel("Test one");
 
-        jp.add(jsp,BorderLayout.CENTER);
-        jp.add(jl,BorderLayout.EAST);
+        jp.add(jsp, BorderLayout.CENTER);
+        jp.add(jl, BorderLayout.EAST);
         add(jp);
-
-        prefs = Preferences.userRoot().node("programmeditor");
 
         // Завершить работу программы, когда пользователь
         // закрывает приложение
@@ -62,8 +55,9 @@ class MainWindow extends JFrame {
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                prefs.putInt("height", MainWindow.this.getHeight());
-                prefs.putInt("width", MainWindow.this.getWidth());
+                up.setSizeFrame(MainWindow.this);
+                //  prefs.putInt("height", MainWindow.this.getHeight());
+                //  prefs.putInt("width", MainWindow.this.getWidth());
             }
         });
 
@@ -71,11 +65,10 @@ class MainWindow extends JFrame {
         setVisible(true);
     }
 
-     private void setToPreferredSizeFrame(){
+    private void setToPreferredSizeFrame() {
         // Получить значение параметров и установить размеры формы
-        int height = prefs.getInt("height",300);
-        int width = prefs.getInt("width",300);
-        setSize(width, height);
+        int[] a = up.getSizeFrame();
+        setSize(a[0], a[1]);
     }
 
     private void centreWindow(Window frame) {
@@ -85,11 +78,12 @@ class MainWindow extends JFrame {
         frame.setLocation(x, y);
     }
 
-    void setTextInTextArea(String s){
+    void setTextInTextArea(String s) {
         ta.setText(s);
         pack();
     }
-    String getTextFromTextArea(){
+
+    String getTextFromTextArea() {
         return ta.getText();
     }
 }
