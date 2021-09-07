@@ -1,8 +1,8 @@
 
-#Intellij IDEA
+#  Intellij IDEA
 out/
 .idea/
-src/resources/
+src/resources/Bin/
 MorbProgEditor.iml
 MorbProgEditor.inf
 MorbProgEditor.lst
