@@ -20,7 +20,11 @@ class MainWindow extends JFrame {
         // Test     style
         UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
         try {
+<<<<<<< HEAD
             UIManager.setLookAndFeel(infos[0].getClassName());
+=======
+            UIManager.setLookAndFeel(infos[3].getClassName());
+>>>>>>> 65f41ed55ad91281ad1adc3feb304838be35466f
             SwingUtilities.updateComponentTreeUI(MainWindow.this);
             pack();
         } catch (Exception e) {
@@ -36,7 +40,11 @@ class MainWindow extends JFrame {
         jsp = new JScrollPane(ta);
         jl = new JLabel("Test one");
 
+<<<<<<< HEAD
         jp.add(jsp, BorderLayout.WEST);
+=======
+        jp.add(jsp, BorderLayout.CENTER);
+>>>>>>> 65f41ed55ad91281ad1adc3feb304838be35466f
         jp.add(jl, BorderLayout.EAST);
         add(jp);
 
