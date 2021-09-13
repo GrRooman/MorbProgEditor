@@ -36,14 +36,11 @@ class Menu extends JMenuBar {
         add(jmE);
         add(jmH);
         
-        jmiOpen.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae){
-                int result = fc.showOpenDialog(mw);
-                    if (result == JFileChooser.APPROVE_OPTION){
-                        String name = fc.getSelectedFile().getPath();
-                        rf = new ReadFile(name);
-                        mw.setTextInTextArea(rf.getDataFromFile(name));
-                    }
+        jmiOpen.addActionListener((ActionEvent ae) -> {
+            int result = fc.showOpenDialog(mw);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                rf = new ReadFile(fc.getSelectedFile());                             // переделать
+                mw.setTextInTextArea(rf.getDataFromFile(fc.getSelectedFile()));       //// переделать 
             }
         });
         

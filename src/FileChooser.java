@@ -9,9 +9,11 @@ import java.io.File;
  * Time: 14:44
  */
 class FileChooser extends JFileChooser{
+    private UserPreferences up;
    
     FileChooser() {
-        setCurrentDirectory(new File("./src/resources"));
+        up = new UserPreferences();
+        setCurrentDirectory(new File(up.getPathToControlProgram()));
 
     FileNameExtensionFilter filter = new FileNameExtensionFilter("Program files", "xxl", "pgm");
     setFileFilter(filter);

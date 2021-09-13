@@ -20,7 +20,7 @@ class MainWindow extends JFrame {
         // Test     style
         UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
         try {
-            UIManager.setLookAndFeel(infos[3].getClassName());
+            UIManager.setLookAndFeel(infos[0].getClassName());
             SwingUtilities.updateComponentTreeUI(MainWindow.this);
             pack();
         } catch (Exception e) {
@@ -36,7 +36,7 @@ class MainWindow extends JFrame {
         jsp = new JScrollPane(ta);
         jl = new JLabel("Test one");
 
-        jp.add(jsp, BorderLayout.CENTER);
+        jp.add(jsp, BorderLayout.WEST);
         jp.add(jl, BorderLayout.EAST);
         add(jp);
 
@@ -54,6 +54,7 @@ class MainWindow extends JFrame {
         centreWindow(this);
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 up.setSizeFrame(MainWindow.this);
                 //  prefs.putInt("height", MainWindow.this.getHeight());

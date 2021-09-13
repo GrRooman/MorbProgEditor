@@ -9,22 +9,23 @@ class ReadFile {
     NativeFileConverter nfc;
     BufferedInputStream br;
     String s="";
+    File fileName;
 
-    ReadFile(String f){
-        nfc = new NativeFileConverter(f);
+    ReadFile(File f){
+       nfc = new NativeFileConverter(f);
     }
 
-    String getDataFromFile(String f) {
+    String getDataFromFile(File fileName) {
         try{
-             br = new BufferedInputStream(new FileInputStream(f));
+             br = new BufferedInputStream(new FileInputStream(fileName));
 
-        }catch(FileNotFoundException e){};
+        }catch(FileNotFoundException e){}
         try{
             int i;
             while((i = br.read()) != -1) {
                 s += (char)i;
             }
-        }catch (IOException e) {};
+        }catch (IOException e) {}
         return s;
     }
 }

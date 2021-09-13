@@ -6,9 +6,9 @@ import javax.swing.JFrame;
 
 
 public class UserPreferences {
-    private Preferences p;
+    private final Preferences p;
     public UserPreferences(){
-        p = Preferences.userRoot().node("programmeditor");
+        p = Preferences.userRoot().node("programeditor");
     }
     // Методы, чтобы установить и получить размеры основного окна
     void setSizeFrame(JFrame f){
@@ -29,5 +29,15 @@ public class UserPreferences {
         
         return "";
     }
+    // Методы, чтобы установить и получить путь к управляющим программам
+    void setPathToControlProgram(){
+        p.put("pathToControlProgram", "C:\\qw\\java\\MorbProgEditor\\src\\resources");
+        
+    }
+    String getPathToControlProgram(){
+        String s = p.get("pathToControlProgram", ".");
+        return s;
+    }
+    
     
 }

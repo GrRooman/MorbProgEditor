@@ -12,17 +12,17 @@ import java.nio.file.Paths;
  */
 class NativeFileConverter {
     private ProcessBuilder pb;
-    private String file;
+    private File file;
     private Path path;
     private final String nameNativeConverter = "Winxiso.exe";
     private String pathConverter = "\\src\\resources\\Bin\\"+nameNativeConverter;
 
-    public NativeFileConverter(String file) {
-        this.file = file;
+    public NativeFileConverter(File fileName) {
+        this.file = fileName;
         path = Paths.get("").toAbsolutePath();
-
         convertPGM_to_XXL();
     }
+    
 
     void convertPGM_to_XXL() {
         try {
