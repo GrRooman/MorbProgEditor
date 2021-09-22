@@ -11,6 +11,7 @@ class MainWindow extends JFrame {
 
     private UserPreferences up;
     private JPanel jp;
+    private JPanel bottomPanel;
     private JTextArea ta;
     private JLabel jl;
     private JScrollPane jsp;
@@ -20,7 +21,7 @@ class MainWindow extends JFrame {
         // Test     style
         UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
         try {
-            UIManager.setLookAndFeel(infos[3].getClassName());
+            UIManager.setLookAndFeel(infos[0].getClassName());
             SwingUtilities.updateComponentTreeUI(MainWindow.this);
             pack();
         } catch (Exception e) {
@@ -28,24 +29,37 @@ class MainWindow extends JFrame {
         }
         //Test    style
 
+        // Указываем название программы
         setTitle("MorbProgEditor");
 
         up = new UserPreferences();
         jp = new JPanel();
-        ta = new JTextArea(40, 30);
+        jp.setBackground(new Color(55,100,200));
+        ta = new JTextArea(10,10);
         jsp = new JScrollPane(ta);
         jl = new JLabel("Test one");
 
+        //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
+        bottomPanel = new JPanel();
+        bottomPanel.setLayout(new GridLayout(1,2));
+        bottomPanel.setBackground(new Color(-6639688));
+
+        createBottomLabels("First simple text");
+        createBottomLabels("Second simple text");
+
+        //  Указываем диспечер компановки
+        jp.setLayout(new BorderLayout());
+
         jp.add(jsp, BorderLayout.WEST);
         jp.add(jl, BorderLayout.EAST);
+
+
+        jp.add(bottomPanel,BorderLayout.SOUTH);
         add(jp);
 
         // Завершить работу программы, когда пользователь
         // закрывает приложение
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //  Указываем диспечер компановки
-        setLayout(new FlowLayout());
 
         // Установить начальные размеры фрейма
         setToPreferredSizeFrame();
@@ -57,8 +71,6 @@ class MainWindow extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 up.setSizeFrame(MainWindow.this);
-                //  prefs.putInt("height", MainWindow.this.getHeight());
-                //  prefs.putInt("width", MainWindow.this.getWidth());
             }
         });
 
@@ -82,6 +94,12 @@ class MainWindow extends JFrame {
     void setTextInTextArea(String s) {
         ta.setText(s);
         pack();
+    }
+    private void createBottomLabels(String text){
+        JLabel j = new JLabel(text);
+        bottomPanel.add(j);
+        System.out.println(j.getFont());
+        j.setFont(new Font("Tahoma", Font.BOLD, 11));
     }
 
     String getTextFromTextArea() {

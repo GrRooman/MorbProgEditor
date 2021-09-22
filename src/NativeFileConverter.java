@@ -26,7 +26,7 @@ class NativeFileConverter {
 
     void convertPGM_to_XXL() {
         try {
-            pb = new ProcessBuilder(path+pathConverter, file.toString(), "-x", "-l", "-i");
+            pb = new ProcessBuilder(path+pathConverter, file.toString(), "-x", "-l", "-i", "-s");
             pb.start();
         } catch (IOException e) {
             e.printStackTrace();
