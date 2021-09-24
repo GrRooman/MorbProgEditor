@@ -98,7 +98,6 @@ class MainWindow extends JFrame {
     private void createBottomLabels(String text){
         JLabel j = new JLabel(text);
         bottomPanel.add(j);
-        System.out.println(j.getFont());
         j.setFont(new Font("Tahoma", Font.BOLD, 11));
     }
 

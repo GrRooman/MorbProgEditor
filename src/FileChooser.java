@@ -20,6 +20,10 @@ class FileChooser extends JFileChooser{
 
     setAccessory(new ImagePreviewer(this));
 
-    setFileView(new FileIconView(filter));  //
+    setFileView(new FileIconView(filter));
+    }
+
+    void getNeedFile(){
+
     }
 }

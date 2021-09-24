@@ -2,7 +2,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 /**
  * User: Grooman
@@ -15,25 +14,20 @@ class ReadFile {
     String s="";
     File fileName;
 
-    ReadFile(File f){
-       nfc = new NativeFileConverter(f);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-
-        }
+    ReadFile(){
+          nfc = new NativeFileConverter();
     }
 
     String getDataFromFile(File fileName){
-        Path p = Paths.get(changeNameExtension(fileName));
-        String s = null;
-        try {
-            s = new String(Files.readAllBytes(p));
-        } catch (IOException e) {
+        if(ExtensionHelper.getFileExtension(fileName.getName()).equals("pgm")) {
+            nfc.convertPGM_to_XXL(fileName);
+            return  readFile(ExtensionHelper.changeNameExtensionPGMtoXXL(fileName));
+        } else {
+            return readFile(fileName.getAbsolutePath());
 
         }
 /*        try{
-             br = new BufferedInputStream(new FileInputStream(new File(changeNameExtension(fileName))));
+             br = new BufferedInputStream(new FileInputStream(new File(changeNameExtensionPGMtoXXL(fileName))));
 
         }catch(FileNotFoundException e){}
         try{
@@ -41,18 +35,19 @@ class ReadFile {
             while((i = br.read()) != -1) {
                 s += (char)i;
             }
-        }catch (IOException e) {}  */
+        }catch (IOException e) {}
+        return s;      */
+    }
+    private String readFile(String fileName){
+        Path p = Paths.get(fileName);
+        String s = null;
+        try {
+            s = new String(Files.readAllBytes(p));
+        } catch (IOException e) {
+            System.out.println(e);}
         return s;
     }
 
-    private String changeNameExtension(File fileName){
-        String newName="";
-        String s = fileName.getAbsolutePath();
-        int i = s.lastIndexOf('.');
-        if (i > 0) {
-            newName = s.substring(0, i)+".xxl";
-        }
-        return newName;
-    }
+
 }
 

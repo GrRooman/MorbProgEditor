@@ -17,14 +17,12 @@ class NativeFileConverter {
     private final String nameNativeConverter = "Winxiso.exe";
     private String pathConverter = "\\src\\resources\\Bin\\"+nameNativeConverter;
 
-    public NativeFileConverter(File fileName) {
-        this.file = fileName;
+    public NativeFileConverter(/*File fileName*/) {
+//        this.file = fileName;
         path = Paths.get("").toAbsolutePath();
-        convertPGM_to_XXL();
     }
-    
 
-    void convertPGM_to_XXL() {
+    public void convertPGM_to_XXL(File file) {
         try {
             pb = new ProcessBuilder(path+pathConverter, file.toString(), "-x", "-l", "-i", "-s");
             pb.start();
@@ -32,7 +30,7 @@ class NativeFileConverter {
             e.printStackTrace();
         }
     }
-    void convertXXL_to_PGM() {
+    public void convertXXL_to_PGM() {
         try {
             pb = new ProcessBuilder(path+pathConverter, file.toString(), "-x", "-l", "-i");
             pb.start();

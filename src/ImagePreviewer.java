@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
-public class ImagePreviewer extends JLabel
+class ImagePreviewer extends JLabel
 {
 Image image;
    public ImagePreviewer(JFileChooser chooser)

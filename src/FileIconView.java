@@ -4,7 +4,7 @@ import javax.swing.filechooser.*;
 import javax.swing.filechooser.FileFilter;
 
 
-public class FileIconView extends FileView
+class FileIconView extends FileView
 {
    private FileFilter filter;
    private Icon icon;

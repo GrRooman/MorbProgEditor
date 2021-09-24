@@ -11,6 +11,7 @@ class Menu extends JMenuBar {
 
     Menu(MainWindow jf){
         mw=jf;
+        rf = new ReadFile();
 
         JMenu jmF = new JMenu("Файл");
         JMenu jmE = new JMenu("Правка");
@@ -39,8 +40,7 @@ class Menu extends JMenuBar {
         jmiOpen.addActionListener((ActionEvent ae) -> {
             int result = fc.showOpenDialog(mw);
             if (result == JFileChooser.APPROVE_OPTION) {
-                rf = new ReadFile(fc.getSelectedFile());                             // переделать
-                mw.setTextInTextArea(rf.getDataFromFile(fc.getSelectedFile()));       //// переделать 
+                mw.setTextInTextArea(rf.getDataFromFile(fc.getSelectedFile()));
             }
         });
         
