@@ -34,15 +34,16 @@ class MainWindow extends JFrame {
 
         up = new UserPreferences();
         jp = new JPanel();
-        jp.setBackground(new Color(55,100,200));
-        ta = new JTextArea(10,10);
+        jp.setBackground(new Color(138, 200, 158));
+        ta = new JTextArea(0,50);
+        ta.setFont(new Font("Tahoma", Font.PLAIN, 12));
         jsp = new JScrollPane(ta);
         jl = new JLabel("Test one");
 
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,2));
-        bottomPanel.setBackground(new Color(-6639688));
+        bottomPanel.setBackground(new Color(120, 160, 200));
 
         createBottomLabels("First simple text");
         createBottomLabels("Second simple text");
@@ -93,7 +94,10 @@ class MainWindow extends JFrame {
 
     void setTextInTextArea(String s) {
         ta.setText(s);
-        pack();
+//        pack();
+    }
+    String getTextFromTextArea(){
+        return ta.getText();
     }
     private void createBottomLabels(String text){
         JLabel j = new JLabel(text);
@@ -101,7 +105,4 @@ class MainWindow extends JFrame {
         j.setFont(new Font("Tahoma", Font.BOLD, 11));
     }
 
-    String getTextFromTextArea() {
-        return ta.getText();
-    }
 }

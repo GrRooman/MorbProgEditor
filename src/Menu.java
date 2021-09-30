@@ -12,6 +12,7 @@ class Menu extends JMenuBar {
     Menu(MainWindow jf){
         mw=jf;
         rf = new ReadFile();
+        wtf = new WriteToFile();
 
         JMenu jmF = new JMenu("Файл");
         JMenu jmE = new JMenu("Правка");
@@ -47,7 +48,7 @@ class Menu extends JMenuBar {
         jmiSave.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
 
-              
+                wtf.saveDataInFile(fc.getSelectedFile().getPath(), mw.getTextFromTextArea());
             }
         });
 
@@ -55,7 +56,6 @@ class Menu extends JMenuBar {
             public void actionPerformed(ActionEvent ae){
                 int result = fc.showSaveDialog(mw);
                  if (result == JFileChooser.APPROVE_OPTION ){
-                     wtf = new WriteToFile();
                      wtf.saveDataInFile(fc.getSelectedFile().getPath(),mw.getTextFromTextArea());
                     JOptionPane.showMessageDialog(mw,"Файл '" + fc.getSelectedFile() + " ) сохранен");
                  }

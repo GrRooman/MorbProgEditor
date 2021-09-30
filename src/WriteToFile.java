@@ -1,6 +1,4 @@
 
-import java.io.*;
-
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,6 +8,7 @@ import java.io.IOException;
 
 class WriteToFile {
     FileOutputStream fos;
+    NativeFileConverter nfc;
     WriteToFile(){
         
     }
@@ -25,4 +24,8 @@ class WriteToFile {
         //finally
     }
 
+    private void tesy() {
+        nfc = new NativeFileConverter();
+        nfc.convertXXL_to_PGM();
+    }
 }

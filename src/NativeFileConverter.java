@@ -12,27 +12,30 @@ import java.nio.file.Paths;
  */
 class NativeFileConverter {
     private ProcessBuilder pb;
-    private File file;
     private Path path;
     private final String nameNativeConverter = "Winxiso.exe";
     private String pathConverter = "\\src\\resources\\Bin\\"+nameNativeConverter;
 
-    public NativeFileConverter(/*File fileName*/) {
-//        this.file = fileName;
+    public NativeFileConverter() {
         path = Paths.get("").toAbsolutePath();
     }
 
     public void convertPGM_to_XXL(File file) {
         try {
             pb = new ProcessBuilder(path+pathConverter, file.toString(), "-x", "-l", "-i", "-s");
-            pb.start();
+            Process p = pb.start();
+            p.waitFor();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
     }
-    public void convertXXL_to_PGM() {
-        try {
-            pb = new ProcessBuilder(path+pathConverter, file.toString(), "-x", "-l", "-i");
+    public void convertXXL_to_PGM(File file) {
+        try {                                          //  "C:/Books/MorbProgEditor/test/test.pgm"
+            System.out.println(file.toString());
+            pb = new ProcessBuilder(path+pathConverter, file.toString(), "-o", , "-l", "-i", "-s" );
             pb.start();
         } catch (IOException e) {
             e.printStackTrace();
