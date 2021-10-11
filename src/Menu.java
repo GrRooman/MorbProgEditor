@@ -1,18 +1,21 @@
 
 import java.awt.event.*;
+import java.io.File;
 import javax.swing.*;
 
 
 class Menu extends JMenuBar {
-    FileChooser fc = new FileChooser();
+    FileChooser fc;
     MainWindow mw;
     ReadFile rf;
     WriteToFile wtf;
+    File saveFile;
 
     Menu(MainWindow jf){
         mw=jf;
         rf = new ReadFile();
-        wtf = new WriteToFile();
+
+        fc = new FileChooser();
 
         JMenu jmF = new JMenu("Файл");
         JMenu jmE = new JMenu("Правка");
@@ -41,14 +44,14 @@ class Menu extends JMenuBar {
         jmiOpen.addActionListener((ActionEvent ae) -> {
             int result = fc.showOpenDialog(mw);
             if (result == JFileChooser.APPROVE_OPTION) {
+                wtf = new WriteToFile(fc.getSelectedFile());
                 mw.setTextInTextArea(rf.getDataFromFile(fc.getSelectedFile()));
             }
         });
         
         jmiSave.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-
-                wtf.saveDataInFile(fc.getSelectedFile().getPath(), mw.getTextFromTextArea());
+                wtf.workingWithFile(mw.getTextFromTextArea());
             }
         });
 
@@ -56,7 +59,8 @@ class Menu extends JMenuBar {
             public void actionPerformed(ActionEvent ae){
                 int result = fc.showSaveDialog(mw);
                  if (result == JFileChooser.APPROVE_OPTION ){
-                     wtf.saveDataInFile(fc.getSelectedFile().getPath(),mw.getTextFromTextArea());
+                     saveFile = fc.getSelectedFile();
+                     wtf.workingWithFile(saveFile, mw.getTextFromTextArea());
                     JOptionPane.showMessageDialog(mw,"Файл '" + fc.getSelectedFile() + " ) сохранен");
                  }
             }

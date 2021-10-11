@@ -1,5 +1,6 @@
 
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -9,10 +10,41 @@ import java.io.IOException;
 class WriteToFile {
     FileOutputStream fos;
     NativeFileConverter nfc;
-    WriteToFile(){
-        
+    File openedFile;
+
+    WriteToFile(File selectedFile){
+         openedFile = selectedFile;
+
+        nfc = new NativeFileConverter();
     }
-    void saveDataInFile(String fname,String strdata){
+
+    void workingWithFile(String strData){
+        if (ExtensionHelper.getFileExtension(openedFile.getAbsolutePath()).equalsIgnoreCase("xxl")) {
+            saveDataInFile(openedFile.getAbsolutePath(), strData);
+        }
+        if (ExtensionHelper.getFileExtension(openedFile.getAbsolutePath()).equalsIgnoreCase("pgm")) {
+            String fileWithXXLExtension = ExtensionHelper.changeNameExtensionPGMtoXXL(openedFile);
+            saveDataInFile(fileWithXXLExtension, strData);
+            nfc.convertXXL_to_PGM(fileWithXXLExtension, openedFile.getAbsolutePath());
+        }
+    }
+
+    void workingWithFile(File newFileName, String strData){
+        if(ExtensionHelper.getFileExtension(newFileName.getAbsolutePath()).equalsIgnoreCase("xxl")){
+            saveDataInFile(newFileName.getAbsolutePath(), strData);
+        }
+        if(ExtensionHelper.getFileExtension(newFileName.getAbsolutePath()).equalsIgnoreCase("pgm"))
+            try {
+                File tempFile = File.createTempFile(newFileName.getName(), ".xxl", newFileName.getParentFile());
+                saveDataInFile(tempFile.getAbsolutePath(), strData);
+                nfc.convertXXL_to_PGM(tempFile.getAbsolutePath(), newFileName.getAbsolutePath());
+    //            temp.deleteOnExit();
+            } catch (IOException e) {
+
+            }
+    }
+
+    void saveDataInFile(String fname, String strdata){
         try{
             fos = new FileOutputStream(fname);
             byte[] b = strdata.getBytes();
@@ -21,11 +53,5 @@ class WriteToFile {
         } catch(IOException e){
             System.out.println(e);
         }
-        //finally
-    }
-
-    private void tesy() {
-        nfc = new NativeFileConverter();
-        nfc.convertXXL_to_PGM();
     }
 }

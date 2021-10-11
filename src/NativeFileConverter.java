@@ -1,5 +1,3 @@
- 
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,12 +30,14 @@ class NativeFileConverter {
         }
 
     }
-    public void convertXXL_to_PGM(File file) {
-        try {                                          //  "C:/Books/MorbProgEditor/test/test.pgm"
-            System.out.println(file.toString());
-            pb = new ProcessBuilder(path+pathConverter, file.toString(), "-o", , "-l", "-i", "-s" );
-            pb.start();
+    public void convertXXL_to_PGM(String file, String newFileName) {
+        try {
+            pb = new ProcessBuilder(path+pathConverter, file.toString(), "-o", newFileName, "-l", "-i", "-s" );
+            Process p = pb.start();
+            p.waitFor();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

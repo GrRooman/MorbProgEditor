@@ -7,10 +7,6 @@ import java.io.File;
  */
 class ExtensionHelper {
 
-
-
-
-
     static String changeNameExtensionPGMtoXXL(File fileName){
         String newName="";
         String s = fileName.getAbsolutePath();
@@ -23,8 +19,10 @@ class ExtensionHelper {
         }
         return newName;
     }
+
     static String getFileExtension(String s){
         int i = s.lastIndexOf('.');
         return s.substring(i+1);
     }
+
 }
