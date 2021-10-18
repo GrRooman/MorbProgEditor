@@ -7,13 +7,13 @@ import javax.swing.*;
 class Menu extends JMenuBar {
     FileChooser fc;
     MainWindow mw;
-    ReadFile rf;
+    PrepareFileForReading pfr;
     WriteToFile wtf;
     File saveFile;
 
     Menu(MainWindow jf){
         mw=jf;
-        rf = new ReadFile();
+        pfr = new PrepareFileForReading();
 
         fc = new FileChooser();
 
@@ -45,7 +45,8 @@ class Menu extends JMenuBar {
             int result = fc.showOpenDialog(mw);
             if (result == JFileChooser.APPROVE_OPTION) {
                 wtf = new WriteToFile(fc.getSelectedFile());
-                mw.setTextInTextArea(rf.getDataFromFile(fc.getSelectedFile()));
+                mw.setTextInTextArea(pfr.getDataFromFile(fc.getSelectedFile()));
+                mw.setTextInBottomLabels(pfr.getDataFromAdditionalFiles(fc.getSelectedFile()));
             }
         });
         

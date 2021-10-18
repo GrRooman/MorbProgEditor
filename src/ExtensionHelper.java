@@ -6,6 +6,18 @@ import java.io.File;
  * Time: 13:45
  */
 class ExtensionHelper {
+    static String changeNameExtension(File file, String newNameExtension){
+        String newName="";
+        String s = file.getAbsolutePath();
+
+        getFileExtension(s);
+
+        int i = s.lastIndexOf('.');
+        if (i > 0) {
+            newName = s.substring(0, i)+"."+newNameExtension;
+        }
+        return newName;
+    }
 
     static String changeNameExtensionPGMtoXXL(File fileName){
         String newName="";

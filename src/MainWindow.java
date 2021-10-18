@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 /**
  * User: Grooman Date: 27.07.21 Time: 15:40
@@ -21,7 +22,7 @@ class MainWindow extends JFrame {
         // Test     style
         UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
         try {
-            UIManager.setLookAndFeel(infos[0].getClassName());
+            UIManager.setLookAndFeel(infos[3].getClassName());
             SwingUtilities.updateComponentTreeUI(MainWindow.this);
             pack();
         } catch (Exception e) {
@@ -38,15 +39,14 @@ class MainWindow extends JFrame {
         ta = new JTextArea(0,50);
         ta.setFont(new Font("Tahoma", Font.PLAIN, 12));
         jsp = new JScrollPane(ta);
-        jl = new JLabel("Test one");
+        jl = new JLabel("Test one s");
 
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
         bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridLayout(1,2));
+//        bottomPanel.setMaximumSize(getMaximumSize());
+        bottomPanel.setLayout(new GridLayout(1, 2));
         bottomPanel.setBackground(new Color(120, 160, 200));
 
-        createBottomLabels("First simple text");
-        createBottomLabels("Second simple text");
 
         //  Указываем диспечер компановки
         jp.setLayout(new BorderLayout());
@@ -94,15 +94,18 @@ class MainWindow extends JFrame {
 
     void setTextInTextArea(String s) {
         ta.setText(s);
-//        pack();
     }
     String getTextFromTextArea(){
         return ta.getText();
     }
     private void createBottomLabels(String text){
-        JLabel j = new JLabel(text);
+        JLabel j = new JLabel("<html>"+text+"<html>");  //    JLabel не поддреживает перенос строки. Но зато поддерживает html
+        j.setBorder(BorderFactory.createEmptyBorder(0,10, 0 ,0));
         bottomPanel.add(j);
         j.setFont(new Font("Tahoma", Font.BOLD, 11));
     }
-
+    void setTextInBottomLabels(ArrayList<String> arrayList){
+        createBottomLabels(arrayList.get(0));
+        createBottomLabels(arrayList.get(1));
+    }
 }

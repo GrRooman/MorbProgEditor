@@ -40,7 +40,7 @@ class WriteToFile {
                 nfc.convertXXL_to_PGM(tempFile.getAbsolutePath(), newFileName.getAbsolutePath());
     //            temp.deleteOnExit();
             } catch (IOException e) {
-
+                e.printStackTrace();
             }
     }
 
@@ -51,7 +51,7 @@ class WriteToFile {
             fos.write(b); 
             
         } catch(IOException e){
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 }
