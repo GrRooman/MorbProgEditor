@@ -9,6 +9,8 @@ class UserPreferences {
     private final Preferences p;
     public UserPreferences(){
         p = Preferences.userRoot().node("programeditor");
+        setPathToConver();
+//        p.clear();
     }
     // Методы, чтобы установить и получить размеры основного окна
     void setSizeFrame(JFrame f){
@@ -23,7 +25,7 @@ class UserPreferences {
     }
     // Методы, чтобы установить и получить путь к конвертеру   
     void setPathToConver(){
-        p.put("pathToConverter", "C:\\qw\\java\\MorbProgEditor\\src\\resources\\Bin");
+        p.put("pathToConverter", "./MorbProgEditor/src/resources/Bin");
     }
     String getPathToConverter(){
         String s = p.get("pathToConverter", ".");

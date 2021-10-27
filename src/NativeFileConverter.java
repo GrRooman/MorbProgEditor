@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -32,7 +34,7 @@ class NativeFileConverter {
     }
     public void convertXXL_to_PGM(String file, String newFileName) {
         try {
-            pb = new ProcessBuilder(path+pathConverter, file.toString(), "-o", newFileName, "-l", "-i", "-s" );
+            pb = new ProcessBuilder(path+pathConverter, file, newFileName, "-l", "-i", "-s");
             Process p = pb.start();
             p.waitFor();
         } catch (IOException e) {

@@ -1,6 +1,9 @@
 
 import java.awt.event.*;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Scanner;
 import javax.swing.*;
 
 
@@ -8,7 +11,7 @@ class Menu extends JMenuBar {
     FileChooser fc;
     MainWindow mw;
     PrepareFileForReading pfr;
-    WriteToFile wtf;
+    PrepareAndSaveData wtf;
     File saveFile;
 
     Menu(MainWindow jf){
@@ -44,7 +47,7 @@ class Menu extends JMenuBar {
         jmiOpen.addActionListener((ActionEvent ae) -> {
             int result = fc.showOpenDialog(mw);
             if (result == JFileChooser.APPROVE_OPTION) {
-                wtf = new WriteToFile(fc.getSelectedFile());
+                wtf = new PrepareAndSaveData(fc.getSelectedFile());
                 mw.setTextInTextArea(pfr.getDataFromFile(fc.getSelectedFile()));
                 mw.setTextInBottomLabels(pfr.getDataFromAdditionalFiles(fc.getSelectedFile()));
             }
@@ -79,7 +82,19 @@ class Menu extends JMenuBar {
             }
         });
     
-    
+        jmiAbout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                InputStream inputStream = getClass().getResourceAsStream("resources/About.txt");
+                String s="";
+                try (Scanner in =new Scanner(inputStream, "UTF-8"))
+                {
+                    while (in.hasNext())
+                        s+=(in.nextLine() + "\n");
+                     }
+                JOptionPane.showMessageDialog(null, s);
+            }
+        });
 
     }
 }

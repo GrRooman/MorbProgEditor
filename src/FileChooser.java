@@ -22,8 +22,4 @@ class FileChooser extends JFileChooser{
 
     setFileView(new FileIconView(filter));
     }
-
-    void getNeedFile(){
-
-    }
 }

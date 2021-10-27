@@ -10,11 +10,11 @@ import java.util.ArrayList;
  */
 class MainWindow extends JFrame {
 
+    private final JPanel jp2;
     private UserPreferences up;
     private JPanel jp;
     private JPanel bottomPanel;
     private JTextArea ta;
-    private JLabel jl;
     private JScrollPane jsp;
 
     MainWindow() {
@@ -35,15 +35,18 @@ class MainWindow extends JFrame {
 
         up = new UserPreferences();
         jp = new JPanel();
-        jp.setBackground(new Color(138, 200, 158));
+        jp2 = new JPanel();
+        jp2.setLayout(new BoxLayout(jp2, BoxLayout.Y_AXIS));
+        jp2.setBackground(new Color(200, 184, 151));
+        jp2.add(new JButton("Закомментировать \';\'"));
+        jp2.add(new JButton("Добавить блок IF THEN"));
+        jp2.add(new JButton("Удалить блок"));
         ta = new JTextArea(0,50);
         ta.setFont(new Font("Tahoma", Font.PLAIN, 12));
         jsp = new JScrollPane(ta);
-        jl = new JLabel("Test one s");
 
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
         bottomPanel = new JPanel();
-//        bottomPanel.setMaximumSize(getMaximumSize());
         bottomPanel.setLayout(new GridLayout(1, 2));
         bottomPanel.setBackground(new Color(120, 160, 200));
 
@@ -51,8 +54,8 @@ class MainWindow extends JFrame {
         //  Указываем диспечер компановки
         jp.setLayout(new BorderLayout());
 
-        jp.add(jsp, BorderLayout.WEST);
-        jp.add(jl, BorderLayout.EAST);
+        jp.add(jsp, BorderLayout.CENTER);
+        jp.add(jp2, BorderLayout.EAST);
 
 
         jp.add(bottomPanel,BorderLayout.SOUTH);
