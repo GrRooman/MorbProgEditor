@@ -36,8 +36,10 @@ class Menu extends JMenuBar {
         jmF.add(jmiClose);
         jmF.add(jmiExit);
 
+        JMenuItem  jmiSetting  =  new  JMenuItem("Настройки");
         JMenuItem  jmiAbout  =  new  JMenuItem("О программе");
 
+        jmH.add(jmiSetting);
         jmH.add(jmiAbout);
 
         add(jmF);
@@ -81,7 +83,15 @@ class Menu extends JMenuBar {
                 System.exit(0);
             }
         });
-    
+
+        jmiSetting.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Settings settings = new Settings();
+                settings.showWindowSetting();
+            }
+        });
+
         jmiAbout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

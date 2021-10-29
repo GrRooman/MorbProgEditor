@@ -32,7 +32,6 @@ class MainWindow extends JFrame {
 
         // Указываем название программы
         setTitle("MorbProgEditor");
-
         up = new UserPreferences();
         jp = new JPanel();
         jp2 = new JPanel();
@@ -59,8 +58,9 @@ class MainWindow extends JFrame {
 
 
         jp.add(bottomPanel,BorderLayout.SOUTH);
-        add(jp);
 
+
+        add(jp);
         // Завершить работу программы, когда пользователь
         // закрывает приложение
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -111,4 +111,5 @@ class MainWindow extends JFrame {
         createBottomLabels(arrayList.get(0));
         createBottomLabels(arrayList.get(1));
     }
+
 }

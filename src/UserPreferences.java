@@ -1,4 +1,5 @@
 
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.JFrame;
 
@@ -8,9 +9,8 @@ import javax.swing.JFrame;
 class UserPreferences {
     private final Preferences p;
     public UserPreferences(){
-        p = Preferences.userRoot().node("programeditor");
-        setPathToConver();
-//        p.clear();
+        p = Preferences.userRoot().node("morbprogeditor");
+
     }
     // Методы, чтобы установить и получить размеры основного окна
     void setSizeFrame(JFrame f){
@@ -24,8 +24,8 @@ class UserPreferences {
         return a; 
     }
     // Методы, чтобы установить и получить путь к конвертеру   
-    void setPathToConver(){
-        p.put("pathToConverter", "./MorbProgEditor/src/resources/Bin");
+    void setPathToConver(String pathToConver){
+        p.put("pathToConverter", pathToConver);
     }
     String getPathToConverter(){
         String s = p.get("pathToConverter", ".");
@@ -33,13 +33,20 @@ class UserPreferences {
     }
 
     // Методы, чтобы установить и получить путь к управляющим программам
-    void setPathToControlProgram(){
-        p.put("pathToControlProgram", "C:\\qw\\java\\MorbProgEditor\\src\\resources");
+    void setPathToControlProgram(String pathToControlProgram){
+        p.put("pathToControlProgram", pathToControlProgram);
         
     }
     String getPathToControlProgram(){
         String s = p.get("pathToControlProgram", ".");
         return s;
+    }
+    void clearUserPreferences(){
+        try {
+            p.clear();
+        } catch (BackingStoreException e) {
+            e.printStackTrace();
+        }
     }
     
     
