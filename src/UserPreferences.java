@@ -28,7 +28,7 @@ class UserPreferences {
         p.put("pathToConverter", pathToConver);
     }
     String getPathToConverter(){
-        String s = p.get("pathToConverter", ".");
+        String s = p.get("pathToConverter", "");
         return s;
     }
 
@@ -38,7 +38,7 @@ class UserPreferences {
         
     }
     String getPathToControlProgram(){
-        String s = p.get("pathToControlProgram", ".");
+        String s = p.get("pathToControlProgram", "");
         return s;
     }
     void clearUserPreferences(){
@@ -48,6 +48,6 @@ class UserPreferences {
             e.printStackTrace();
         }
     }
-    
+  
     
 }

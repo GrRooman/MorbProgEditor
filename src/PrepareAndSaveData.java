@@ -1,7 +1,6 @@
 
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 
@@ -18,9 +17,11 @@ class PrepareAndSaveData {
     }
 
     void workingWithFile(String strData){
+        //Если файл имеет раширение 'XXL' , данные записываются в файл с расширением XXL. 
         if (ExtensionHelper.getFileExtension(openedFile.getAbsolutePath()).equalsIgnoreCase("xxl")) {
             WriteToFile.saveDataInFile(openedFile.getAbsolutePath(), strData);
         }
+        //Если файл имеет раширение 'PGM' , данные записываются в файл с расширением PGM.
         if (ExtensionHelper.getFileExtension(openedFile.getAbsolutePath()).equalsIgnoreCase("pgm")) {
             String fileWithXXLExtension = ExtensionHelper.changeNameExtensionPGMtoXXL(openedFile);
             WriteToFile.saveDataInFile(fileWithXXLExtension, strData);

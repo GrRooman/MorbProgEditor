@@ -2,7 +2,6 @@
 import java.awt.event.*;
 import java.io.File;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Scanner;
 import javax.swing.*;
 
@@ -11,11 +10,11 @@ class Menu extends JMenuBar {
     FileChooser fc;
     MainWindow mw;
     PrepareFileForReading pfr;
-    PrepareAndSaveData wtf;
+    PrepareAndSaveData prepareAndSave;
     File saveFile;
 
-    Menu(MainWindow jf){
-        mw=jf;
+    Menu(MainWindow mw){
+        this.mw=mw;
         pfr = new PrepareFileForReading();
 
         fc = new FileChooser();
@@ -47,9 +46,8 @@ class Menu extends JMenuBar {
         add(jmH);
         
         jmiOpen.addActionListener((ActionEvent ae) -> {
-            int result = fc.showOpenDialog(mw);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                wtf = new PrepareAndSaveData(fc.getSelectedFile());
+            if (fc.openDialog(mw) == JFileChooser.APPROVE_OPTION) {
+                prepareAndSave = new PrepareAndSaveData(fc.getSelectedFile());
                 mw.setTextInTextArea(pfr.getDataFromFile(fc.getSelectedFile()));
                 mw.setTextInBottomLabels(pfr.getDataFromAdditionalFiles(fc.getSelectedFile()));
             }
@@ -57,7 +55,7 @@ class Menu extends JMenuBar {
         
         jmiSave.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-                wtf.workingWithFile(mw.getTextFromTextArea());
+                prepareAndSave.workingWithFile(mw.getTextFromTextArea());
             }
         });
 
@@ -66,7 +64,7 @@ class Menu extends JMenuBar {
                 int result = fc.showSaveDialog(mw);
                  if (result == JFileChooser.APPROVE_OPTION ){
                      saveFile = fc.getSelectedFile();
-                     wtf.workingWithFile(saveFile, mw.getTextFromTextArea());
+                     prepareAndSave.workingWithFile(saveFile, mw.getTextFromTextArea());
                     JOptionPane.showMessageDialog(mw,"Файл '" + fc.getSelectedFile() + " ) сохранен");
                  }
             }
@@ -87,7 +85,7 @@ class Menu extends JMenuBar {
         jmiSetting.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Settings settings = new Settings();
+                Settings settings = new Settings(mw);
                 settings.showWindowSetting();
             }
         });

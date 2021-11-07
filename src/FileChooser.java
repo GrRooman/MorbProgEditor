@@ -22,4 +22,8 @@ class FileChooser extends JFileChooser{
 
     setFileView(new FileIconView(filter));
     }
+    int openDialog(JFrame mw){
+        int result = this.showOpenDialog(mw);
+        return result;
+    }
 }
