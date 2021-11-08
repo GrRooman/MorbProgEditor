@@ -7,12 +7,14 @@ import java.io.IOException;
 
 
 class PrepareAndSaveData {
-    NativeFileConverter nfc;
-    File openedFile;
+    private NativeFileConverter nfc;
+    private File openedFile;
+    private PreparePicture preparePicture;
 
     PrepareAndSaveData(File selectedFile){
-         openedFile = selectedFile;
+        openedFile = selectedFile;
 
+        preparePicture = new PreparePicture(selectedFile);
         nfc = new NativeFileConverter();
     }
 
@@ -34,6 +36,9 @@ class PrepareAndSaveData {
             WriteToFile.saveDataInFile(newFileName.getAbsolutePath(), strData);
         }
         if(ExtensionHelper.getFileExtension(newFileName.getAbsolutePath()).equalsIgnoreCase("pgm"))
+            preparePicture.getRenamedPicture(newFileName);
+
+
             try {
                 File tempFile = File.createTempFile(newFileName.getName(), ".xxl", newFileName.getParentFile());
                 WriteToFile.saveDataInFile(tempFile.getAbsolutePath(), strData);
@@ -43,6 +48,7 @@ class PrepareAndSaveData {
                 e.printStackTrace();
             }
     }
+
 
 
 }

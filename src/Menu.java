@@ -62,11 +62,11 @@ class Menu extends JMenuBar {
         jmiSaveAs.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
                 int result = fc.showSaveDialog(mw);
-                 if (result == JFileChooser.APPROVE_OPTION ){
-                     saveFile = fc.getSelectedFile();
-                     prepareAndSave.workingWithFile(saveFile, mw.getTextFromTextArea());
+                if (result == JFileChooser.APPROVE_OPTION ){
+                    saveFile = fc.getSelectedFile();
+                    prepareAndSave.workingWithFile(saveFile, mw.getTextFromTextArea());
                     JOptionPane.showMessageDialog(mw,"Файл '" + fc.getSelectedFile() + " ) сохранен");
-                 }
+                }
             }
         });
 
