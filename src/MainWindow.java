@@ -18,19 +18,6 @@ class MainWindow extends JFrame {
     private JScrollPane jsp;
 
     MainWindow() {
-
-        // Test     style
-        UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-        try {
-            UIManager.setLookAndFeel(infos[3].getClassName());
-            SwingUtilities.updateComponentTreeUI(MainWindow.this);
-            pack();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //Test    style
-
-        // Указываем название программы
         setTitle("MorbProgEditor");
         up = new UserPreferences();
         jp = new JPanel();
@@ -43,7 +30,6 @@ class MainWindow extends JFrame {
         ta = new JTextArea(0,50);
         ta.setFont(new Font("Tahoma", Font.PLAIN, 12));
         jsp = new JScrollPane(ta);
-
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1, 2));
@@ -59,17 +45,16 @@ class MainWindow extends JFrame {
 
         jp.add(bottomPanel,BorderLayout.SOUTH);
 
-
         add(jp);
+        setVisualStyleOfProgram(3);    //  Введите число от 0 до 3 для смены внешнего вида программы
         // Завершить работу программы, когда пользователь
         // закрывает приложение
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         // Установить начальные размеры фрейма
         setToPreferredSizeFrame();
-
         // Устанавливаем место появления окна программы
         centreWindow(this);
+
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -110,6 +95,16 @@ class MainWindow extends JFrame {
     void setTextInBottomLabels(ArrayList<String> arrayList){
         createBottomLabels(arrayList.get(0));
         createBottomLabels(arrayList.get(1));
+    }
+    void setVisualStyleOfProgram(int n){
+        UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
+        try {
+            UIManager.setLookAndFeel(infos[n].getClassName());
+            SwingUtilities.updateComponentTreeUI(this);
+            pack();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
