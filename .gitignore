@@ -5,9 +5,11 @@ out/
 src/resources/Bin/
 MorbProgEditor.iml
 
+
 #  NetBeans
 nbproject/
 build.xml
 config.xml
 /build/
 /dist/
+/prog_test/*

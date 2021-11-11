@@ -1,7 +1,11 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: Grooman
@@ -14,11 +18,18 @@ class ReadFile {
     }
     String readFile(String fileName){
         Path p = Paths.get(fileName);
-        String s = null;
-        try {
-            s = new String(Files.readAllBytes(p));
+        String s = "";
+        String sa = "";
+        List<String> lis = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "Windows-1251"))){
+            while((s = reader.readLine()) != null){
+                lis.add(s);
+            }
         } catch (IOException e) { e.printStackTrace(); }
-        return s;
+        for(String q:lis){
+            sa+=q+"\n";
+        }
+        return sa;
     }
 
 
