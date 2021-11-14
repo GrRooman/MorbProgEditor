@@ -12,4 +12,4 @@ build.xml
 config.xml
 /build/
 /dist/
-/prog_test/*
+/prog_test/

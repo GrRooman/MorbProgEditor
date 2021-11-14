@@ -1,0 +1,9 @@
+
+
+class DeleteTrash {
+
+    public DeleteTrash() {
+    }
+    
+    
+}

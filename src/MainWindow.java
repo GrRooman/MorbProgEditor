@@ -86,15 +86,17 @@ class MainWindow extends JFrame {
     String getTextFromTextArea(){
         return ta.getText();
     }
-    private void createBottomLabels(String text){
-        JLabel j = new JLabel("<html>"+text+"<html>");  //    JLabel не поддреживает перенос строки. Но зато поддерживает html
+    private void createBottomLabels(String text, Color color){
+        JTextArea j = new JTextArea(text);  //    JLabel не поддреживает перенос строки. Но зато поддерживает html
+        j.setBackground(color);
         j.setBorder(BorderFactory.createEmptyBorder(0,10, 0 ,0));
         bottomPanel.add(j);
         j.setFont(new Font("Tahoma", Font.BOLD, 11));
     }
-    void setTextInBottomLabels(ArrayList<String> arrayList){
-        createBottomLabels(arrayList.get(0));
-        createBottomLabels(arrayList.get(1));
+    void setTextInfoToBottomLabels(AdditionalInformation info){
+        ArrayList<String> arrayList = info.getDataFromAdditionalFiles();
+        createBottomLabels(arrayList.get(0), Color.GRAY);
+        createBottomLabels(arrayList.get(1), Color.GRAY);
     }
     void setVisualStyleOfProgram(int n){
         UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();

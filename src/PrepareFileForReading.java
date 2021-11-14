@@ -1,6 +1,5 @@
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: Grooman
@@ -19,16 +18,15 @@ class PrepareFileForReading {
     String getDataFromFile(File fileName){
         if(ExtensionHelper.getFileExtension(fileName.getName()).equalsIgnoreCase("pgm")) {
             nfc.convertPGM_to_XXL(fileName);
-            return  rf.readFile(ExtensionHelper.changeNameExtensionPGMtoXXL(fileName));
+            return  listIntoText(rf.readFile(ExtensionHelper.changeNameExtensionPGMtoXXL(fileName)));
         } else {
-            return rf.readFile(fileName.getAbsolutePath());
+            return listIntoText(rf.readFile(fileName.getAbsolutePath()));
         }
     }
-    ArrayList<String> getDataFromAdditionalFiles(File file){
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add( rf.readFile(ExtensionHelper.changeNameExtension(file, "lst")));
-        arrayList.add( rf.readFile(ExtensionHelper.changeNameExtension(file, "inf")));
-        return arrayList;
+    String listIntoText(List<String> lis){
+        String s="";
+        s = lis.stream().map(q -> q+"\n").reduce(s, String::concat);
+        return s;
     }
 }
 

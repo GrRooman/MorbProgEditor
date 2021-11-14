@@ -11,6 +11,7 @@ class Menu extends JMenuBar {
     MainWindow mw;
     PrepareFileForReading pfr;
     PrepareAndSaveData prepareAndSave;
+    AdditionalInformation additionalInformation;
     File saveFile;
 
     Menu(MainWindow mw){
@@ -49,7 +50,7 @@ class Menu extends JMenuBar {
             if (fc.openDialog(mw) == JFileChooser.APPROVE_OPTION) {
                 prepareAndSave = new PrepareAndSaveData(fc.getSelectedFile());
                 mw.setTextInTextArea(pfr.getDataFromFile(fc.getSelectedFile()));
-                mw.setTextInBottomLabels(pfr.getDataFromAdditionalFiles(fc.getSelectedFile()));
+                mw.setTextInfoToBottomLabels(new AdditionalInformation(fc.getSelectedFile()));
             }
         });
         
