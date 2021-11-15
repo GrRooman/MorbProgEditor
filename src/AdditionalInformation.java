@@ -7,18 +7,20 @@ import java.util.List;
 
 
 class AdditionalInformation {
-    private Color errorColor;
+    private ArrayList<Color> errorColor;
     private File filePath;
     private ReadFile rf;
+    private ArrayList<String> listAdditFiles;
     public AdditionalInformation(File file) {
         filePath = file;
         rf = new ReadFile();
+        errorColor = new ArrayList<>();
+        listAdditFiles = new ArrayList<>();
     }
     ArrayList<String> getDataFromAdditionalFiles(){
-            ArrayList<String> arrayList = new ArrayList<>();
-            arrayList.add(parseText(rf.readFile(ExtensionHelper.changeNameExtension(filePath, "lst"))));
-            arrayList.add(parseText(rf.readFile(ExtensionHelper.changeNameExtension(filePath, "inf"))));
-            return arrayList;
+        listAdditFiles.add(parseText(rf.readFile(ExtensionHelper.changeNameExtension(filePath, "lst"))));
+        listAdditFiles.add(parseText(rf.readFile(ExtensionHelper.changeNameExtension(filePath, "inf"))));
+        return listAdditFiles;
     }
     private String parseText(List<String> list){
         String str = "";
@@ -28,10 +30,21 @@ class AdditionalInformation {
         str = list.stream().filter(x->!x.isEmpty()).map(x -> x+"\n").reduce(str, String::concat);
         return str;
     }
-    Color getColorOfError(){
-        if(true) errorColor = new Color(100, 200, 100);
-        else errorColor = new Color(200, 100, 100);
+
+    List<Color> getColorOfError(){
+        for(String s: listAdditFiles){
+            if(s.indexOf("Errors") != -1) {
+                int n = s.indexOf("Errors");
+                if(s.charAt(n+8) == '0') errorColor.add(new Color(100, 200, 100));
+                else errorColor.add(new Color(200, 36, 34));
+            }
+            if(s.indexOf("[ERRORS]") != -1){
+                int n = s.indexOf("[ERRORS]");
+                if(s.charAt(n+9) == '0') errorColor.add(new Color(100, 200, 100));
+                else errorColor.add(new Color(200, 36, 34));
+            }
+        }
         return errorColor;
-    }   
+    }
     
 }

@@ -3,7 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
 /**
  * User: Grooman Date: 27.07.21 Time: 15:40
@@ -95,8 +96,9 @@ class MainWindow extends JFrame {
     }
     void setTextInfoToBottomLabels(AdditionalInformation info){
         ArrayList<String> arrayList = info.getDataFromAdditionalFiles();
-        createBottomLabels(arrayList.get(0), Color.GRAY);
-        createBottomLabels(arrayList.get(1), Color.GRAY);
+        List<Color> errorColor = info.getColorOfError();
+        createBottomLabels(arrayList.get(0), errorColor.get(0));
+        createBottomLabels(arrayList.get(1), errorColor.get(1));
     }
     void setVisualStyleOfProgram(int n){
         UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
