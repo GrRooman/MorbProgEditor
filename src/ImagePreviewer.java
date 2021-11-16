@@ -31,7 +31,7 @@ Image image;
                    try {
                        image = ImageIO.read(f);
                        if( image == null) {                                            // Условие заглушка т.к. некоторым файлам просто
-                           image = ImageIO.read(new File("./src/resources/unknown.png"));   // нечего изображать.
+                           image = ImageIO.read(getClass().getResource("resources/unknown.png"));   // нечего изображать.
                        }
                    } catch (IOException ex) {
                    } 

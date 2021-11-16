@@ -9,14 +9,14 @@ import javax.swing.*;
 class Menu extends JMenuBar {
     FileChooser fc;
     MainWindow mw;
-    PrepareFileForReading pfr;
+    ControlProgramFile controlProgramFile;
     PrepareAndSaveData prepareAndSave;
     AdditionalInformation additionalInformation;
     File saveFile;
 
     Menu(MainWindow mw){
         this.mw=mw;
-        pfr = new PrepareFileForReading();
+
 
         fc = new FileChooser();
 
@@ -49,7 +49,11 @@ class Menu extends JMenuBar {
         jmiOpen.addActionListener((ActionEvent ae) -> {
             if (fc.openDialog(mw) == JFileChooser.APPROVE_OPTION) {
                 prepareAndSave = new PrepareAndSaveData(fc.getSelectedFile());
-                mw.setTextInTextArea(pfr.getDataFromFile(fc.getSelectedFile()));
+                controlProgramFile = new ControlProgramFile(fc.getSelectedFile());
+                /********************************/
+                mw.setProgram(controlProgramFile);
+            /**********************************/
+                mw.setTextInTextArea(controlProgramFile.getDataFromFile());
                 mw.setTextInfoToBottomLabels(new AdditionalInformation(fc.getSelectedFile()));
             }
         });

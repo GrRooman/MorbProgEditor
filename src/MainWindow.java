@@ -11,23 +11,33 @@ import java.util.List;
  */
 class MainWindow extends JFrame {
 
-    private final JPanel jp2;
+    private final JPanel rightPanel;
     private UserPreferences up;
     private JPanel jp;
     private JPanel bottomPanel;
     private JTextArea ta;
     private JScrollPane jsp;
+    private JLabel imageLabel;
+    private ControlProgramFile controlProgramFile;
+    private JTextArea bottomTextArea;
 
     MainWindow() {
         setTitle("MorbProgEditor");
         up = new UserPreferences();
         jp = new JPanel();
-        jp2 = new JPanel();
-        jp2.setLayout(new BoxLayout(jp2, BoxLayout.Y_AXIS));
-        jp2.setBackground(new Color(200, 184, 151));
-        jp2.add(new JButton("Закомментировать \';\'"));
-        jp2.add(new JButton("Добавить блок IF THEN"));
-        jp2.add(new JButton("Удалить блок"));
+
+        imageLabel = new JLabel("Место для вашей рекламы");
+        imageLabel.setPreferredSize(new Dimension(220, 105));
+        imageLabel.setMaximumSize(new Dimension(220, 105));
+
+        rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setBackground(new Color(200, 184, 151));
+
+        rightPanel.add(imageLabel);
+        rightPanel.add(new JButton("Закомментировать \';\'"));
+        rightPanel.add(new JButton("Добавить блок IF THEN"));
+        rightPanel.add(new JButton("Удалить блок"));
         ta = new JTextArea(0,50);
         ta.setFont(new Font("Tahoma", Font.PLAIN, 12));
         jsp = new JScrollPane(ta);
@@ -41,7 +51,7 @@ class MainWindow extends JFrame {
         jp.setLayout(new BorderLayout());
 
         jp.add(jsp, BorderLayout.CENTER);
-        jp.add(jp2, BorderLayout.EAST);
+        jp.add(rightPanel, BorderLayout.EAST);
 
 
         jp.add(bottomPanel,BorderLayout.SOUTH);
@@ -83,16 +93,18 @@ class MainWindow extends JFrame {
 
     void setTextInTextArea(String s) {
         ta.setText(s);
+        imageLabel.setIcon( controlProgramFile.getImage());
     }
     String getTextFromTextArea(){
         return ta.getText();
     }
     private void createBottomLabels(String text, Color color){
-        JTextArea j = new JTextArea(text);  //    JLabel не поддреживает перенос строки. Но зато поддерживает html
-        j.setBackground(color);
-        j.setBorder(BorderFactory.createEmptyBorder(0,10, 0 ,0));
-        bottomPanel.add(j);
-        j.setFont(new Font("Tahoma", Font.BOLD, 11));
+        bottomTextArea = new JTextArea(text);
+        bottomTextArea.setEditable(false);
+        bottomTextArea.setBackground(color);
+        bottomTextArea.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        bottomPanel.add(bottomTextArea);
+        bottomTextArea.setFont(new Font("Tahoma", Font.BOLD, 11));
     }
     void setTextInfoToBottomLabels(AdditionalInformation info){
         ArrayList<String> arrayList = info.getDataFromAdditionalFiles();
@@ -109,6 +121,9 @@ class MainWindow extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    void setProgram(ControlProgramFile c){
+        controlProgramFile  = c;
     }
 
 }

@@ -1,10 +1,5 @@
 import java.io.File;
 
-/**
- * User: Grooman
- * Date: 24.09.21
- * Time: 13:45
- */
 class ExtensionHelper {
     static String changeNameExtension(File file, String newNameExtension){
         String newName="";
@@ -34,7 +29,22 @@ class ExtensionHelper {
 
     static String getFileExtension(String s){
         int i = s.lastIndexOf('.');
-        return s.substring(i+1);
+        if (i > 0) {
+            return s.substring(i+1);
+        }
+        return null;
+    }
+
+    static String getFileExtension(File f){
+        String name = f.getName();
+        String extension="";
+
+        int i = name.lastIndexOf('.');
+
+        if (i > 0) {
+            return name.substring(i+1);
+        }
+        return null;
     }
 
 }

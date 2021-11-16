@@ -16,7 +16,7 @@ class FileIconView extends FileView
    }
    @Override
    public Icon getIcon(File f) {
-    String extension = getExtensionFile(f);
+    String extension = ExtensionHelper.getFileExtension(f);
     
     if (f.isDirectory() && filter.accept(f)) return null;
 
@@ -35,17 +35,4 @@ class FileIconView extends FileView
         URL url = getClass().getResource(name);
         return url;
     }
-    @Deprecated
-    private String getExtensionFile(File f){
-        
-        String name = f.getName();
-        String extension="";
-        
-        int i = name.lastIndexOf('.');
-        
-        if (i > 0) {
-          extension = name.substring(i+1);
-        }
-       return extension;
-   }
 }
