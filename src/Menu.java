@@ -53,7 +53,6 @@ class Menu extends JMenuBar {
                 /********************************/
                 mw.setProgram(controlProgramFile);
             /**********************************/
-                mw.setTextInTextArea(controlProgramFile.getDataFromFile());
                 mw.setTextInfoToBottomLabels(new AdditionalInformation(fc.getSelectedFile()));
             }
         });
@@ -70,6 +69,7 @@ class Menu extends JMenuBar {
                 if (result == JFileChooser.APPROVE_OPTION ){
                     saveFile = fc.getSelectedFile();
                     prepareAndSave.workingWithFile(saveFile, mw.getTextFromTextArea());
+                    mw.setTextInfoToBottomLabels(new AdditionalInformation(fc.getSelectedFile()));
                     JOptionPane.showMessageDialog(mw,"Файл '" + fc.getSelectedFile() + " ) сохранен");
                 }
             }

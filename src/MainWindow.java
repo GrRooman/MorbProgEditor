@@ -16,15 +16,19 @@ class MainWindow extends JFrame {
     private JPanel jp;
     private JPanel bottomPanel;
     private JTextArea ta;
+    private JTextArea leftBottomTextArea;
+    private JTextArea rightBottomTextArea;
     private JScrollPane jsp;
     private JLabel imageLabel;
     private ControlProgramFile controlProgramFile;
-    private JTextArea bottomTextArea;
+    private JTextArea jTextArea;
 
     MainWindow() {
         setTitle("MorbProgEditor");
         up = new UserPreferences();
         jp = new JPanel();
+        leftBottomTextArea = new JTextArea();
+        rightBottomTextArea = new JTextArea();
 
         imageLabel = new JLabel("Место для вашей рекламы");
         imageLabel.setPreferredSize(new Dimension(220, 105));
@@ -32,7 +36,7 @@ class MainWindow extends JFrame {
 
         rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setBackground(new Color(200, 184, 151));
+        rightPanel.setBackground(new Color(176, 181, 176));
 
         rightPanel.add(imageLabel);
         rightPanel.add(new JButton("Закомментировать \';\'"));
@@ -93,26 +97,29 @@ class MainWindow extends JFrame {
 
     void setTextInTextArea(String s) {
         ta.setText(s);
+    }
+    void showImageOfProgram(){
         imageLabel.setIcon( controlProgramFile.getImage());
     }
     String getTextFromTextArea(){
         return ta.getText();
     }
-    private void createBottomLabels(String text, Color color){
-        bottomTextArea = new JTextArea(text);
-        bottomTextArea.setEditable(false);
-        bottomTextArea.setBackground(color);
-        bottomTextArea.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        bottomPanel.add(bottomTextArea);
-        bottomTextArea.setFont(new Font("Tahoma", Font.BOLD, 11));
+    private void createBottomLabels(JTextArea textArea, String text, Color color){
+//        textArea = new JTextArea(text);
+        textArea.setText(text);
+        textArea.setEditable(false);
+        textArea.setBackground(color);
+        textArea.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        bottomPanel.add(textArea);
+        textArea.setFont(new Font("Tahoma", Font.BOLD, 11));
     }
     void setTextInfoToBottomLabels(AdditionalInformation info){
         ArrayList<String> arrayList = info.getDataFromAdditionalFiles();
         List<Color> errorColor = info.getColorOfError();
-        createBottomLabels(arrayList.get(0), errorColor.get(0));
-        createBottomLabels(arrayList.get(1), errorColor.get(1));
+        createBottomLabels(leftBottomTextArea, arrayList.get(0), errorColor.get(0));
+        createBottomLabels(rightBottomTextArea, arrayList.get(1), errorColor.get(1));
     }
-    void setVisualStyleOfProgram(int n){
+    private void setVisualStyleOfProgram(int n){
         UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
         try {
             UIManager.setLookAndFeel(infos[n].getClassName());
@@ -124,6 +131,8 @@ class MainWindow extends JFrame {
     }
     void setProgram(ControlProgramFile c){
         controlProgramFile  = c;
+        setTextInTextArea(controlProgramFile.getDataFromFile());
+        showImageOfProgram();
     }
 
 }
