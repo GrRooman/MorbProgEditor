@@ -1,6 +1,9 @@
 
 import java.awt.Color;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,16 +25,21 @@ class AdditionalInformation {
             colorHaveError = new Color(224, 100, 89);
     }
     ArrayList<String> getDataFromAdditionalFiles(){
-        listAdditFiles.add(parseText(rf.readFile(ExtensionHelper.changeNameExtension(filePath, "lst"))));
-        listAdditFiles.add(parseText(rf.readFile(ExtensionHelper.changeNameExtension(filePath, "inf"))));
+        Path paLst = Paths.get(ExtensionHelper.changeNameExtension(filePath, "lst"));
+        if (Files.exists(paLst)){
+            listAdditFiles.add(parseText(rf.readFile(ExtensionHelper.changeNameExtension(filePath, "lst"))));
+        }
+        else listAdditFiles.add("Инфофайл не найден.");
+        Path paInf = Paths.get(ExtensionHelper.changeNameExtension(filePath, "inf"));
+        if (Files.exists(paInf)){
+            listAdditFiles.add(parseText(rf.readFile(ExtensionHelper.changeNameExtension(filePath, "inf"))));
+        }
+        else listAdditFiles.add("Инфофайл не найден.");
         return listAdditFiles;
     }
     private String parseText(List<String> list){
         String str = "";
-//        for(String s: list){
-//            String[]arr = s.split("   ");
-//        }
-        str = list.stream().filter(x->!x.isEmpty()).map(x -> x+"\n").reduce(str, String::concat);
+        str = list.stream().filter(x->!x.isEmpty()).map(x -> x+"\n").skip(1).reduce(str, String::concat);
         return str;
     }
 
@@ -46,6 +54,9 @@ class AdditionalInformation {
                 int n = s.indexOf("[ERRORS]");
                 if(s.charAt(n+9) == '0') arrErrorColor.add(colorErrorFree);
                 else arrErrorColor.add(colorHaveError);
+            }
+            if(s.equals("Инфофайл не найден.")){
+                arrErrorColor.add(colorHaveError);
             }
         }
         return arrErrorColor;

@@ -40,16 +40,15 @@ class MainWindow extends JFrame {
 
         rightPanel.add(imageLabel);
         rightPanel.add(new JButton("Закомментировать \';\'"));
+        rightPanel.add(new JButton("Закомментировать блок\';\'"));
         rightPanel.add(new JButton("Добавить блок IF THEN"));
         rightPanel.add(new JButton("Удалить блок"));
-        ta = new JTextArea(0,50);
+        ta = new JTextArea(0,0);
         ta.setFont(new Font("Tahoma", Font.PLAIN, 12));
         jsp = new JScrollPane(ta);
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1, 2));
-        bottomPanel.setBackground(new Color(120, 160, 200));
-
 
         //  Указываем диспечер компановки
         jp.setLayout(new BorderLayout());
@@ -74,6 +73,7 @@ class MainWindow extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                DeleteTrash.deleteFile();
                 up.setSizeFrame(MainWindow.this);
             }
         });
@@ -105,7 +105,6 @@ class MainWindow extends JFrame {
         return ta.getText();
     }
     private void createBottomLabels(JTextArea textArea, String text, Color color){
-//        textArea = new JTextArea(text);
         textArea.setText(text);
         textArea.setEditable(false);
         textArea.setBackground(color);
@@ -113,7 +112,7 @@ class MainWindow extends JFrame {
         bottomPanel.add(textArea);
         textArea.setFont(new Font("Tahoma", Font.BOLD, 11));
     }
-    void setTextInfoToBottomLabels(AdditionalInformation info){
+    void setInfoTextToBottomLabels(AdditionalInformation info){
         ArrayList<String> arrayList = info.getDataFromAdditionalFiles();
         List<Color> errorColor = info.getColorOfError();
         createBottomLabels(leftBottomTextArea, arrayList.get(0), errorColor.get(0));
@@ -133,6 +132,7 @@ class MainWindow extends JFrame {
         controlProgramFile  = c;
         setTextInTextArea(controlProgramFile.getDataFromFile());
         showImageOfProgram();
+        setInfoTextToBottomLabels(c.getAdditionalInformation());
     }
 
 }

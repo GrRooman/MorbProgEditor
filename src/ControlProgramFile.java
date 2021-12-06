@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
+ * Класс который аккумулирует всю информацию об управляющей программе.
  * User: Grooman
  * Date: 17.08.21
  * Time: 14:04
@@ -18,11 +19,13 @@ class ControlProgramFile {
     private NativeFileConverter nfc;
     private Image image;
     private File pathToFile;
+    private AdditionalInformation additionalInformation;
 
     ControlProgramFile(File file){
+        pathToFile = file;
         nfc = new NativeFileConverter();
         rf = new ReadFile();
-        pathToFile = file;
+        additionalInformation = new AdditionalInformation(pathToFile);
     }
 
     String getDataFromFile(){
@@ -48,6 +51,8 @@ class ControlProgramFile {
         }
         return new ImageIcon(image);
     }
-
+    AdditionalInformation getAdditionalInformation(){
+        return additionalInformation;
+    }
 }
 

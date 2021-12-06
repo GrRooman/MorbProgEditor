@@ -48,12 +48,14 @@ class Menu extends JMenuBar {
         
         jmiOpen.addActionListener((ActionEvent ae) -> {
             if (fc.openDialog(mw) == JFileChooser.APPROVE_OPTION) {
-                prepareAndSave = new PrepareAndSaveData(fc.getSelectedFile());
-                controlProgramFile = new ControlProgramFile(fc.getSelectedFile());
+                File selectedFile =  fc.getSelectedFile();
+                prepareAndSave = new PrepareAndSaveData(selectedFile);
+                controlProgramFile = new ControlProgramFile(selectedFile);
                 /********************************/
                 mw.setProgram(controlProgramFile);
-            /**********************************/
-                mw.setTextInfoToBottomLabels(new AdditionalInformation(fc.getSelectedFile()));
+                /**********************************/
+                DeleteTrash.setFileName(selectedFile);
+//                mw.setInfoTextToBottomLabels(new AdditionalInformation(selectedFile));
             }
         });
         
@@ -69,8 +71,9 @@ class Menu extends JMenuBar {
                 if (result == JFileChooser.APPROVE_OPTION ){
                     saveFile = fc.getSelectedFile();
                     prepareAndSave.workingWithFile(saveFile, mw.getTextFromTextArea());
-                    mw.setTextInfoToBottomLabels(new AdditionalInformation(fc.getSelectedFile()));
-                    JOptionPane.showMessageDialog(mw,"Файл '" + fc.getSelectedFile() + " ) сохранен");
+                    mw.setInfoTextToBottomLabels(new AdditionalInformation(saveFile));
+                    JOptionPane.showMessageDialog(mw,"Файл '" + saveFile + " ) сохранен");
+                    DeleteTrash.setFileName(saveFile);
                 }
             }
         });
