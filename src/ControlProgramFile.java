@@ -19,21 +19,19 @@ class ControlProgramFile {
     private NativeFileConverter nfc;
     private Image image;
     private File pathToFile;
-    private AdditionalInformation additionalInformation;
 
     ControlProgramFile(File file){
         pathToFile = file;
         nfc = new NativeFileConverter();
         rf = new ReadFile();
-        additionalInformation = new AdditionalInformation(pathToFile);
     }
 
-    String getDataFromFile(){
+    List<String> getDataFromFile(){
         if(ExtensionHelper.getFileExtension(pathToFile.getName()).equalsIgnoreCase("pgm")) {
             nfc.convertPGM_to_XXL(pathToFile);
-            return  listIntoText(rf.readFile(ExtensionHelper.changeNameExtensionPGMtoXXL(pathToFile)));
+            return  rf.readFile(ExtensionHelper.changeNameExtensionPGMtoXXL(pathToFile));
         } else {
-            return  listIntoText(rf.readFile(pathToFile.getAbsolutePath()));
+            return  rf.readFile(pathToFile.getAbsolutePath());
         }
     }
     private String listIntoText(List<String> list){
@@ -50,9 +48,6 @@ class ControlProgramFile {
         } catch (IOException ex) {
         }
         return new ImageIcon(image);
-    }
-    AdditionalInformation getAdditionalInformation(){
-        return additionalInformation;
     }
 }
 

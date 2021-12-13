@@ -16,6 +16,9 @@ class DeleteTrash {
 
     private static void pushExistFiles(File fileName){
         if (ExtensionHelper.getFileExtension(fileName).equalsIgnoreCase("PGM")){
+            if (Files.exists(Paths.get(ExtensionHelper.changeNameExtension(fileName, "xxl")))){
+                arrayList.add(ExtensionHelper.changeNameExtension(fileName, "xxl"));
+            }
             if (Files.exists(Paths.get(ExtensionHelper.changeNameExtension(fileName, "inf")))){
                 arrayList.add(ExtensionHelper.changeNameExtension(fileName, "inf"));
             }
@@ -26,10 +29,20 @@ class DeleteTrash {
                 arrayList.add(ExtensionHelper.changeNameExtension(fileName, "bmp"));
             }
         }
-        if (ExtensionHelper.getFileExtension(fileName).equalsIgnoreCase("XXL")){}
+       if (ExtensionHelper.getFileExtension(fileName).equalsIgnoreCase("XXL")){
+
+           if (Files.exists(Paths.get(ExtensionHelper.changeNameExtension(fileName, "inf")))){
+               arrayList.add(ExtensionHelper.changeNameExtension(fileName, "inf"));
+           }
+           if (Files.exists(Paths.get(ExtensionHelper.changeNameExtension(fileName, "lst")))){
+               arrayList.add(ExtensionHelper.changeNameExtension(fileName, "lst"));
+           }
+           if (Files.exists(Paths.get(ExtensionHelper.changeNameExtension(fileName, "bmp")))){
+               arrayList.add(ExtensionHelper.changeNameExtension(fileName, "bmp"));
+           }
+       }
     }
     static void deleteFile(){
-        System.out.println("Files deleted");
         if(!arrayList.isEmpty()){
             for(String s : arrayList){
                 try {

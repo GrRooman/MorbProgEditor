@@ -17,7 +17,7 @@ class PrepareAndSaveData {
         preparePicture = new PreparePicture(selectedFile);
         nfc = new NativeFileConverter();
     }
-
+    //  метод для простого Save
     void workingWithFile(String strData){
         //Если файл имеет раширение 'XXL' , данные записываются в файл с расширением XXL. 
         if (ExtensionHelper.getFileExtension(openedFile.getAbsolutePath()).equalsIgnoreCase("xxl")) {
@@ -30,15 +30,13 @@ class PrepareAndSaveData {
             nfc.convertXXL_to_PGM(fileWithXXLExtension, openedFile.getAbsolutePath());
         }
     }
-
+    //   метод для сохранения SaveAs
     void workingWithFile(File newFileName, String strData){
         if(ExtensionHelper.getFileExtension(newFileName.getAbsolutePath()).equalsIgnoreCase("xxl")){
             WriteToFile.saveDataInFile(newFileName.getAbsolutePath(), strData);
         }
-        if(ExtensionHelper.getFileExtension(newFileName.getAbsolutePath()).equalsIgnoreCase("pgm"))
+        if(ExtensionHelper.getFileExtension(newFileName.getAbsolutePath()).equalsIgnoreCase("pgm")){
             preparePicture.getRenamedPicture(newFileName);
-
-
             try {
                 File tempFile = File.createTempFile(newFileName.getName(), ".xxl", newFileName.getParentFile());
                 WriteToFile.saveDataInFile(tempFile.getAbsolutePath(), strData);
@@ -47,8 +45,8 @@ class PrepareAndSaveData {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
     }
-
 
 
 }

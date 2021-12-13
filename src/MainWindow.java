@@ -1,5 +1,9 @@
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.Caret;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -13,26 +17,30 @@ class MainWindow extends JFrame {
 
     private final JPanel rightPanel;
     private UserPreferences up;
-    private JPanel jp;
+    private JPanel jPanel;
     private JPanel bottomPanel;
-    private JTextArea ta;
+    private TextAreaWithStyles textArea;
     private JTextArea leftBottomTextArea;
     private JTextArea rightBottomTextArea;
     private JScrollPane jsp;
     private JLabel imageLabel;
+    private JLabel textInfoLabel;
     private ControlProgramFile controlProgramFile;
-    private JTextArea jTextArea;
 
     MainWindow() {
         setTitle("MorbProgEditor");
         up = new UserPreferences();
-        jp = new JPanel();
+        jPanel = new JPanel();
         leftBottomTextArea = new JTextArea();
         rightBottomTextArea = new JTextArea();
 
         imageLabel = new JLabel("Место для вашей рекламы");
         imageLabel.setPreferredSize(new Dimension(220, 105));
         imageLabel.setMaximumSize(new Dimension(220, 105));
+
+        textInfoLabel = new JLabel("new data");
+        textInfoLabel.setPreferredSize(new Dimension(220, 105));
+        textInfoLabel.setMaximumSize(new Dimension(220, 105));
 
         rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
@@ -43,23 +51,22 @@ class MainWindow extends JFrame {
         rightPanel.add(new JButton("Закомментировать блок\';\'"));
         rightPanel.add(new JButton("Добавить блок IF THEN"));
         rightPanel.add(new JButton("Удалить блок"));
-        ta = new JTextArea(0,0);
-        ta.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        jsp = new JScrollPane(ta);
+        rightPanel.add(textInfoLabel);
+        textArea = new TextAreaWithStyles();
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1, 2));
 
         //  Указываем диспечер компановки
-        jp.setLayout(new BorderLayout());
+        jPanel.setLayout(new BorderLayout());
 
-        jp.add(jsp, BorderLayout.CENTER);
-        jp.add(rightPanel, BorderLayout.EAST);
+        jPanel.add(new JScrollPane(textArea), BorderLayout.CENTER);
+        jPanel.add(rightPanel, BorderLayout.EAST);
 
 
-        jp.add(bottomPanel,BorderLayout.SOUTH);
+        jPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-        add(jp);
+        add(jPanel);
         setVisualStyleOfProgram(3);    //  Введите число от 0 до 3 для смены внешнего вида программы
         // Завершить работу программы, когда пользователь
         // закрывает приложение
@@ -68,7 +75,6 @@ class MainWindow extends JFrame {
         setToPreferredSizeFrame();
         // Устанавливаем место появления окна программы
         centreWindow(this);
-
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -95,22 +101,22 @@ class MainWindow extends JFrame {
         frame.setLocation(x, y);
     }
 
-    void setTextInTextArea(String s) {
-        ta.setText(s);
+    void setTextInTextArea(List<String> s) {
+        textArea.loadText(s);
+    }
+    String getTextFromTextArea(){
+        return textArea.getStyleText();
     }
     void showImageOfProgram(){
         imageLabel.setIcon( controlProgramFile.getImage());
     }
-    String getTextFromTextArea(){
-        return ta.getText();
-    }
-    private void createBottomLabels(JTextArea textArea, String text, Color color){
-        textArea.setText(text);
-        textArea.setEditable(false);
-        textArea.setBackground(color);
-        textArea.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        bottomPanel.add(textArea);
-        textArea.setFont(new Font("Tahoma", Font.BOLD, 11));
+    private void createBottomLabels(JTextArea bottomTextArea, String text, Color color){
+        bottomTextArea.setText(text);
+        bottomTextArea.setEditable(false);
+        bottomTextArea.setBackground(color);
+        bottomTextArea.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        bottomTextArea.setFont(new Font("Tahoma", Font.BOLD, 11));
+        bottomPanel.add(bottomTextArea);
     }
     void setInfoTextToBottomLabels(AdditionalInformation info){
         ArrayList<String> arrayList = info.getDataFromAdditionalFiles();
@@ -132,7 +138,6 @@ class MainWindow extends JFrame {
         controlProgramFile  = c;
         setTextInTextArea(controlProgramFile.getDataFromFile());
         showImageOfProgram();
-        setInfoTextToBottomLabels(c.getAdditionalInformation());
     }
 
 }
