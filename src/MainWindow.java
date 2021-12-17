@@ -1,10 +1,10 @@
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.text.Caret;
-import javax.swing.text.DefaultCaret;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.*;
@@ -22,7 +22,7 @@ class MainWindow extends JFrame {
     private TextAreaWithStyles textArea;
     private JTextArea leftBottomTextArea;
     private JTextArea rightBottomTextArea;
-    private JScrollPane jsp;
+    private JButton commentButton;
     private JLabel imageLabel;
     private JLabel textInfoLabel;
     private ControlProgramFile controlProgramFile;
@@ -42,12 +42,14 @@ class MainWindow extends JFrame {
         textInfoLabel.setPreferredSize(new Dimension(220, 105));
         textInfoLabel.setMaximumSize(new Dimension(220, 105));
 
+        commentButton = new JButton();
+
         rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBackground(new Color(176, 181, 176));
 
         rightPanel.add(imageLabel);
-        rightPanel.add(new JButton("Закомментировать \';\'"));
+        rightPanel.add(commentButton);
         rightPanel.add(new JButton("Закомментировать блок\';\'"));
         rightPanel.add(new JButton("Добавить блок IF THEN"));
         rightPanel.add(new JButton("Удалить блок"));
@@ -76,6 +78,22 @@ class MainWindow extends JFrame {
         // Устанавливаем место появления окна программы
         centreWindow(this);
 
+        textArea.addCaretListener(new CaretListener() {
+            @Override
+            public void caretUpdate(CaretEvent e) {
+                int numLine = RXTextUtilities.getLineAtCaret(textArea);
+                textInfoLabel.setText(String.valueOf(numLine));
+                setTextToCommentButton(textArea.isComments(numLine));
+
+            }
+        });
+
+        commentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -99,6 +117,12 @@ class MainWindow extends JFrame {
         int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
         frame.setLocation(x, y);
+    }
+
+    private void setTextToCommentButton(boolean b){
+        System.out.println("****");
+        if(b) commentButton.setText("Раскомментировать строку");
+        else commentButton.setText("Закомментировать строку");
     }
 
     void setTextInTextArea(List<String> s) {

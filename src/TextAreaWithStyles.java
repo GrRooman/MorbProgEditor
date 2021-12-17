@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.text.*;
 
@@ -7,6 +8,7 @@ import javax.swing.text.*;
 
 
 class TextAreaWithStyles extends JTextPane{
+    List<String> listCom;
     // Стили редактора
     private  Style     heading    = null; // стиль заголовка
     private  Style     normal     = null; // стиль текста
@@ -39,6 +41,7 @@ class TextAreaWithStyles extends JTextPane{
      */
     void loadText(List<String> list)
     {
+        listCom = list;
         // Загружаем в документ содержимое
         for (String s : list) {
             Style style = (s.startsWith("H")) ? heading : normal;
@@ -78,7 +81,12 @@ class TextAreaWithStyles extends JTextPane{
     }
     @Override
     public boolean getScrollableTracksViewportWidth(){
-        return getUI().getPreferredSize(this).width<=getParent().getSize().width;
+        return getUI().getPreferredSize(this).width <= getParent().getSize().width;
+    }
+    boolean isComments(int line){
+
+        if(listCom.get(line-1).charAt(0) == ';') return true;
+        else return false;
     }
 
 }
