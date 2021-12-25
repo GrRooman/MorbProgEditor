@@ -22,9 +22,9 @@ class FileIconView extends FileView
 
     if (extension != null) {
         if (extension.equals("xxl")) {
-            icon =  new ImageIcon(getImagePath("resources/xxl.png"));
+            icon =  new ImageIcon(getImagePath("xxl.png"));
         } else if (extension.equals("pgm")) {
-            icon =  new ImageIcon(getImagePath("resources/pgm.png"));
+            icon =  new ImageIcon(getImagePath("pgm.png"));
         } else {
             return null;
         }

@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.text.*;
 
 
@@ -15,10 +17,17 @@ class TextAreaWithStyles extends JTextPane{
     private  final  String STYLE_heading = "heading",
             STYLE_normal  = "normal" ,
             FONT_style    = "Times New Roman";
+    Document doc;
     public TextAreaWithStyles()
     {
         // Определение стилей редактора
         createStyles();
+        addCaretListener(new CaretListener() {
+            @Override
+            public void caretUpdate(CaretEvent e) {
+                int numLine = RXTextUtilities.getLineAtCaret(TextAreaWithStyles.this);
+            }
+        });
 
     }
     /**
@@ -69,7 +78,7 @@ class TextAreaWithStyles extends JTextPane{
     private void insertText(String string, Style style)
     {
         try {
-            Document doc = this.getDocument();
+            doc = this.getDocument();
             doc.insertString(doc.getLength(), string, style);
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,10 +88,13 @@ class TextAreaWithStyles extends JTextPane{
     public String getStyleText(){
          return this.getText();
     }
+    // Метод позволяет появиться горизонтальному ScrollBar,
+    // тем самым запрещает переноситься тексту на новую строку.
     @Override
     public boolean getScrollableTracksViewportWidth(){
         return getUI().getPreferredSize(this).width <= getParent().getSize().width;
     }
+
     boolean isComments(int line){
 
         if(listCom.get(line-1).charAt(0) == ';') return true;

@@ -2,7 +2,7 @@
 #  Intellij IDEA
 out/
 .idea/
-src/resources/Bin/
+/src/main/resources/Bin/
 MorbProgEditor.iml
 
 

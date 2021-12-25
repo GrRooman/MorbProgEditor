@@ -43,7 +43,7 @@ class ControlProgramFile {
         try {
             image = ImageIO.read(pathToFile);
             if( image == null) {
-                image = ImageIO.read(getClass().getResource("resources/unknownXXL.png"));
+                image = ImageIO.read(getClass().getResource("unknownXXL.png"));
             }
         } catch (IOException ex) {
         }

@@ -78,16 +78,6 @@ class MainWindow extends JFrame {
         // Устанавливаем место появления окна программы
         centreWindow(this);
 
-        textArea.addCaretListener(new CaretListener() {
-            @Override
-            public void caretUpdate(CaretEvent e) {
-                int numLine = RXTextUtilities.getLineAtCaret(textArea);
-                textInfoLabel.setText(String.valueOf(numLine));
-                setTextToCommentButton(textArea.isComments(numLine));
-
-            }
-        });
-
         commentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -120,7 +110,6 @@ class MainWindow extends JFrame {
     }
 
     private void setTextToCommentButton(boolean b){
-        System.out.println("****");
         if(b) commentButton.setText("Раскомментировать строку");
         else commentButton.setText("Закомментировать строку");
     }

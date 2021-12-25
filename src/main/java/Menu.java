@@ -104,7 +104,7 @@ class Menu extends JMenuBar {
         jmiAbout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                InputStream inputStream = getClass().getResourceAsStream("resources/About.txt");
+                InputStream inputStream = getClass().getResourceAsStream("About.txt");
                 String s="";
                 try (Scanner in =new Scanner(inputStream, "UTF-8"))
                 {
