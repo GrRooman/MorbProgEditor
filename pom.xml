@@ -6,22 +6,49 @@
 
     <groupId>groupId</groupId>
     <artifactId>MorbProgEditor</artifactId>
-    <version>1.1</version>
+    <version>1.001</version>
+
     <properties>
             <maven.compiler.source>1.8</maven.compiler.source>
             <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
-                <version>2.17.0</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.17.0</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.32</version>
         </dependency>
     </dependencies>
-    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <!-- указываем класс с методом main -->
+                            <mainClass>Main</mainClass>
+
+                            <!-- Указываем дополнительный каталог, который нужно включить в classpath
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>data/lib/</classpathPrefix>-->
+
+                        </manifest>
+                        <manifestEntries>
+                            <SplashScreen-Image>screenimg.jpg</SplashScreen-Image>
+                            <!-- Эти записи добавятся в MANIFEST.MF- -->
+                            <My-Super-Description>Just my super description</My-Super-Description>
+                            <Some-Key>Screen?</Some-Key>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

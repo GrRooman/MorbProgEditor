@@ -1,3 +1,6 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -10,6 +13,8 @@ class NativeFileConverter {
     private ProcessBuilder pb;
     private UserPreferences userPreferences;
     private String pathConverter;
+
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public NativeFileConverter() {
         userPreferences = new UserPreferences();
@@ -40,7 +45,7 @@ class NativeFileConverter {
         }
     }
     private String putPathToConvert(){
-        System.out.println(userPreferences.getPathToConverter());  // понять почему вызывается дважды
+        logger.info("test {}", userPreferences.getPathToConverter());  // понять почему вызывается дважды
         // написать предпреждение о том, что конвертер не выбран
         return   userPreferences.getPathToConverter();
     }
