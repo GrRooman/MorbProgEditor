@@ -4,13 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
     <groupId>groupId</groupId>
     <artifactId>MorbProgEditor</artifactId>
-    <version>1.001</version>
+    <version>1.005</version>
 
     <properties>
-            <maven.compiler.source>1.8</maven.compiler.source>
-            <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
@@ -27,28 +29,80 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <!-- указываем класс с методом main -->
-                            <mainClass>Main</mainClass>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.2-beta-5</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <mainClass>
+                                    Main
+                                </mainClass>
+                            </manifest>
+                            <manifestEntries>
+                                <SplashScreen-Image>screenimg.jpg</SplashScreen-Image>
+                                <!-- Эти записи добавятся в MANIFEST.MF- -->
+                                <My-Super-Description>Just my super description</My-Super-Description>
+                                <Some-Key>Screen?</Some-Key>
+                            </manifestEntries>
+                        </archive>
+                        <descriptorRefs>
+                            <descriptorRef>jar-with-dependencies</descriptorRef>
+                        </descriptorRefs>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-dependency-plugin</artifactId>-->
+                <!--<version>3.2.0</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>copy-dependencies</id>-->
+                        <!--<phase>prepare-package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>copy-dependencies</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<outputDirectory>/libs</outputDirectory>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
 
-                            <!-- Указываем дополнительный каталог, который нужно включить в classpath
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>data/lib/</classpathPrefix>-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-jar-plugin</artifactId>-->
+                <!--<version>2.3.2</version>-->
+                <!--<configuration>-->
+                    <!--<archive>-->
+                        <!--<manifest>-->
+                            <!--<addClasspath>true</addClasspath>-->
+                            <!--<classpathPrefix>libs/</classpathPrefix>-->
+                            <!--&lt;!&ndash; указываем класс с методом main &ndash;&gt;-->
+                            <!--<mainClass>Main</mainClass>-->
 
-                        </manifest>
-                        <manifestEntries>
-                            <SplashScreen-Image>screenimg.jpg</SplashScreen-Image>
-                            <!-- Эти записи добавятся в MANIFEST.MF- -->
-                            <My-Super-Description>Just my super description</My-Super-Description>
-                            <Some-Key>Screen?</Some-Key>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
+                            <!--&lt;!&ndash; Указываем дополнительный каталог, который нужно включить в classpath-->
+                            <!--<addClasspath>true</addClasspath>-->
+                            <!--<classpathPrefix>data/lib/</classpathPrefix>&ndash;&gt;-->
+
+                        <!--</manifest>-->
+                        <!--<manifestEntries>-->
+                            <!--<SplashScreen-Image>screenimg.jpg</SplashScreen-Image>-->
+                            <!--&lt;!&ndash; Эти записи добавятся в MANIFEST.MF- &ndash;&gt;-->
+                            <!--<My-Super-Description>Just my super description</My-Super-Description>-->
+                            <!--<Some-Key>Screen?</Some-Key>-->
+                        <!--</manifestEntries>-->
+                    <!--</archive>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 </project>
