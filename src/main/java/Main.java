@@ -7,7 +7,7 @@ import javax.swing.*;
 
 
 public class Main {
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger logger = LoggerFactory.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
         logger.info("Start the program.");

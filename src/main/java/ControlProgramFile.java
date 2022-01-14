@@ -34,11 +34,13 @@ class ControlProgramFile {
             return  rf.readFile(pathToFile.getAbsolutePath());
         }
     }
+
     private String listIntoText(List<String> list){
         String s="";
         s = list.stream().map(q -> q+"\n").reduce(s, String::concat);
         return s;
     }
+
     ImageIcon getImage(){
         try {
             image = ImageIO.read(pathToFile);

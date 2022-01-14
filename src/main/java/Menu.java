@@ -7,12 +7,11 @@ import javax.swing.*;
 
 
 class Menu extends JMenuBar {
-    FileChooser fc;
-    MainWindow mw;
-    ControlProgramFile controlProgramFile;
-    PrepareAndSaveData prepareAndSave;
-    AdditionalInformation additionalInformation;
-    File saveFile;
+    private FileChooser fc;
+    private MainWindow mw;
+    private ControlProgramFile controlProgramFile;
+    private PrepareAndSaveData prepareAndSave;
+    private AdditionalInformation additionalInformation;
 
     Menu(MainWindow mw){
         this.mw=mw;
@@ -70,7 +69,7 @@ class Menu extends JMenuBar {
             public void actionPerformed(ActionEvent ae){
                 int result = fc.showSaveDialog(mw);
                 if (result == JFileChooser.APPROVE_OPTION ){
-                    saveFile = fc.getSelectedFile();
+                    File saveFile = fc.getSelectedFile();
                     prepareAndSave.workingWithFile(saveFile, mw.getTextFromTextArea());
 
                     mw.setInfoTextToBottomLabels(new AdditionalInformation(saveFile));

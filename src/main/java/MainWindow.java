@@ -1,4 +1,7 @@
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -19,13 +22,14 @@ class MainWindow extends JFrame {
     private UserPreferences up;
     private JPanel jPanel;
     private JPanel bottomPanel;
-    private TextAreaWithStyles textArea;
+    private TextAreaWithStyles mainTextArea;
     private JTextArea leftBottomTextArea;
     private JTextArea rightBottomTextArea;
     private JButton commentButton;
     private JLabel imageLabel;
     private JLabel textInfoLabel;
     private ControlProgramFile controlProgramFile;
+    private static final Logger log = LoggerFactory.getLogger(MainWindow.class.getName());
 
     MainWindow() {
         setTitle("MorbProgEditor");
@@ -42,7 +46,7 @@ class MainWindow extends JFrame {
         textInfoLabel.setPreferredSize(new Dimension(220, 105));
         textInfoLabel.setMaximumSize(new Dimension(220, 105));
 
-        commentButton = new JButton();
+        commentButton = new JButton("Закомментировать блок\';\'");
 
         rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
@@ -50,11 +54,10 @@ class MainWindow extends JFrame {
 
         rightPanel.add(imageLabel);
         rightPanel.add(commentButton);
-        rightPanel.add(new JButton("Закомментировать блок\';\'"));
         rightPanel.add(new JButton("Добавить блок IF THEN"));
         rightPanel.add(new JButton("Удалить блок"));
         rightPanel.add(textInfoLabel);
-        textArea = new TextAreaWithStyles();
+        mainTextArea = new TextAreaWithStyles();
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1, 2));
@@ -62,7 +65,7 @@ class MainWindow extends JFrame {
         //  Указываем диспечер компановки
         jPanel.setLayout(new BorderLayout());
 
-        jPanel.add(new JScrollPane(textArea), BorderLayout.CENTER);
+        jPanel.add(new JScrollPane(mainTextArea), BorderLayout.CENTER);
         jPanel.add(rightPanel, BorderLayout.EAST);
 
 
@@ -81,6 +84,7 @@ class MainWindow extends JFrame {
         commentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                mainTextArea.setComOfLine();
             }
         });
 
@@ -91,7 +95,6 @@ class MainWindow extends JFrame {
                 up.setSizeFrame(MainWindow.this);
             }
         });
-
         setJMenuBar(new Menu(MainWindow.this));
         setVisible(true);
     }
@@ -115,10 +118,10 @@ class MainWindow extends JFrame {
     }
 
     void setTextInTextArea(List<String> s) {
-        textArea.loadText(s);
+        mainTextArea.loadText(s);
     }
     String getTextFromTextArea(){
-        return textArea.getStyleText();
+        return mainTextArea.getStyleText();
     }
     void showImageOfProgram(){
         imageLabel.setIcon( controlProgramFile.getImage());
