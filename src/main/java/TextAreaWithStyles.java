@@ -2,18 +2,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import java.awt.Color;
-import java.util.List;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.*;
+import java.awt.*;
+import java.util.List;
 
 
 
 
 class TextAreaWithStyles extends JTextPane{
     private List<String> list;
+    private int startText;
+    private int endText;
     // Стили редактора
+    private String[] firstLetterOfComandString =
+                  {"H","G0", "G1", "G2", "G3", "GIN", "GOUT",
+                   "C", "XB", "B", "XL2P", "XAR", "", "MSG", "N"};
     private  Style     heading    = null; // стиль заголовка
     private  Style     normal     = null; // стиль текста
     private  Style     comment    = null; // стиль коментария
@@ -25,6 +30,7 @@ class TextAreaWithStyles extends JTextPane{
     private static final Logger log = LoggerFactory.getLogger(TextAreaWithStyles.class.getName());
     public TextAreaWithStyles()
     {
+
         // Определение стилей редактора
         createStyles();
     }
@@ -38,14 +44,27 @@ class TextAreaWithStyles extends JTextPane{
         StyleConstants.setFontSize(comment, 15);
         StyleConstants.setItalic(comment, true);
         StyleConstants.setStrikeThrough(comment, true);
+
         normal = this.addStyle(STYLE_normal, null);
         StyleConstants.setFontFamily(normal ,FONT_style);
         StyleConstants.setFontSize(normal, 15);
+
         // Наследуем свойстdо FontFamily
         heading = this.addStyle(STYLE_heading, normal);
         StyleConstants.setFontSize(heading, 17);
         StyleConstants.setBold(heading, true);
         StyleConstants.setBackground(heading, new Color(171, 171, 171));
+    }
+    /**
+     * Процедура изменения стиля документа
+     */
+    private void changeDocumentStyle()
+    {
+        // Изменение стиля части текста
+        SimpleAttributeSet blue = new SimpleAttributeSet();
+        StyleConstants.setForeground(blue, Color.blue);
+        StyledDocument doc = this.getStyledDocument();
+        doc.setCharacterAttributes(30, 9, blue, false);
     }
     /**
      * Процедура загрузки текста в редактор
@@ -64,17 +83,6 @@ class TextAreaWithStyles extends JTextPane{
         //  Определение функции для зменение стиля части текста
         changeDocumentStyle();
 //        setListenerForTextPane();
-    }
-    /**
-     * Процедура изменения стиля документа
-     */
-    private void changeDocumentStyle()
-    {
-        // Изменение стиля части текста
-        SimpleAttributeSet blue = new SimpleAttributeSet();
-        StyleConstants.setForeground(blue, Color.blue);
-        StyledDocument doc = this.getStyledDocument();
-        doc.setCharacterAttributes(30, 9, blue, false);
     }
     /**
      * Процедура добавления в редактор строки определенного стиля
@@ -102,39 +110,51 @@ class TextAreaWithStyles extends JTextPane{
         return getUI().getPreferredSize(this).width <= getParent().getSize().width;
     }
 
-    void setComOfLine(){
-        int numLine = RXTextUtilities.getLineAtCaret(TextAreaWithStyles.this);
-        int numLineForList = numLine-1;
-        if(!isComments(numLine)){
-            list.set(numLineForList, ";" + list.get(numLineForList));
+    void setCommentOfLine(){
+        getStartAndEndSelectedText();
+        for (int i = startText; i <= endText; i++) {
+            if(!isComments(i)){
+                list.set(i, ";" + list.get(i));
+            }
+            else {
+                list.set(i, (list.get(i).substring(1)));
+            }
             textAreaReset();
             loadText(list);
-            RXTextUtilities.gotoStartOfLine(this, numLine+1);
-        }
-        else {
-            list.set(numLineForList, (list.get(numLineForList).substring(1)));
-            textAreaReset();
-            loadText(list);
-            RXTextUtilities.gotoStartOfLine(this, numLine+1);
+            RXTextUtilities.gotoStartOfLine(this, i+1);
         }
     }
 
-    private boolean isComments(int line){
 
-        if(list.get(line-1).charAt(0) == ';') return true;
+    private boolean isComments(int line){
+        if(list.get(line).charAt(0) == ';') return true;
         else return false;
     }
 
     private void textAreaReset(){
         this.setText("");
     }
+    private void getStartAndEndSelectedText(){      // пересмотрнеть возможно вывести один руут будет лучше
+        Element root = TextAreaWithStyles.this.getDocument().getDefaultRootElement();
+        int a = root.getElementIndex( TextAreaWithStyles.this.getSelectionStart() );  //Начало выделения
+        int b = root.getElementIndex( TextAreaWithStyles.this.getSelectionEnd()   );  //Конец выделения
+        if ( a<=b ) {
+            startText = a;
+            endText   = b;
+        }
+        else {
+            startText = b;
+            endText   = a;
+        }
+
+    }
 
     void setListenerForTextPane(){
         this.addCaretListener(new CaretListener() {
             @Override
             public void caretUpdate(CaretEvent e) {
-                int numCol = RXTextUtilities.getColumnAtCaret(TextAreaWithStyles.this);
-
+//                getStartAndEndSelectedText();
+//                System.out.println(startText+"  "+endText);
             }
         });
 

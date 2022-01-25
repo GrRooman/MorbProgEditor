@@ -84,7 +84,7 @@ class MainWindow extends JFrame {
         commentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainTextArea.setComOfLine();
+                mainTextArea.setCommentOfLine();
             }
         });
 
