@@ -29,6 +29,9 @@ class Menu extends JMenuBar {
         JMenuItem  jmiClose  =  new  JMenuItem("Закрыть");
         JMenuItem  jmiExit  =  new  JMenuItem("Выход");
 
+        jmiOpen.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
+        jmiSave.setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
+
         jmF.add(jmiOpen);
         jmF.add(jmiSave);
         jmF.add(jmiSaveAs);
