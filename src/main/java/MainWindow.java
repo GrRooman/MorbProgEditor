@@ -26,6 +26,8 @@ class MainWindow extends JFrame {
     private JTextArea leftBottomTextArea;
     private JTextArea rightBottomTextArea;
     private JButton commentButton;
+    private JButton commentBlockButton;
+    private JButton blockButton;
     private JLabel imageLabel;
     private JLabel textInfoLabel;
     private ControlProgramFile controlProgramFile;
@@ -46,7 +48,9 @@ class MainWindow extends JFrame {
         textInfoLabel.setPreferredSize(new Dimension(220, 105));
         textInfoLabel.setMaximumSize(new Dimension(220, 105));
 
-        commentButton = new JButton("Закомментировать блок\';\'");
+        commentButton = new JButton("Закомментировать\';\'");
+        commentBlockButton = new JButton("Закомментировать блок\';\'");
+        blockButton = new JButton("Выделить блок\';\'");
 
         rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
@@ -54,7 +58,8 @@ class MainWindow extends JFrame {
 
         rightPanel.add(imageLabel);
         rightPanel.add(commentButton);
-        rightPanel.add(new JButton("Добавить блок IF THEN"));
+        rightPanel.add(commentBlockButton);
+        rightPanel.add(blockButton);
         rightPanel.add(new JButton("Удалить блок"));
         rightPanel.add(textInfoLabel);
         mainTextArea = new TextAreaWithStyles();
@@ -81,10 +86,22 @@ class MainWindow extends JFrame {
         // Устанавливаем место появления окна программы
         centreWindow(this);
 
+        commentBlockButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainTextArea.setCommentOfLines();
+            }
+        });
         commentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mainTextArea.setCommentOfLine();
+            }
+        });
+        blockButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
 

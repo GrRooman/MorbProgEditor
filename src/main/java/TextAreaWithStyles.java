@@ -6,19 +6,19 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 
 
 
 
 class TextAreaWithStyles extends JTextPane{
-    private List<String> list;
-    private int startText;
-    private int endText;
+    private List<String> listGCommands;
     // Стили редактора
     private String[] firstLetterOfComandString =
-                  {"H","G0", "G1", "G2", "G3", "GIN", "GOUT",
-                   "C", "XB", "B", "XL2P", "XAR", "", "MSG", "N"};
+                  {"H","G0", "G1", "G2", "G3", "B", "GIN", "GOUT",
+                          "C", "XG0", "XB", "XGIN", "XGOUT",
+                          "XL2P", "XAR", "", "MSG", "N"};
     private  Style     heading    = null; // стиль заголовка
     private  Style     normal     = null; // стиль текста
     private  Style     comment    = null; // стиль коментария
@@ -69,16 +69,17 @@ class TextAreaWithStyles extends JTextPane{
     /**
      * Процедура загрузки текста в редактор
      */
-    void loadText(List<String> list)
-    {
+    void loadText(List<String> list) {
+        int n=1;
         Style style=null;
-        this.list = list;
+        this.listGCommands = list;
         // Загружаем в документ содержимое
         for (String s : list) {
             if(s.startsWith("H")) style = heading;
             else if(s.startsWith(";")) style = comment;
             else style = normal;
-            insertText(s+"\n", style);
+            insertText( n < list.size() ? s+"\n" : s, style );   // Запрет перевода каретки на новую строку
+            n++;
         }
         //  Определение функции для зменение стиля части текста
         changeDocumentStyle();
@@ -111,31 +112,47 @@ class TextAreaWithStyles extends JTextPane{
     }
 
     void setCommentOfLine(){
-        getStartAndEndSelectedText();
-        for (int i = startText; i <= endText; i++) {
+        int[] val = getStartAndEndSelectedText();
+        for (int i = val[0]; i <= val[1]; i++) {
             if(!isComments(i)){
-                list.set(i, ";" + list.get(i));
+                listGCommands.set(i, ";" + listGCommands.get(i));
             }
             else {
-                list.set(i, (list.get(i).substring(1)));
+                listGCommands.set(i, (listGCommands.get(i).substring(1)));
             }
             textAreaReset();
-            loadText(list);
+            loadText(listGCommands);
+            RXTextUtilities.gotoStartOfLine(this, i+1);
+        }
+    }
+    // Этот метод почти полностью похож на предидущий. Можно попробовать все сделать через один метод
+    void setCommentOfLines(){
+        int[] val = defineBlockOfCodeByCaret();
+        for (int i = val[0]; i < val[1]; i++) {
+            if(!isComments(i)){
+                listGCommands.set(i, ";" + listGCommands.get(i));
+            }
+            else {
+                listGCommands.set(i, (listGCommands.get(i).substring(1)));
+            }
+            textAreaReset();
+            loadText(listGCommands);
             RXTextUtilities.gotoStartOfLine(this, i+1);
         }
     }
 
 
     private boolean isComments(int line){
-        if(list.get(line).charAt(0) == ';') return true;
+        if(listGCommands.get(line).charAt(0) == ';') return true;
         else return false;
     }
 
     private void textAreaReset(){
         this.setText("");
     }
-    private void getStartAndEndSelectedText(){      // пересмотрнеть возможно вывести один руут будет лучше
+    private int[] getStartAndEndSelectedText(){      // пересмотрнеть возможно вывести один руут будет лучше
         Element root = TextAreaWithStyles.this.getDocument().getDefaultRootElement();
+        int startText,endText;
         int a = root.getElementIndex( TextAreaWithStyles.this.getSelectionStart() );  //Начало выделения
         int b = root.getElementIndex( TextAreaWithStyles.this.getSelectionEnd()   );  //Конец выделения
         if ( a<=b ) {
@@ -146,7 +163,25 @@ class TextAreaWithStyles extends JTextPane{
             startText = b;
             endText   = a;
         }
-
+        return new int[]{startText, endText};
+    }
+    private int[] defineBlockOfCodeByCaret(){
+        int n = RXTextUtilities.getLineAtCaret(this);
+        int end = 0;
+        int start = 0;
+        for (int i = n; i > 0; i--) {
+            if( listGCommands.get(i).contains("GIN") ) {
+                start = i;
+                break;
+            }
+        }
+        for (int i = n; i < listGCommands.size(); i++) {
+            if( listGCommands.get(i-1).contains("GOUT") ) {
+                end = i;
+                break;
+            }
+        }
+        return new int[]{start, end};
     }
 
     void setListenerForTextPane(){
