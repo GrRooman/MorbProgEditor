@@ -1,3 +1,5 @@
+package textpane_editor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -6,13 +8,13 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.*;
 import java.awt.*;
-import java.util.Arrays;
+import java.awt.event.ActionEvent;
 import java.util.List;
 
 
 
 
-class TextAreaWithStyles extends JTextPane{
+public class TextAreaWithStyles extends JTextPane{
     private List<String> listGCommands;
     // Стили редактора
     private String[] firstLetterOfComandString =
@@ -28,9 +30,9 @@ class TextAreaWithStyles extends JTextPane{
             FONT_style    = "Times New Roman";
     private Document doc;
     private static final Logger log = LoggerFactory.getLogger(TextAreaWithStyles.class.getName());
-    public TextAreaWithStyles()
-    {
 
+    public TextAreaWithStyles(List<String> list) {
+        listGCommands = list;
         // Определение стилей редактора
         createStyles();
     }
@@ -69,16 +71,16 @@ class TextAreaWithStyles extends JTextPane{
     /**
      * Процедура загрузки текста в редактор
      */
-    void loadText(List<String> list) {
+    public void loadText() {
+//        System.out.println("*****");
         int n=1;
         Style style=null;
-        this.listGCommands = list;
         // Загружаем в документ содержимое
-        for (String s : list) {
+        for (String s : listGCommands) {
             if(s.startsWith("H")) style = heading;
             else if(s.startsWith(";")) style = comment;
             else style = normal;
-            insertText( n < list.size() ? s+"\n" : s, style );   // Запрет перевода каретки на новую строку
+            insertText( n < listGCommands.size() ? s+"\n" : s, style );   // Запрет перевода каретки на новую строку
             n++;
         }
         //  Определение функции для зменение стиля части текста
@@ -96,9 +98,8 @@ class TextAreaWithStyles extends JTextPane{
             doc = this.getDocument();
             doc.insertString(doc.getLength(), string, style);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Ошибка вставки данных в документ {}",e);
         }
-
     }
     public String getStyleText(){
          return this.getText();
@@ -111,8 +112,11 @@ class TextAreaWithStyles extends JTextPane{
         return getUI().getPreferredSize(this).width <= getParent().getSize().width;
     }
 
-    void setCommentOfLine(){
-        int[] val = getStartAndEndSelectedText();
+    public void setCommentOfLines(ActionEvent ae){
+        int[] val = {0,0};
+        if (ae.getActionCommand().equals("comLine"))  val = getStartAndEndSelectedText();
+        else if (ae.getActionCommand().equals("comLines")) val = defineBlockOfCodeByCaret();
+        else log.error("Был сделан какой-то неожиданный выбор при нажатии чего-то.");
         for (int i = val[0]; i <= val[1]; i++) {
             if(!isComments(i)){
                 listGCommands.set(i, ";" + listGCommands.get(i));
@@ -121,26 +125,18 @@ class TextAreaWithStyles extends JTextPane{
                 listGCommands.set(i, (listGCommands.get(i).substring(1)));
             }
             textAreaReset();
-            loadText(listGCommands);
-            RXTextUtilities.gotoStartOfLine(this, i+1);
-        }
-    }
-    // Этот метод почти полностью похож на предидущий. Можно попробовать все сделать через один метод
-    void setCommentOfLines(){
-        int[] val = defineBlockOfCodeByCaret();
-        for (int i = val[0]; i < val[1]; i++) {
-            if(!isComments(i)){
-                listGCommands.set(i, ";" + listGCommands.get(i));
-            }
-            else {
-                listGCommands.set(i, (listGCommands.get(i).substring(1)));
-            }
-            textAreaReset();
-            loadText(listGCommands);
+            loadText();
             RXTextUtilities.gotoStartOfLine(this, i+1);
         }
     }
 
+    public void setConditionAtCode(){
+        IfThenQuestionDialog i = new IfThenQuestionDialog(listGCommands);
+        i.getConditionAtCode(defineBlockOfCodeByCaret());
+        textAreaReset();
+        loadText();
+        RXTextUtilities.gotoStartOfLine(this, 1);
+    }
 
     private boolean isComments(int line){
         if(listGCommands.get(line).charAt(0) == ';') return true;
@@ -150,6 +146,7 @@ class TextAreaWithStyles extends JTextPane{
     private void textAreaReset(){
         this.setText("");
     }
+
     private int[] getStartAndEndSelectedText(){      // пересмотрнеть возможно вывести один руут будет лучше
         Element root = TextAreaWithStyles.this.getDocument().getDefaultRootElement();
         int startText,endText;
@@ -165,18 +162,20 @@ class TextAreaWithStyles extends JTextPane{
         }
         return new int[]{startText, endText};
     }
+
     private int[] defineBlockOfCodeByCaret(){
-        int n = RXTextUtilities.getLineAtCaret(this);
+        int n = RXTextUtilities.getLineAtCaret(this)-1;
         int end = 0;
         int start = 0;
         for (int i = n; i > 0; i--) {
             if( listGCommands.get(i).contains("GIN") ) {
-                start = i;
+                if( listGCommands.get(i-1).contains("C") ) {start = i-1; break;}
+                else start = i;
                 break;
             }
         }
         for (int i = n; i < listGCommands.size(); i++) {
-            if( listGCommands.get(i-1).contains("GOUT") ) {
+            if( listGCommands.get(i).contains("GOUT") ) {
                 end = i;
                 break;
             }
@@ -192,8 +191,6 @@ class TextAreaWithStyles extends JTextPane{
 //                System.out.println(startText+"  "+endText);
             }
         });
-
     }
-
 }
 

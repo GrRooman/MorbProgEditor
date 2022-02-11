@@ -1,3 +1,4 @@
+package textpane_editor;
 
 import java.awt.*;
 import javax.swing.*;

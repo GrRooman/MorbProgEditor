@@ -1,4 +1,6 @@
 
+import textpane_editor.TextAreaWithStyles;
+
 import java.awt.event.*;
 import java.io.File;
 import java.io.InputStream;
@@ -57,7 +59,6 @@ class Menu extends JMenuBar {
                 mw.setProgram(controlProgramFile);
                 /**********************************/
                 mw.setInfoTextToBottomLabels(new AdditionalInformation(selectedFile));
-
                 DeleteTrash.setFileName(selectedFile);
             }
         });
@@ -77,15 +78,15 @@ class Menu extends JMenuBar {
 
                     mw.setInfoTextToBottomLabels(new AdditionalInformation(saveFile));
 
-                    JOptionPane.showMessageDialog(mw,"Файл '" + saveFile + " ) сохранен");
+                    JOptionPane.showMessageDialog(mw, "Файл '" + saveFile + " ) сохранен");
                     DeleteTrash.setFileName(saveFile);
                 }
             }
         });
-
+//        Не работает , починить
         jmiClose.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-                mw.setTextInTextArea(null);
+//                mw.setTextInTextArea(null);
             }
         });
         

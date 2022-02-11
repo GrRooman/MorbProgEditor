@@ -2,9 +2,9 @@
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import textpane_editor.TextAreaWithStyles;
+
 import javax.swing.*;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,9 +13,7 @@ import java.awt.event.WindowEvent;
 import java.util.*;
 import java.util.List;
 
-/**
- * User: Grooman Date: 27.07.21 Time: 15:40
- */
+
 class MainWindow extends JFrame {
 
     private final JPanel rightPanel;
@@ -50,7 +48,10 @@ class MainWindow extends JFrame {
 
         commentButton = new JButton("Закомментировать\';\'");
         commentBlockButton = new JButton("Закомментировать блок\';\'");
-        blockButton = new JButton("Выделить блок\';\'");
+        blockButton = new JButton("Условн. инстр. блок IF THEN");
+
+        commentButton.setActionCommand("comLine");
+        commentBlockButton.setActionCommand("comLines");
 
         rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
@@ -62,7 +63,7 @@ class MainWindow extends JFrame {
         rightPanel.add(blockButton);
         rightPanel.add(new JButton("Удалить блок"));
         rightPanel.add(textInfoLabel);
-        mainTextArea = new TextAreaWithStyles();
+//
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1, 2));
@@ -70,7 +71,7 @@ class MainWindow extends JFrame {
         //  Указываем диспечер компановки
         jPanel.setLayout(new BorderLayout());
 
-        jPanel.add(new JScrollPane(mainTextArea), BorderLayout.CENTER);
+//        jPanel.add(new JScrollPane(mainTextArea), BorderLayout.CENTER);
         jPanel.add(rightPanel, BorderLayout.EAST);
 
 
@@ -88,20 +89,20 @@ class MainWindow extends JFrame {
 
         commentBlockButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                mainTextArea.setCommentOfLines();
+            public void actionPerformed(ActionEvent ae) {
+                mainTextArea.setCommentOfLines(ae);
             }
         });
         commentButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                mainTextArea.setCommentOfLine();
+            public void actionPerformed(ActionEvent ae) {
+                mainTextArea.setCommentOfLines(ae);
             }
         });
         blockButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                mainTextArea.setConditionAtCode();
             }
         });
 
@@ -114,6 +115,9 @@ class MainWindow extends JFrame {
         });
         setJMenuBar(new Menu(MainWindow.this));
         setVisible(true);
+    }
+    private void setCenterTextArea(){
+        jPanel.add(new JScrollPane(mainTextArea), BorderLayout.CENTER);
     }
 
     private void setToPreferredSizeFrame() {
@@ -134,13 +138,10 @@ class MainWindow extends JFrame {
         else commentButton.setText("Закомментировать строку");
     }
 
-    void setTextInTextArea(List<String> s) {
-        mainTextArea.loadText(s);
-    }
     String getTextFromTextArea(){
         return mainTextArea.getStyleText();
     }
-    void showImageOfProgram(){
+    private void showImageOfProgram(){
         imageLabel.setIcon( controlProgramFile.getImage());
     }
     private void createBottomLabels(JTextArea bottomTextArea, String text, Color color){
@@ -169,8 +170,10 @@ class MainWindow extends JFrame {
     }
     void setProgram(ControlProgramFile c){
         controlProgramFile  = c;
-        setTextInTextArea(controlProgramFile.getDataFromFile());
+        mainTextArea = new TextAreaWithStyles(controlProgramFile.getDataFromFile());
+        mainTextArea.loadText();
         showImageOfProgram();
+        setCenterTextArea();
     }
 
 }
