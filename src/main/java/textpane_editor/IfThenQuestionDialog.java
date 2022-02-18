@@ -3,6 +3,7 @@ package textpane_editor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -22,10 +23,9 @@ class IfThenQuestionDialog extends JDialog {
 
     IfThenQuestionDialog(List<String> listGCommands){
         super();
-
         this.listGCommands = listGCommands;
     }
-    private void setConditionWindow(){
+    private void initComponents(){
         pnPanel0 = new JPanel();
         GridBagLayout gbPanel0 = new GridBagLayout();
         GridBagConstraints gbcPanel0 = new GridBagConstraints();
@@ -142,14 +142,46 @@ class IfThenQuestionDialog extends JDialog {
     public void getConditionAtCode(int[] val){
         String s = JOptionPane.showInputDialog("Введите условие вида+" +
                 " \'word(слово) = 1(число)\'");
+
         if(!s.isEmpty()){
             listGCommands.add(val[0], "IF " + s + " THEN");
             listGCommands.add(val[1] + 2, "FI");
+            listGCommands.add(1, "PAR "+ s + "\" \"");
         }
         else return;
     }
 
-    String[] getTextFromIfThenDialog(){
-        return sArray;
+    // ПЕРЕДЕЛАТЬ ЭТУ ДИЧЬ!
+    public void deleteCondition(int n){
+        int end = 0;
+        int start = 0;
+        for (int i = n; i > 0; i--) {
+            if ( listGCommands.get(i).contains("FI") ) {
+                JOptionPane.showMessageDialog(null,"Блок был указан не верно.");
+                return;
+            }
+            if( listGCommands.get(i).contains("IF") ) {
+                start = i;
+                break;
+            }
+        }
+        for (int i = n; i < listGCommands.size(); i++) {
+            if( listGCommands.get(i).contains("IF") )  {
+                JOptionPane.showMessageDialog(null,"А нет вашего блока");
+                break;
+            }
+            if( listGCommands.get(i).contains("FI") )  end = i;
+        }
+        System.out.println(listGCommands.get(start).substring(3, listGCommands.get(start).indexOf("THEN")-1));
+        if (start == 0 | end == 0){
+            JOptionPane.showMessageDialog(null,"А нет вашего блока");
+            return;}
+        else {
+            listGCommands.remove(end);     //Удаляем с конца. Т.к. если удалить с начала массива
+            listGCommands.remove(start);   //элементы сдвинутся и будут удалена другая строка
+        }
+
     }
+
+
 }

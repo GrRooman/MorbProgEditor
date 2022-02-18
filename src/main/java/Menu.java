@@ -83,10 +83,10 @@ class Menu extends JMenuBar {
                 }
             }
         });
-//        Не работает , починить
+
         jmiClose.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-//                mw.setTextInTextArea(null);
+                mw.clearTextPane();
             }
         });
         

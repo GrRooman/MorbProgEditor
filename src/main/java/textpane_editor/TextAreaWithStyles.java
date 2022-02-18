@@ -18,9 +18,9 @@ public class TextAreaWithStyles extends JTextPane{
     private List<String> listGCommands;
     // Стили редактора
     private String[] firstLetterOfComandString =
-                  {"H","G0", "G1", "G2", "G3", "B", "GIN", "GOUT",
-                          "C", "XG0", "XB", "XGIN", "XGOUT",
-                          "XL2P", "XAR", "", "MSG", "N"};
+            {"H","G0", "G1", "G2", "G3", "B", "GIN", "GOUT",
+                    "C", "XG0", "XB", "XGIN", "XGOUT",
+                    "XL2P", "XAR", "", "MSG", "N"};
     private  Style     heading    = null; // стиль заголовка
     private  Style     normal     = null; // стиль текста
     private  Style     comment    = null; // стиль коментария
@@ -31,10 +31,13 @@ public class TextAreaWithStyles extends JTextPane{
     private Document doc;
     private static final Logger log = LoggerFactory.getLogger(TextAreaWithStyles.class.getName());
 
+    static int n=0;
+
     public TextAreaWithStyles(List<String> list) {
         listGCommands = list;
         // Определение стилей редактора
         createStyles();
+        System.out.println(n++);
     }
     /**
      * Процедура формирования стилей редактора
@@ -72,7 +75,6 @@ public class TextAreaWithStyles extends JTextPane{
      * Процедура загрузки текста в редактор
      */
     public void loadText() {
-//        System.out.println("*****");
         int n=1;
         Style style=null;
         // Загружаем в документ содержимое
@@ -92,17 +94,17 @@ public class TextAreaWithStyles extends JTextPane{
      * @param string строка
      * @param style стиль
      */
-    private void insertText(String string, Style style)
-    {
+    private void insertText(String string, Style style) {
         try {
             doc = this.getDocument();
             doc.insertString(doc.getLength(), string, style);
         } catch (Exception e) {
             log.error("Ошибка вставки данных в документ {}",e);
         }
+        repaint();
     }
     public String getStyleText(){
-         return this.getText();
+        return this.getText();
     }
 
     // Метод позволяет появиться горизонтальному ScrollBar,
@@ -110,6 +112,11 @@ public class TextAreaWithStyles extends JTextPane{
     @Override
     public boolean getScrollableTracksViewportWidth(){
         return getUI().getPreferredSize(this).width <= getParent().getSize().width;
+    }
+    public void clearTextPane(){
+//        listGCommands.clear();
+        textAreaReset();
+//        System.out.println("clear");
     }
 
     public void setCommentOfLines(ActionEvent ae){
@@ -136,6 +143,14 @@ public class TextAreaWithStyles extends JTextPane{
         textAreaReset();
         loadText();
         RXTextUtilities.gotoStartOfLine(this, 1);
+    }
+    public void deleteBlockOfCode(){
+        System.out.println(this.getText());
+//        IfThenQuestionDialog i = new IfThenQuestionDialog(listGCommands);
+//        i.deleteCondition(RXTextUtilities.getLineAtCaret(this));
+//        textAreaReset();
+//        loadText();
+//        RXTextUtilities.gotoStartOfLine(this, 1);
     }
 
     private boolean isComments(int line){

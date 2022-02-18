@@ -23,9 +23,10 @@ class MainWindow extends JFrame {
     private TextAreaWithStyles mainTextArea;
     private JTextArea leftBottomTextArea;
     private JTextArea rightBottomTextArea;
-    private JButton commentButton;
-    private JButton commentBlockButton;
-    private JButton blockButton;
+    private JButton commentToggleButton;
+    private JButton commentBlockToggleButton;
+    private JButton conditionOnBlockToggleButton;
+    private JButton deleteBlockButton;
     private JLabel imageLabel;
     private JLabel textInfoLabel;
     private ControlProgramFile controlProgramFile;
@@ -46,22 +47,23 @@ class MainWindow extends JFrame {
         textInfoLabel.setPreferredSize(new Dimension(220, 105));
         textInfoLabel.setMaximumSize(new Dimension(220, 105));
 
-        commentButton = new JButton("Закомментировать\';\'");
-        commentBlockButton = new JButton("Закомментировать блок\';\'");
-        blockButton = new JButton("Условн. инстр. блок IF THEN");
+        commentToggleButton = new JButton("Закомментировать\';\'");
+        commentBlockToggleButton = new JButton("Закомментировать блок\';\'");
+        conditionOnBlockToggleButton = new JButton("Условн. инстр. блок IF THEN");
+        deleteBlockButton = new JButton("Удалить блок");
 
-        commentButton.setActionCommand("comLine");
-        commentBlockButton.setActionCommand("comLines");
+        commentToggleButton.setActionCommand("comLine");
+        commentBlockToggleButton.setActionCommand("comLines");
 
         rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBackground(new Color(176, 181, 176));
 
         rightPanel.add(imageLabel);
-        rightPanel.add(commentButton);
-        rightPanel.add(commentBlockButton);
-        rightPanel.add(blockButton);
-        rightPanel.add(new JButton("Удалить блок"));
+        rightPanel.add(commentToggleButton);
+        rightPanel.add(commentBlockToggleButton);
+        rightPanel.add(conditionOnBlockToggleButton);
+        rightPanel.add(deleteBlockButton);
         rightPanel.add(textInfoLabel);
 //
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
@@ -87,24 +89,31 @@ class MainWindow extends JFrame {
         // Устанавливаем место появления окна программы
         centreWindow(this);
 
-        commentBlockButton.addActionListener(new ActionListener() {
+        commentBlockToggleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 mainTextArea.setCommentOfLines(ae);
             }
         });
-        commentButton.addActionListener(new ActionListener() {
+        commentToggleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 mainTextArea.setCommentOfLines(ae);
             }
         });
-        blockButton.addActionListener(new ActionListener() {
+        conditionOnBlockToggleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mainTextArea.setConditionAtCode();
             }
         });
+        deleteBlockButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainTextArea.deleteBlockOfCode();
+            }
+        });
+
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -134,8 +143,8 @@ class MainWindow extends JFrame {
     }
 
     private void setTextToCommentButton(boolean b){
-        if(b) commentButton.setText("Раскомментировать строку");
-        else commentButton.setText("Закомментировать строку");
+        if(b) commentToggleButton.setText("Раскомментировать строку");
+        else commentToggleButton.setText("Закомментировать строку");
     }
 
     String getTextFromTextArea(){
@@ -167,6 +176,9 @@ class MainWindow extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    void clearTextPane(){
+        mainTextArea.clearTextPane();
     }
     void setProgram(ControlProgramFile c){
         controlProgramFile  = c;
