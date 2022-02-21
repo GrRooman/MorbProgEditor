@@ -6,7 +6,12 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.text.*;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -35,9 +40,27 @@ public class TextAreaWithStyles extends JTextPane{
 
     public TextAreaWithStyles(List<String> list) {
         listGCommands = list;
+
+//        // Привязка Undo Redo функций к JTextPane
+        doc = this.getDocument();
+//        final UndoManager undo=new UndoManager();
+        // Listen for undo and redo events
+//        doc.addUndoableEditListener(new UndoableEditListener() {
+//            public void undoableEditHappened(UndoableEditEvent evt) {
+//                undo.addEdit(evt.getEdit()); } }); // Create an undo action and add it to the text component
+//        this.getActionMap().put("Undo", new AbstractAction("Undo") {
+//            public void actionPerformed(ActionEvent evt) {
+//                try { if (undo.canUndo()) { undo.undo(); }
+//                } catch (CannotUndoException e) { } } }); // Bind the undo action to ctl-Z
+//        this.getInputMap().put(KeyStroke.getKeyStroke("control Z"), "Undo"); // Create a redo action and add it to the text component
+//        this.getActionMap().put("Redo", new AbstractAction("Redo") {
+//            public void actionPerformed(ActionEvent evt) {
+//                try { if (undo.canRedo()) { undo.redo(); }
+//                } catch (CannotRedoException e) { } } }); // Bind the redo action to ctl-Y
+//        this.getInputMap().put(KeyStroke.getKeyStroke("control Y"), "Redo");
+
         // Определение стилей редактора
         createStyles();
-        System.out.println(n++);
     }
     /**
      * Процедура формирования стилей редактора
@@ -96,7 +119,7 @@ public class TextAreaWithStyles extends JTextPane{
      */
     private void insertText(String string, Style style) {
         try {
-            doc = this.getDocument();
+//            doc = this.getDocument();
             doc.insertString(doc.getLength(), string, style);
         } catch (Exception e) {
             log.error("Ошибка вставки данных в документ {}",e);
@@ -114,9 +137,7 @@ public class TextAreaWithStyles extends JTextPane{
         return getUI().getPreferredSize(this).width <= getParent().getSize().width;
     }
     public void clearTextPane(){
-//        listGCommands.clear();
         textAreaReset();
-//        System.out.println("clear");
     }
 
     public void setCommentOfLines(ActionEvent ae){
@@ -145,7 +166,7 @@ public class TextAreaWithStyles extends JTextPane{
         RXTextUtilities.gotoStartOfLine(this, 1);
     }
     public void deleteBlockOfCode(){
-        System.out.println(this.getText());
+//        System.out.println(this);
 //        IfThenQuestionDialog i = new IfThenQuestionDialog(listGCommands);
 //        i.deleteCondition(RXTextUtilities.getLineAtCaret(this));
 //        textAreaReset();

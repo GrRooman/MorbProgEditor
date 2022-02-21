@@ -4,6 +4,7 @@ out/
 .idea/
 /src/main/resources/Bin/
 MorbProgEditor.iml
+/target/
 
 
 #  NetBeans

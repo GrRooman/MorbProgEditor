@@ -86,7 +86,7 @@ class Menu extends JMenuBar {
 
         jmiClose.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-                mw.clearTextPane();
+                mw.clearAndCloseTextPane();
             }
         });
         

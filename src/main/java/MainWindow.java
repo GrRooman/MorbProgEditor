@@ -29,6 +29,7 @@ class MainWindow extends JFrame {
     private JButton deleteBlockButton;
     private JLabel imageLabel;
     private JLabel textInfoLabel;
+    private JScrollPane scrollPane;
     private ControlProgramFile controlProgramFile;
     private static final Logger log = LoggerFactory.getLogger(MainWindow.class.getName());
 
@@ -73,9 +74,7 @@ class MainWindow extends JFrame {
         //  Указываем диспечер компановки
         jPanel.setLayout(new BorderLayout());
 
-//        jPanel.add(new JScrollPane(mainTextArea), BorderLayout.CENTER);
         jPanel.add(rightPanel, BorderLayout.EAST);
-
 
         jPanel.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -110,7 +109,7 @@ class MainWindow extends JFrame {
         deleteBlockButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainTextArea.deleteBlockOfCode();
+                System.out.println(mainTextArea);
             }
         });
 
@@ -126,7 +125,7 @@ class MainWindow extends JFrame {
         setVisible(true);
     }
     private void setCenterTextArea(){
-        jPanel.add(new JScrollPane(mainTextArea), BorderLayout.CENTER);
+        jPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
     private void setToPreferredSizeFrame() {
@@ -177,12 +176,17 @@ class MainWindow extends JFrame {
             e.printStackTrace();
         }
     }
-    void clearTextPane(){
+    void clearAndCloseTextPane(){
         mainTextArea.clearTextPane();
+        mainTextArea = null;
+        jPanel.remove(scrollPane);
+        scrollPane = null;
+        MainWindow.this.repaint();
     }
     void setProgram(ControlProgramFile c){
         controlProgramFile  = c;
         mainTextArea = new TextAreaWithStyles(controlProgramFile.getDataFromFile());
+        scrollPane = new JScrollPane(mainTextArea);
         mainTextArea.loadText();
         showImageOfProgram();
         setCenterTextArea();
