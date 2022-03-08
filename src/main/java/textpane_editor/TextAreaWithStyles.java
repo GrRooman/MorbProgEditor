@@ -14,6 +14,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -143,7 +144,7 @@ public class TextAreaWithStyles extends JTextPane{
     public void setCommentOfLines(ActionEvent ae){
         int[] val = {0,0};
         if (ae.getActionCommand().equals("comLine"))  val = getStartAndEndSelectedText();
-        else if (ae.getActionCommand().equals("comLines")) val = defineBlockOfCodeByCaret();
+        else if (ae.getActionCommand().equals("comBlock")) val = defineBlockOfCodeByCaret();
         else log.error("Был сделан какой-то неожиданный выбор при нажатии чего-то.");
         for (int i = val[0]; i <= val[1]; i++) {
             if(!isComments(i)){
@@ -158,9 +159,11 @@ public class TextAreaWithStyles extends JTextPane{
         }
     }
 
-    public void setConditionAtCode(){
-        IfThenQuestionDialog i = new IfThenQuestionDialog(listGCommands);
-        i.getConditionAtCode(defineBlockOfCodeByCaret());
+    public void setConditionAtCode(ActionEvent ae){
+        int[] val = {0,0};
+        if (ae.getActionCommand().equals("condiLines"))  val = getStartAndEndSelectedText();
+        else if (ae.getActionCommand().equals("condiBlock")) val = defineBlockOfCodeByCaret();
+        IfThenQuestionDialog.setConditionAtCode(val, listGCommands);
         textAreaReset();
         loadText();
         RXTextUtilities.gotoStartOfLine(this, 1);

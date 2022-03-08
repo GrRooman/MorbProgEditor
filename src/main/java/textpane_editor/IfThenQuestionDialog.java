@@ -139,17 +139,40 @@ class IfThenQuestionDialog extends JDialog {
 
     }
 
-    public void getConditionAtCode(int[] val){
+    static void setConditionAtCode(int[] val, List list){
         String s = JOptionPane.showInputDialog("Введите условие вида+" +
                 " \'word(слово) = 1(число)\'");
 
         if(!s.isEmpty()){
-            listGCommands.add(val[0], "IF " + s + " THEN");
-            listGCommands.add(val[1] + 2, "FI");
-            listGCommands.add(1, "PAR "+ s + "\" \"");
+            list.add(val[0], "IF " + s + " THEN");
+            list.add(val[1] + 2, "FI");
+            list.add(1, "PAR "+ s + "\" \"");
         }
         else return;
     }
+
+//    static void defineIfThenBlock(int[] n, List list){
+//        for (int i = n; i > 0; i--) {
+//            if ( list.get(i).contains("FI") ) {
+//                System.out.println(i);
+//                JOptionPane.showMessageDialog(null,"Блок был указан не верно.");
+//                break;
+//            }
+//            if( list.get(i).contains("IF") ) {
+//                System.out.println(1+"*");
+//                start = i;
+//                break;
+//            }
+//        }
+//        for (int i = n; i < list.size(); i++) {
+//            if( list.get(i).contains("IF") )  {
+//                JOptionPane.showMessageDialog(null,"А нет вашего блока");
+//                break;
+//            }
+//            if( list.get(i).contains("FI") )  end = i;
+//        }
+//
+//    }
 
     // ПЕРЕДЕЛАТЬ ЭТУ ДИЧЬ!
     public void deleteCondition(int n){
@@ -157,10 +180,12 @@ class IfThenQuestionDialog extends JDialog {
         int start = 0;
         for (int i = n; i > 0; i--) {
             if ( listGCommands.get(i).contains("FI") ) {
+                System.out.println(i);
                 JOptionPane.showMessageDialog(null,"Блок был указан не верно.");
-                return;
+                break;
             }
             if( listGCommands.get(i).contains("IF") ) {
+                System.out.println(1+"*");
                 start = i;
                 break;
             }

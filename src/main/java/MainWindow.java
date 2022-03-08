@@ -18,17 +18,16 @@ class MainWindow extends JFrame {
 
     private final JPanel rightPanel;
     private UserPreferences up;
-    private JPanel jPanel;
-    private JPanel bottomPanel;
+    private JPanel jPanel, bottomPanel;
     private TextAreaWithStyles mainTextArea;
-    private JTextArea leftBottomTextArea;
-    private JTextArea rightBottomTextArea;
-    private JButton commentToggleButton;
-    private JButton commentBlockToggleButton;
-    private JButton conditionOnBlockToggleButton;
-    private JButton deleteBlockButton;
+    private JTextArea leftBottomTextArea, rightBottomTextArea;
+    private JButton commentToggleButton,
+            commentBlockToggleButton,
+            conditionToggleButton,
+            conditionOnBlockToggleButton,
+            deleteBlockButton;
     private JLabel imageLabel;
-    private JLabel textInfoLabel;
+//    private JLabel textInfoLabel;
     private JScrollPane scrollPane;
     private ControlProgramFile controlProgramFile;
     private static final Logger log = LoggerFactory.getLogger(MainWindow.class.getName());
@@ -44,17 +43,20 @@ class MainWindow extends JFrame {
         imageLabel.setPreferredSize(new Dimension(220, 105));
         imageLabel.setMaximumSize(new Dimension(220, 105));
 
-        textInfoLabel = new JLabel("new data");
-        textInfoLabel.setPreferredSize(new Dimension(220, 105));
-        textInfoLabel.setMaximumSize(new Dimension(220, 105));
+//        textInfoLabel = new JLabel("new data");
+//        textInfoLabel.setPreferredSize(new Dimension(220, 105));
+//        textInfoLabel.setMaximumSize(new Dimension(220, 105));
 
-        commentToggleButton = new JButton("Закомментировать\';\'");
+        commentToggleButton = new JButton("Закомментировать строки\';\'");
         commentBlockToggleButton = new JButton("Закомментировать блок\';\'");
+        conditionToggleButton = new JButton("Условн. инстр. IF THEN");
         conditionOnBlockToggleButton = new JButton("Условн. инстр. блок IF THEN");
         deleteBlockButton = new JButton("Удалить блок");
 
         commentToggleButton.setActionCommand("comLine");
-        commentBlockToggleButton.setActionCommand("comLines");
+        commentBlockToggleButton.setActionCommand("comBlock");
+        conditionToggleButton.setActionCommand("condiLines");
+        conditionOnBlockToggleButton.setActionCommand("condiBlock");
 
         rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
@@ -63,9 +65,10 @@ class MainWindow extends JFrame {
         rightPanel.add(imageLabel);
         rightPanel.add(commentToggleButton);
         rightPanel.add(commentBlockToggleButton);
+        rightPanel.add(conditionToggleButton);
         rightPanel.add(conditionOnBlockToggleButton);
         rightPanel.add(deleteBlockButton);
-        rightPanel.add(textInfoLabel);
+//        rightPanel.add(textInfoLabel);
 //
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
         bottomPanel = new JPanel();
@@ -100,10 +103,16 @@ class MainWindow extends JFrame {
                 mainTextArea.setCommentOfLines(ae);
             }
         });
+        conditionToggleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                mainTextArea.setConditionAtCode(ae);
+            }
+        });
         conditionOnBlockToggleButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                mainTextArea.setConditionAtCode();
+            public void actionPerformed(ActionEvent ae) {
+                mainTextArea.setConditionAtCode(ae);
             }
         });
         deleteBlockButton.addActionListener(new ActionListener() {
