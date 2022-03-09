@@ -10,21 +10,16 @@ class IfThenQuestionDialog extends JDialog {
 
     private JPanel pnPanel0;
     private JCheckBox cbBox0;
-    private JLabel lbLabel1;
-    private JTextField tfText0;
-    private JLabel lbLabel2;
-    private JTextField tfText1;
-    private JButton btBut0;
-    private JButton btBut1;
+    private JLabel lbLabel1, lbLabel2;
+    private JTextField tfText0, tfText1;
+    private JButton btBut0, btBut1;
     private String[] sArray;
 
-    private java.util.List<String> listGCommands;
 
-    IfThenQuestionDialog(List<String> listGCommands){
+    IfThenQuestionDialog() {
         super();
-        this.listGCommands = listGCommands;
     }
-    private void initComponents(){
+    private void initComponents() {
         pnPanel0 = new JPanel();
         GridBagLayout gbPanel0 = new GridBagLayout();
         GridBagConstraints gbcPanel0 = new GridBagConstraints();
@@ -139,75 +134,63 @@ class IfThenQuestionDialog extends JDialog {
     }
 
     static void setConditionAtCode(List<String> list, int[] val){
-        String s = JOptionPane.showInputDialog("Введите условие вида+" +
-                " \'word(слово) = 1(число)\'");
-
-        if(!s.isEmpty()){
-            list.add(val[0], "IF " + s + " THEN");
-            list.add(val[1] + 2, "FI");
-            list.add(1, "PAR "+ s + "\" \"");
+        String s = JOptionPane.showInputDialog("Введите условие вида+" + " \'word(слово) = 1(число)\'");
+        if (s != null) {
+            if (!s.isEmpty()) {
+                list.add(val[0], "IF " + s + " THEN");
+                list.add(val[1] + 2, "FI");
+                list.add(1, "PAR " + s + "\" \"");
+            }
         }
         else return;
     }
-
+    // Функция для определения нахождения каретки или выделенного текста в блоке  IF THEN.
+    // Если каретка или выделенный текст находится в блоке возвращает TRUE, иначе FALSE.
     static boolean defineIfThenBlock(List<String> list, int[] n){
-        int start = 0, end = 0;
+        int start = -1, end = -1;
         for (int i = n[0]; i > 0; i--) {
-            if ( list.get(i).contains("FI") ) {
-                start = -1;
+            if (list.get(i).contains("FI")) {
+//                start = -1;
                 break;
             }
-            if( list.get(i).contains("IF") ) {
+            if (list.get(i).contains("IF")) {
                 start = i;
                 break;
             }
         }
         for (int i = n[1]; i < list.size(); i++) {
-            if( list.get(i).contains("IF") )  {
-                end = -1;
+            if (list.get(i).contains("IF")) {
+//                end = -1;
                 break;
             }
-            if( list.get(i).contains("FI") ) {
+            if (list.get(i).contains("FI")) {
                 end = i;
                 break;
             }
         }
-        if(start != -1 && end != -1 ) return true;
+        if ((start != -1) && (end != -1)) return true;
         else return false;
     }
 
-    // ПЕРЕДЕЛАТЬ ЭТУ ДИЧЬ!
-    public void deleteCondition(int n){
-        int start = 0, end = 0;
-        for (int i = n; i > 0; i--) {
-            if ( listGCommands.get(i).contains("FI") ) {
-                System.out.println(i);
-                JOptionPane.showMessageDialog(null, "Блок был указан не верно.");
-                break;
-            }
-            if( listGCommands.get(i).contains("IF") ) {
-                System.out.println(1+"*");
+    static void deleteCondition(List<String> list, int[] n){
+        int start = -1 , end = -1;
+        for (int i = n[0]; i > 0; i--) {
+            if (list.get(i).contains("IF")) {
                 start = i;
                 break;
             }
         }
-        for (int i = n; i < listGCommands.size(); i++) {
-            if( listGCommands.get(i).contains("IF") )  {
-                JOptionPane.showMessageDialog(null, "А нет вашего блока XA! XA! XA!");
-                break;
-            }
-            if( listGCommands.get(i).contains("FI") )  end = i;
+        for (int i = n[1]; i < list.size(); i++) {
+            if (list.get(i).contains("FI")) end = i;
         }
-        System.out.println(listGCommands.get(start).substring(3, listGCommands.get(start).indexOf("THEN")-1));
-        if (start == 0 | end == 0){
-            JOptionPane.showMessageDialog(null, "А нет вашего блока XA! XA! XA!");
-            return;}
-        else {
-            listGCommands.remove(end);     //Удаляем с конца. Т.к. если удалить с начала массива
-            listGCommands.remove(start);   //элементы сдвинутся и будут удалена другая строка
+        if ((start != -1) &&(end != -1)) {
+            list.remove(end);     //Удаляем с конца. Т.к. если удалить с начала массива
+            list.remove(start);   //элементы сдвинутся и будут удалена другая строка
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "\"Правильный\" блок IF THEN не обнаружен. Используйте другую кнопку.",
+                    "Внимание!",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
-
     }
-
-
 }

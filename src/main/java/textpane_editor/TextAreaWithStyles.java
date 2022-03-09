@@ -163,8 +163,14 @@ public class TextAreaWithStyles extends JTextPane{
         int[] val = {0,0};
         if (ae.getActionCommand().equals("condiLines"))  val = getStartAndEndSelectedText();
         else if (ae.getActionCommand().equals("condiBlock")) val = defineBlockOfCodeByCaret();
-        System.out.println(IfThenQuestionDialog.defineIfThenBlock(listGCommands, val));
-        IfThenQuestionDialog.setConditionAtCode(listGCommands, val);
+        System.out.println(Arrays.toString(val));
+        if (IfThenQuestionDialog.defineIfThenBlock(listGCommands, val)) {
+            System.out.println("*");
+            IfThenQuestionDialog.deleteCondition(listGCommands, val);
+        } else {
+            System.out.println("**");
+            IfThenQuestionDialog.setConditionAtCode(listGCommands, val);
+        }
         textAreaReset();
         loadText();
         RXTextUtilities.gotoStartOfLine(this, 1);
@@ -205,8 +211,7 @@ public class TextAreaWithStyles extends JTextPane{
 
     private int[] defineBlockOfCodeByCaret(){
         int n = RXTextUtilities.getLineAtCaret(this)-1;
-        int end = 0;
-        int start = 0;
+        int end = 0, start = 0;
         for (int i = n; i > 0; i--) {
             if( listGCommands.get(i).contains("GIN") ) {
                 if( listGCommands.get(i-1).contains("C") ) {start = i-1; break;}
