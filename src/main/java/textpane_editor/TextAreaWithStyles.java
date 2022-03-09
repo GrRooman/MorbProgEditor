@@ -163,7 +163,8 @@ public class TextAreaWithStyles extends JTextPane{
         int[] val = {0,0};
         if (ae.getActionCommand().equals("condiLines"))  val = getStartAndEndSelectedText();
         else if (ae.getActionCommand().equals("condiBlock")) val = defineBlockOfCodeByCaret();
-        IfThenQuestionDialog.setConditionAtCode(val, listGCommands);
+        System.out.println(IfThenQuestionDialog.defineIfThenBlock(listGCommands, val));
+        IfThenQuestionDialog.setConditionAtCode(listGCommands, val);
         textAreaReset();
         loadText();
         RXTextUtilities.gotoStartOfLine(this, 1);

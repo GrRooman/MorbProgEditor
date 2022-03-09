@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import java.util.List;
 
-
 class IfThenQuestionDialog extends JDialog {
 
     private JPanel pnPanel0;
@@ -139,7 +138,7 @@ class IfThenQuestionDialog extends JDialog {
 
     }
 
-    static void setConditionAtCode(int[] val, List list){
+    static void setConditionAtCode(List<String> list, int[] val){
         String s = JOptionPane.showInputDialog("Введите условие вида+" +
                 " \'word(слово) = 1(число)\'");
 
@@ -151,37 +150,39 @@ class IfThenQuestionDialog extends JDialog {
         else return;
     }
 
-//    static void defineIfThenBlock(int[] n, List list){
-//        for (int i = n; i > 0; i--) {
-//            if ( list.get(i).contains("FI") ) {
-//                System.out.println(i);
-//                JOptionPane.showMessageDialog(null,"Блок был указан не верно.");
-//                break;
-//            }
-//            if( list.get(i).contains("IF") ) {
-//                System.out.println(1+"*");
-//                start = i;
-//                break;
-//            }
-//        }
-//        for (int i = n; i < list.size(); i++) {
-//            if( list.get(i).contains("IF") )  {
-//                JOptionPane.showMessageDialog(null,"А нет вашего блока");
-//                break;
-//            }
-//            if( list.get(i).contains("FI") )  end = i;
-//        }
-//
-//    }
+    static boolean defineIfThenBlock(List<String> list, int[] n){
+        int start = 0, end = 0;
+        for (int i = n[0]; i > 0; i--) {
+            if ( list.get(i).contains("FI") ) {
+                start = -1;
+                break;
+            }
+            if( list.get(i).contains("IF") ) {
+                start = i;
+                break;
+            }
+        }
+        for (int i = n[1]; i < list.size(); i++) {
+            if( list.get(i).contains("IF") )  {
+                end = -1;
+                break;
+            }
+            if( list.get(i).contains("FI") ) {
+                end = i;
+                break;
+            }
+        }
+        if(start != -1 && end != -1 ) return true;
+        else return false;
+    }
 
     // ПЕРЕДЕЛАТЬ ЭТУ ДИЧЬ!
     public void deleteCondition(int n){
-        int end = 0;
-        int start = 0;
+        int start = 0, end = 0;
         for (int i = n; i > 0; i--) {
             if ( listGCommands.get(i).contains("FI") ) {
                 System.out.println(i);
-                JOptionPane.showMessageDialog(null,"Блок был указан не верно.");
+                JOptionPane.showMessageDialog(null, "Блок был указан не верно.");
                 break;
             }
             if( listGCommands.get(i).contains("IF") ) {
@@ -192,14 +193,14 @@ class IfThenQuestionDialog extends JDialog {
         }
         for (int i = n; i < listGCommands.size(); i++) {
             if( listGCommands.get(i).contains("IF") )  {
-                JOptionPane.showMessageDialog(null,"А нет вашего блока");
+                JOptionPane.showMessageDialog(null, "А нет вашего блока XA! XA! XA!");
                 break;
             }
             if( listGCommands.get(i).contains("FI") )  end = i;
         }
         System.out.println(listGCommands.get(start).substring(3, listGCommands.get(start).indexOf("THEN")-1));
         if (start == 0 | end == 0){
-            JOptionPane.showMessageDialog(null,"А нет вашего блока");
+            JOptionPane.showMessageDialog(null, "А нет вашего блока XA! XA! XA!");
             return;}
         else {
             listGCommands.remove(end);     //Удаляем с конца. Т.к. если удалить с начала массива
