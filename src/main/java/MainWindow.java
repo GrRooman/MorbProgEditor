@@ -27,13 +27,14 @@ class MainWindow extends JFrame {
             conditionOnBlockToggleButton,
             deleteBlockButton;
     private JLabel imageLabel;
-//    private JLabel textInfoLabel;
+    //    private JLabel textInfoLabel;
     private JScrollPane scrollPane;
     private ControlProgramFile controlProgramFile;
     private static final Logger log = LoggerFactory.getLogger(MainWindow.class.getName());
 
     MainWindow() {
         setTitle("MorbProgEditor");
+
         up = new UserPreferences();
         jPanel = new JPanel();
         leftBottomTextArea = new JTextArea();
@@ -51,7 +52,7 @@ class MainWindow extends JFrame {
         commentBlockToggleButton = new JButton("Закомментировать блок\';\'");
         conditionToggleButton = new JButton("Условн. инстр. IF THEN");
         conditionOnBlockToggleButton = new JButton("Условн. инстр. блок IF THEN");
-        deleteBlockButton = new JButton("Удалить блок");
+        deleteBlockButton = new JButton("Удалить выделенный блок");
 
         commentToggleButton.setActionCommand("comLine");
         commentBlockToggleButton.setActionCommand("comBlock");
@@ -118,7 +119,7 @@ class MainWindow extends JFrame {
         deleteBlockButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(mainTextArea);
+//                mainTextArea.deleteBlockOfCode();
             }
         });
 
@@ -133,6 +134,12 @@ class MainWindow extends JFrame {
         setJMenuBar(new Menu(MainWindow.this));
         setVisible(true);
     }
+    private void setAddTitle(String name){
+        setTitle(name + "     | "  + "     [ Length: " + mainTextArea.getText().length()
+                + "    Lines: " + (mainTextArea.getText() + "|").split("\n").length
+                + "    Words: " + mainTextArea.getText().trim().split("\\s+").length + " ]");
+    }
+
     private void setCenterTextArea(){
         jPanel.add(scrollPane, BorderLayout.CENTER);
     }
@@ -199,6 +206,7 @@ class MainWindow extends JFrame {
         mainTextArea.loadText();
         showImageOfProgram();
         setCenterTextArea();
+        setAddTitle(controlProgramFile.getFileName());
     }
 
 }

@@ -175,14 +175,14 @@ public class TextAreaWithStyles extends JTextPane{
         loadText();
         RXTextUtilities.gotoStartOfLine(this, 1);
     }
-    public void deleteBlockOfCode(){
-//        System.out.println(this);
-//        IfThenQuestionDialog i = new IfThenQuestionDialog(listGCommands);
-//        i.deleteCondition(RXTextUtilities.getLineAtCaret(this));
+//    public void deleteBlockOfCode(){
+//        System.out.println("delete");
+//        int[] val = defineBlockOfCodeByCaret();
+//        System.out.println(Arrays.toString(val));
 //        textAreaReset();
 //        loadText();
 //        RXTextUtilities.gotoStartOfLine(this, 1);
-    }
+//    }
 
     private boolean isComments(int line){
         if(listGCommands.get(line).charAt(0) == ';') return true;
@@ -201,8 +201,7 @@ public class TextAreaWithStyles extends JTextPane{
         if ( a<=b ) {
             startText = a;
             endText   = b;
-        }
-        else {
+        } else {
             startText = b;
             endText   = a;
         }

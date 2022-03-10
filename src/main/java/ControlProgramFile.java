@@ -34,11 +34,8 @@ class ControlProgramFile {
             return  rf.readFile(pathToFile.getAbsolutePath());
         }
     }
-
-    private String listIntoText(List<String> list){
-        String s="";
-        s = list.stream().map(q -> q+"\n").reduce(s, String::concat);
-        return s;
+    String getFileName(){
+        return pathToFile.getName();
     }
 
     ImageIcon getImage(){
@@ -50,6 +47,11 @@ class ControlProgramFile {
         } catch (IOException ex) {
         }
         return new ImageIcon(image);
+    }
+    private String listIntoText(List<String> list){
+        String s="";
+        s = list.stream().map(q -> q+"\n").reduce(s, String::concat);
+        return s;
     }
 }
 
