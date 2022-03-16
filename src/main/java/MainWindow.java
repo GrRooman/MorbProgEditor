@@ -6,10 +6,7 @@ import textpane_editor.TextAreaWithStyles;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
@@ -27,6 +24,7 @@ class MainWindow extends JFrame {
             conditionOnBlockToggleButton,
             deleteBlockButton;
     private JLabel imageLabel;
+    private JToolBar jToolBar;
     //    private JLabel textInfoLabel;
     private JScrollPane scrollPane;
     private ControlProgramFile controlProgramFile;
@@ -39,6 +37,16 @@ class MainWindow extends JFrame {
         jPanel = new JPanel();
         leftBottomTextArea = new JTextArea();
         rightBottomTextArea = new JTextArea();
+        jToolBar = new JToolBar();
+        jToolBar.add(new EditAction("Открыть", new ImageIcon(getClass().getResource("Folder-Open.png")),
+                KeyEvent.VK_O,
+                KeyEvent.VK_O, "Открыть файл (Ctrl+O)"));
+        jToolBar.add(new EditAction("Undo", new ImageIcon(getClass().getResource("Arrows-Undo.png")),
+                KeyEvent.VK_Z,
+                KeyEvent.VK_Z, "Действие назад (Ctrl+Z)"));
+        jToolBar.add(new EditAction("Redo", new ImageIcon(getClass().getResource("Arrows-Redo.png")),
+                KeyEvent.VK_Y,
+                KeyEvent.VK_Y, "Действие вперед (Ctrl+Y)"));
 
         imageLabel = new JLabel("Место для вашей рекламы");
         imageLabel.setPreferredSize(new Dimension(220, 105));
@@ -78,8 +86,8 @@ class MainWindow extends JFrame {
         //  Указываем диспечер компановки
         jPanel.setLayout(new BorderLayout());
 
+        jPanel.add(jToolBar, BorderLayout.NORTH);
         jPanel.add(rightPanel, BorderLayout.EAST);
-
         jPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         add(jPanel);
@@ -207,6 +215,19 @@ class MainWindow extends JFrame {
         showImageOfProgram();
         setCenterTextArea();
         setAddTitle(controlProgramFile.getFileName());
+    }
+    class EditAction extends AbstractAction {
+        public EditAction(String  name,  Icon  image,  int  mnem, int  accel,  String  tTip) {
+            super(name,  image);
+            putValue(ACCELERATOR_KEY,  KeyStroke.getKeyStroke(accel, InputEvent.CTRL_DOWN_MASK));
+            putValue(MNEMONIC_KEY, new  Integer(mnem));
+            putValue(SHORT_DESCRIPTION,  tTip);
+        }
+
+        public void actionPerformed(ActionEvent event)
+        {
+            System.out.println(event.getSource());
+        }
     }
 
 }
