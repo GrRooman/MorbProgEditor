@@ -15,6 +15,8 @@ class MainWindow extends JFrame {
 
     private final JPanel rightPanel;
     private UserPreferences up;
+    private JMenu mFile, mEdit, mHelp;
+    private JMenuItem jmiOpen, jmiSave, jmiSaveAs, jmiClose, jmiExit,mUndo, mRedo, jmiSetting, jmiAbout;
     private JPanel jPanel, bottomPanel;
     private TextAreaWithStyles mainTextArea;
     private JTextArea leftBottomTextArea, rightBottomTextArea;
@@ -34,19 +36,50 @@ class MainWindow extends JFrame {
         setTitle("MorbProgEditor");
 
         up = new UserPreferences();
+
+        Action openFile = new EditAction("Открыть", new ImageIcon(getClass().getResource("Folder-Open.png")),
+                1,
+                KeyEvent.VK_O, "Открыть файл (Ctrl+O)");
+        Action saveFile = new EditAction("Сохранить", new ImageIcon(getClass().getResource("Save-Icon.png")),
+                1,
+                KeyEvent.VK_S, "Сохранить файл (Ctrl+S)");
+        Action undo = new EditAction("Undo", new ImageIcon(getClass().getResource("Arrows-Undo.png")),
+                KeyEvent.VK_Z,
+                KeyEvent.VK_Z, "Действие назад (Ctrl+Z)");
+        Action redo = new EditAction("Redo", new ImageIcon(getClass().getResource("Arrows-Redo.png")),
+                KeyEvent.VK_Y,
+                KeyEvent.VK_Y, "Действие вперед (Ctrl+Y)");
+
+        jToolBar = new JToolBar();
+        jToolBar.add(openFile);
+        jToolBar.add(saveFile);
+
+        mFile = new JMenu("Файл");
+
+        jmiSaveAs  =  new  JMenuItem("Сохранить как...");
+        jmiClose  =  new  JMenuItem("Закрыть");
+        jmiExit  =  new  JMenuItem("Выход");
+        mFile.add(openFile);
+        mFile.add(saveFile);
+        mFile.add(jmiSaveAs);
+        mFile.add(jmiClose);
+        mFile.add(jmiExit);
+
+        mEdit = new JMenu("Правка");
+        mUndo = new JMenuItem("Undo");
+        mRedo = new JMenuItem("Redo");
+
+        mHelp = new JMenu("Помощь");
+        jmiSetting  =  new  JMenuItem("Настройки");
+        jmiAbout  =  new  JMenuItem("О программе");
+
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(mFile);
+
+
         jPanel = new JPanel();
         leftBottomTextArea = new JTextArea();
         rightBottomTextArea = new JTextArea();
-        jToolBar = new JToolBar();
-        jToolBar.add(new EditAction("Открыть", new ImageIcon(getClass().getResource("Folder-Open.png")),
-                KeyEvent.VK_O,
-                KeyEvent.VK_O, "Открыть файл (Ctrl+O)"));
-        jToolBar.add(new EditAction("Undo", new ImageIcon(getClass().getResource("Arrows-Undo.png")),
-                KeyEvent.VK_Z,
-                KeyEvent.VK_Z, "Действие назад (Ctrl+Z)"));
-        jToolBar.add(new EditAction("Redo", new ImageIcon(getClass().getResource("Arrows-Redo.png")),
-                KeyEvent.VK_Y,
-                KeyEvent.VK_Y, "Действие вперед (Ctrl+Y)"));
 
         imageLabel = new JLabel("Место для вашей рекламы");
         imageLabel.setPreferredSize(new Dimension(220, 105));
@@ -139,7 +172,7 @@ class MainWindow extends JFrame {
                 up.setSizeFrame(MainWindow.this);
             }
         });
-        setJMenuBar(new Menu(MainWindow.this));
+        setJMenuBar(menuBar);
         setVisible(true);
     }
     private void setAddTitle(String name){

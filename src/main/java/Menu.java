@@ -46,9 +46,9 @@ class Menu extends JMenuBar {
         jmH.add(jmiSetting);
         jmH.add(jmiAbout);
 
-        add(jmF);
-        add(jmE);
-        add(jmH);
+//        add(jmF);
+//        add(jmE);
+//        add(jmH);
         
         jmiOpen.addActionListener((ActionEvent ae) -> {
             if (fc.openDialog(mw) == JFileChooser.APPROVE_OPTION) {
