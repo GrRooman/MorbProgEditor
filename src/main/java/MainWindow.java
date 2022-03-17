@@ -7,11 +7,13 @@ import textpane_editor.TextAreaWithStyles;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 
 
-class MainWindow extends JFrame {
+class MainWindow extends JFrame implements ActionListener {
 
     private final JPanel rightPanel;
     private UserPreferences up;
@@ -29,13 +31,17 @@ class MainWindow extends JFrame {
     private JToolBar jToolBar;
     //    private JLabel textInfoLabel;
     private JScrollPane scrollPane;
+    private FileChooser fc;
     private ControlProgramFile controlProgramFile;
+    private PrepareAndSaveData prepareAndSave;
+    private AdditionalInformation additionalInformation;
     private static final Logger log = LoggerFactory.getLogger(MainWindow.class.getName());
 
     MainWindow() {
         setTitle("MorbProgEditor");
 
         up = new UserPreferences();
+        fc = new FileChooser();
 
         Action openFile = new EditAction("Открыть", new ImageIcon(getClass().getResource("Folder-Open.png")),
                 1,
@@ -43,16 +49,20 @@ class MainWindow extends JFrame {
         Action saveFile = new EditAction("Сохранить", new ImageIcon(getClass().getResource("Save-Icon.png")),
                 1,
                 KeyEvent.VK_S, "Сохранить файл (Ctrl+S)");
-        Action undo = new EditAction("Undo", new ImageIcon(getClass().getResource("Arrows-Undo.png")),
+        Action undo = new EditAction("Назад", new ImageIcon(getClass().getResource("Arrows-Undo.png")),
                 KeyEvent.VK_Z,
                 KeyEvent.VK_Z, "Действие назад (Ctrl+Z)");
-        Action redo = new EditAction("Redo", new ImageIcon(getClass().getResource("Arrows-Redo.png")),
+        Action redo = new EditAction("Вперед", new ImageIcon(getClass().getResource("Arrows-Redo.png")),
                 KeyEvent.VK_Y,
                 KeyEvent.VK_Y, "Действие вперед (Ctrl+Y)");
 
         jToolBar = new JToolBar();
         jToolBar.add(openFile);
+        jToolBar.addSeparator();
         jToolBar.add(saveFile);
+        jToolBar.addSeparator();
+        jToolBar.add(undo);
+        jToolBar.add(redo);
 
         mFile = new JMenu("Файл");
 
@@ -66,15 +76,25 @@ class MainWindow extends JFrame {
         mFile.add(jmiExit);
 
         mEdit = new JMenu("Правка");
-        mUndo = new JMenuItem("Undo");
-        mRedo = new JMenuItem("Redo");
+        mEdit.add(undo);
+        mEdit.add(redo);
 
         mHelp = new JMenu("Помощь");
         jmiSetting  =  new  JMenuItem("Настройки");
         jmiAbout  =  new  JMenuItem("О программе");
+        mHelp.add(jmiSetting);
+        mHelp.add(jmiAbout);
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(mFile);
+        menuBar.add(mEdit);
+        menuBar.add(mHelp);
+
+        jmiSaveAs.addActionListener(this);
+        jmiClose.addActionListener(this);
+        jmiExit.addActionListener(this);
+        jmiSetting.addActionListener(this);
+        jmiAbout.addActionListener(this);
 
 
         jPanel = new JPanel();
@@ -249,6 +269,46 @@ class MainWindow extends JFrame {
         setCenterTextArea();
         setAddTitle(controlProgramFile.getFileName());
     }
+
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        switch (ae.getActionCommand()){
+            case "Сохранить как...":
+                int result = fc.showSaveDialog(this);
+                if (result == JFileChooser.APPROVE_OPTION ){
+                    File saveFile = fc.getSelectedFile();
+                    prepareAndSave.workingWithFile(saveFile, this.getTextFromTextArea());
+
+                    this.setInfoTextToBottomLabels(new AdditionalInformation(saveFile));
+
+                    JOptionPane.showMessageDialog(this, "Файл '" + saveFile + " ) сохранен");
+                    DeleteTrash.setFileName(saveFile);
+                }
+                break;
+            case "Закрыть":
+                ae.getActionCommand();
+                break;
+            case "Выход":
+                System.exit(0);
+                break;
+            case "Настройки":
+                Settings settings = new Settings(this);
+                settings.showWindowSetting();
+                break;
+            case "О программе":
+                InputStream inputStream = getClass().getResourceAsStream("About.txt");
+                String s="";
+                try (Scanner in =new Scanner(inputStream, "UTF-8"))
+                {
+                    while (in.hasNext())
+                        s+=(in.nextLine() + "\n");
+                }
+                JOptionPane.showMessageDialog(null, s);
+                break;
+        }
+    }
+
+
     class EditAction extends AbstractAction {
         public EditAction(String  name,  Icon  image,  int  mnem, int  accel,  String  tTip) {
             super(name,  image);
@@ -257,10 +317,22 @@ class MainWindow extends JFrame {
             putValue(SHORT_DESCRIPTION,  tTip);
         }
 
-        public void actionPerformed(ActionEvent event)
-        {
-            System.out.println(event.getSource());
+        public void actionPerformed(ActionEvent event)  {
+            switch(event.getActionCommand()){
+                case "Открыть":
+                    System.out.println(this.getClass().getName());
+                    if (fc.openDialog(MainWindow.this) == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile =  fc.getSelectedFile();
+                        prepareAndSave = new PrepareAndSaveData(selectedFile);
+                        controlProgramFile = new ControlProgramFile(selectedFile);
+                        /********************************/
+                        MainWindow.this.setProgram(controlProgramFile);
+                        /**********************************/
+                        MainWindow.this.setInfoTextToBottomLabels(new AdditionalInformation(selectedFile));
+                        DeleteTrash.setFileName(selectedFile);
+                    }
+            }
+
         }
     }
-
 }
