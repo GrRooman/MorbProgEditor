@@ -44,17 +44,22 @@ class MainWindow extends JFrame implements ActionListener {
         fc = new FileChooser();
 
         Action openFile = new EditAction("Открыть", new ImageIcon(getClass().getResource("Folder-Open.png")),
-                1,
+                0x41e,  // не работает
                 KeyEvent.VK_O, "Открыть файл (Ctrl+O)");
         Action saveFile = new EditAction("Сохранить", new ImageIcon(getClass().getResource("Save-Icon.png")),
-                1,
+                0x411,  // не работает
                 KeyEvent.VK_S, "Сохранить файл (Ctrl+S)");
         Action undo = new EditAction("Назад", new ImageIcon(getClass().getResource("Arrows-Undo.png")),
-                KeyEvent.VK_Z,
+                KeyEvent.VK_U,  // не работает
                 KeyEvent.VK_Z, "Действие назад (Ctrl+Z)");
         Action redo = new EditAction("Вперед", new ImageIcon(getClass().getResource("Arrows-Redo.png")),
-                KeyEvent.VK_Y,
+                KeyEvent.VK_R,  // не работает
                 KeyEvent.VK_Y, "Действие вперед (Ctrl+Y)");
+        Action settings = new EditAction("Настройки", new ImageIcon(getClass().getResource("Settings-Icon.png")),
+                KeyEvent.VK_R,  // не работает
+                KeyEvent.VK_M, "Настройки программ (Ctrl+M)");
+
+//        System.out.println(KeyEvent.getKeyText('С'));
 
         jToolBar = new JToolBar();
         jToolBar.add(openFile);
@@ -63,12 +68,14 @@ class MainWindow extends JFrame implements ActionListener {
         jToolBar.addSeparator();
         jToolBar.add(undo);
         jToolBar.add(redo);
+        jToolBar.addSeparator();
+        jToolBar.add(settings);
 
         mFile = new JMenu("Файл");
 
         jmiSaveAs  =  new  JMenuItem("Сохранить как...");
         jmiClose  =  new  JMenuItem("Закрыть");
-        jmiExit  =  new  JMenuItem("Выход");
+        jmiExit  =  new  JMenuItem("Выход", new ImageIcon(getClass().getResource("Exit-Icon.png")));
         mFile.add(openFile);
         mFile.add(saveFile);
         mFile.add(jmiSaveAs);
@@ -80,9 +87,8 @@ class MainWindow extends JFrame implements ActionListener {
         mEdit.add(redo);
 
         mHelp = new JMenu("Помощь");
-        jmiSetting  =  new  JMenuItem("Настройки");
         jmiAbout  =  new  JMenuItem("О программе");
-        mHelp.add(jmiSetting);
+        mHelp.add(settings);
         mHelp.add(jmiAbout);
 
         JMenuBar menuBar = new JMenuBar();
@@ -93,7 +99,6 @@ class MainWindow extends JFrame implements ActionListener {
         jmiSaveAs.addActionListener(this);
         jmiClose.addActionListener(this);
         jmiExit.addActionListener(this);
-        jmiSetting.addActionListener(this);
         jmiAbout.addActionListener(this);
 
 
@@ -291,10 +296,6 @@ class MainWindow extends JFrame implements ActionListener {
             case "Выход":
                 System.exit(0);
                 break;
-            case "Настройки":
-                Settings settings = new Settings(this);
-                settings.showWindowSetting();
-                break;
             case "О программе":
                 InputStream inputStream = getClass().getResourceAsStream("About.txt");
                 String s="";
@@ -312,25 +313,32 @@ class MainWindow extends JFrame implements ActionListener {
     class EditAction extends AbstractAction {
         public EditAction(String  name,  Icon  image,  int  mnem, int  accel,  String  tTip) {
             super(name,  image);
+            putValue(ACTION_COMMAND_KEY, name);
             putValue(ACCELERATOR_KEY,  KeyStroke.getKeyStroke(accel, InputEvent.CTRL_DOWN_MASK));
             putValue(MNEMONIC_KEY, new  Integer(mnem));
             putValue(SHORT_DESCRIPTION,  tTip);
         }
 
-        public void actionPerformed(ActionEvent event)  {
-            switch(event.getActionCommand()){
+        public void actionPerformed(ActionEvent ae)  {
+
+            switch(ae.getActionCommand()) {
                 case "Открыть":
-                    System.out.println(this.getClass().getName());
                     if (fc.openDialog(MainWindow.this) == JFileChooser.APPROVE_OPTION) {
                         File selectedFile =  fc.getSelectedFile();
                         prepareAndSave = new PrepareAndSaveData(selectedFile);
                         controlProgramFile = new ControlProgramFile(selectedFile);
-                        /********************************/
+
                         MainWindow.this.setProgram(controlProgramFile);
-                        /**********************************/
+
                         MainWindow.this.setInfoTextToBottomLabels(new AdditionalInformation(selectedFile));
                         DeleteTrash.setFileName(selectedFile);
                     }
+                    break;
+                case "Сохранить": prepareAndSave.workingWithFile(MainWindow.this.getTextFromTextArea());
+                case "Настройки":
+                    Settings settings = new Settings(MainWindow.this);
+                    settings.showWindowSetting();
+                    break;
             }
 
         }
