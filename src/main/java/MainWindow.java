@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import textpane_editor.TextAreaWithStyles;
 
 import javax.swing.*;
+import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -18,7 +19,7 @@ class MainWindow extends JFrame implements ActionListener {
     private final JPanel rightPanel;
     private UserPreferences up;
     private JMenu mFile, mEdit, mHelp;
-    private JMenuItem jmiOpen, jmiSave, jmiSaveAs, jmiClose, jmiExit,mUndo, mRedo, jmiSetting, jmiAbout;
+    private JMenuItem mfSaveAs, mfClose, meCut, meCopy, mePaste, mhExit, mhAbout;
     private JPanel jPanel, bottomPanel;
     private TextAreaWithStyles mainTextArea;
     private JTextArea leftBottomTextArea, rightBottomTextArea;
@@ -35,6 +36,7 @@ class MainWindow extends JFrame implements ActionListener {
     private ControlProgramFile controlProgramFile;
     private PrepareAndSaveData prepareAndSave;
     private AdditionalInformation additionalInformation;
+    private Action openFile, saveFile, undo, redo, settings;
     private static final Logger log = LoggerFactory.getLogger(MainWindow.class.getName());
 
     MainWindow() {
@@ -43,23 +45,27 @@ class MainWindow extends JFrame implements ActionListener {
         up = new UserPreferences();
         fc = new FileChooser();
 
-        Action openFile = new EditAction("Открыть", new ImageIcon(getClass().getResource("Folder-Open.png")),
+        openFile = new EditAction("Открыть", new ImageIcon(getClass().getResource("Folder-Open.png")),
                 0x41e,  // не работает
-                KeyEvent.VK_O, "Открыть файл (Ctrl+O)");
-        Action saveFile = new EditAction("Сохранить", new ImageIcon(getClass().getResource("Save-Icon.png")),
+                KeyEvent.VK_O, "Открыть файл (Ctrl+O)",
+                true);
+        saveFile = new EditAction("Сохранить", new ImageIcon(getClass().getResource("Save-Icon.png")),
                 0x411,  // не работает
-                KeyEvent.VK_S, "Сохранить файл (Ctrl+S)");
-        Action undo = new EditAction("Назад", new ImageIcon(getClass().getResource("Arrows-Undo.png")),
+                KeyEvent.VK_S, "Сохранить файл (Ctrl+S)",
+                false);
+        undo = new EditAction("Назад", new ImageIcon(getClass().getResource("Arrows-Undo.png")),
                 KeyEvent.VK_U,  // не работает
-                KeyEvent.VK_Z, "Действие назад (Ctrl+Z)");
-        Action redo = new EditAction("Вперед", new ImageIcon(getClass().getResource("Arrows-Redo.png")),
+                KeyEvent.VK_Z, "Действие назад (Ctrl+Z)",
+                false);
+        redo = new EditAction("Вперед", new ImageIcon(getClass().getResource("Arrows-Redo.png")),
                 KeyEvent.VK_R,  // не работает
-                KeyEvent.VK_Y, "Действие вперед (Ctrl+Y)");
-        Action settings = new EditAction("Настройки", new ImageIcon(getClass().getResource("Settings-Icon.png")),
+                KeyEvent.VK_Y, "Действие вперед (Ctrl+Y)",
+                false);
+        settings = new EditAction("Настройки", new ImageIcon(getClass().getResource("Settings-Icon.png")),
                 KeyEvent.VK_R,  // не работает
-                KeyEvent.VK_M, "Настройки программ (Ctrl+M)");
+                KeyEvent.VK_M, "Настройки программ (Ctrl+M)",
+                true);
 
-//        System.out.println(KeyEvent.getKeyText('С'));
 
         jToolBar = new JToolBar();
         jToolBar.add(openFile);
@@ -73,33 +79,61 @@ class MainWindow extends JFrame implements ActionListener {
 
         mFile = new JMenu("Файл");
 
-        jmiSaveAs  =  new  JMenuItem("Сохранить как...");
-        jmiClose  =  new  JMenuItem("Закрыть");
-        jmiExit  =  new  JMenuItem("Выход", new ImageIcon(getClass().getResource("Exit-Icon.png")));
+        mfSaveAs =  new  JMenuItem("Сохранить как...");
+        mfSaveAs.setEnabled(false);
+        mfClose =  new  JMenuItem("Закрыть файл", new ImageIcon(getClass().getResource("Erase-Icon.png")));
+        mfClose.setEnabled(false);
+        mhExit =  new  JMenuItem("Выход", new ImageIcon(getClass().getResource("Exit-Icon.png")));
         mFile.add(openFile);
         mFile.add(saveFile);
-        mFile.add(jmiSaveAs);
-        mFile.add(jmiClose);
-        mFile.add(jmiExit);
+        mFile.add(mfSaveAs);
+        mFile.add(mfClose);
+        mFile.add(mhExit);
 
         mEdit = new JMenu("Правка");
         mEdit.add(undo);
         mEdit.add(redo);
+        mEdit.addSeparator();
+        meCut  =  new  JMenuItem(new DefaultEditorKit.CutAction());
+        meCut.setText("Вырезать");
+        meCut.setIcon(new ImageIcon(getClass().getResource("Cut-Icon.png")));
+        meCut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
+        meCut.setEnabled(false);
+
+        meCopy  =  new  JMenuItem(new DefaultEditorKit.CopyAction());
+        meCopy.setText("Копировать");
+        meCopy.setIcon(new ImageIcon(getClass().getResource("Copy-Icon.png")));
+        meCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
+        meCopy.setEnabled(false);
+
+        mePaste  =  new  JMenuItem(new DefaultEditorKit.PasteAction());
+        mePaste.setText("Вставить");
+        mePaste.setIcon(new ImageIcon(getClass().getResource("Paste-Icon.png")));
+        mePaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
+        mePaste.setEnabled(false);
+
+        mEdit.add(meCut);
+        mEdit.add(meCopy);
+        mEdit.add(mePaste);
+
 
         mHelp = new JMenu("Помощь");
-        jmiAbout  =  new  JMenuItem("О программе");
+        mhAbout =  new  JMenuItem("О программе");
         mHelp.add(settings);
-        mHelp.add(jmiAbout);
+        mHelp.add(mhAbout);
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(mFile);
         menuBar.add(mEdit);
         menuBar.add(mHelp);
 
-        jmiSaveAs.addActionListener(this);
-        jmiClose.addActionListener(this);
-        jmiExit.addActionListener(this);
-        jmiAbout.addActionListener(this);
+        mfSaveAs.addActionListener(this);
+        mfClose.addActionListener(this);
+        meCut.addActionListener(this);
+        meCopy.addActionListener(this);
+        mePaste.addActionListener(this);
+        mhExit.addActionListener(this);
+        mhAbout.addActionListener(this);
 
 
         jPanel = new JPanel();
@@ -258,12 +292,23 @@ class MainWindow extends JFrame implements ActionListener {
             e.printStackTrace();
         }
     }
+    private void setVisibleMenuItem(boolean visible){
+        saveFile.setEnabled(visible);
+        undo.setEnabled(visible);
+        redo.setEnabled(visible);
+        meCut.setEnabled(visible);
+        meCopy.setEnabled(visible);
+        mePaste.setEnabled(visible);
+        mfSaveAs.setEnabled(visible);
+        mfClose.setEnabled(visible);
+    }
     void clearAndCloseTextPane(){
         mainTextArea.clearTextPane();
         mainTextArea = null;
         jPanel.remove(scrollPane);
         scrollPane = null;
         MainWindow.this.repaint();
+        setVisibleMenuItem(false);
     }
     void setProgram(ControlProgramFile c){
         controlProgramFile  = c;
@@ -273,6 +318,7 @@ class MainWindow extends JFrame implements ActionListener {
         showImageOfProgram();
         setCenterTextArea();
         setAddTitle(controlProgramFile.getFileName());
+        setVisibleMenuItem(true);
     }
 
     @Override
@@ -291,10 +337,20 @@ class MainWindow extends JFrame implements ActionListener {
                 }
                 break;
             case "Закрыть":
-                ae.getActionCommand();
+                clearAndCloseTextPane();
+                break;
+            case "Вырезать":
+//                new DefaultEditorKit.CutAction();
+                break;
+            case "Копировать":
+                new DefaultEditorKit.CopyAction();
+                break;
+            case "Вставить":
+                new DefaultEditorKit.PasteAction();
                 break;
             case "Выход":
-                System.exit(0);
+                DeleteTrash.deleteFile();
+                System.exit(0);         //Возможно надо сменить на dispose();
                 break;
             case "О программе":
                 InputStream inputStream = getClass().getResourceAsStream("About.txt");
@@ -304,19 +360,20 @@ class MainWindow extends JFrame implements ActionListener {
                     while (in.hasNext())
                         s+=(in.nextLine() + "\n");
                 }
-                JOptionPane.showMessageDialog(null, s);
+                JOptionPane.showMessageDialog(this, s);
                 break;
         }
     }
 
 
     class EditAction extends AbstractAction {
-        public EditAction(String  name,  Icon  image,  int  mnem, int  accel,  String  tTip) {
+        public EditAction(String  name,  Icon  image,  int  mnem, int  accel,  String  tTip, boolean visible) {
             super(name,  image);
             putValue(ACTION_COMMAND_KEY, name);
             putValue(ACCELERATOR_KEY,  KeyStroke.getKeyStroke(accel, InputEvent.CTRL_DOWN_MASK));
             putValue(MNEMONIC_KEY, new  Integer(mnem));
             putValue(SHORT_DESCRIPTION,  tTip);
+            setEnabled(visible);
         }
 
         public void actionPerformed(ActionEvent ae)  {
@@ -334,13 +391,20 @@ class MainWindow extends JFrame implements ActionListener {
                         DeleteTrash.setFileName(selectedFile);
                     }
                     break;
-                case "Сохранить": prepareAndSave.workingWithFile(MainWindow.this.getTextFromTextArea());
+                case "Назад":
+                    mainTextArea.undo();
+                    break;
+                case "Вперед":
+                    mainTextArea.redo();
+                    break;
+                case "Сохранить":
+                    prepareAndSave.workingWithFile(MainWindow.this.getTextFromTextArea());
+                    break;
                 case "Настройки":
                     Settings settings = new Settings(MainWindow.this);
                     settings.showWindowSetting();
                     break;
             }
-
         }
     }
 }

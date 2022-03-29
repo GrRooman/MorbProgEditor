@@ -35,6 +35,7 @@ public class TextAreaWithStyles extends JTextPane{
             STYLE_comment = "comment" ,
             FONT_style    = "Times New Roman";
     private Document doc;
+    private final UndoManager undo;
     private static final Logger log = LoggerFactory.getLogger(TextAreaWithStyles.class.getName());
 
     static int n=0;
@@ -44,28 +45,29 @@ public class TextAreaWithStyles extends JTextPane{
 
 //        // Привязка Undo Redo функций к JTextPane
         doc = this.getDocument();
-//        final UndoManager undo=new UndoManager();
-        // Listen for undo and redo events
-//        doc.addUndoableEditListener(new UndoableEditListener() {
-//            public void undoableEditHappened(UndoableEditEvent evt) {
-//                undo.addEdit(evt.getEdit()); } }); // Create an undo action and add it to the text component
-//        this.getActionMap().put("Undo", new AbstractAction("Undo") {
-//            public void actionPerformed(ActionEvent evt) {
-//                try { if (undo.canUndo()) { undo.undo(); }
-//                } catch (CannotUndoException e) { } } }); // Bind the undo action to ctl-Z
-//        this.getInputMap().put(KeyStroke.getKeyStroke("control Z"), "Undo"); // Create a redo action and add it to the text component
-//        this.getActionMap().put("Redo", new AbstractAction("Redo") {
-//            public void actionPerformed(ActionEvent evt) {
-//                try { if (undo.canRedo()) { undo.redo(); }
-//                } catch (CannotRedoException e) { } } }); // Bind the redo action to ctl-Y
-//        this.getInputMap().put(KeyStroke.getKeyStroke("control Y"), "Redo");
-
+        undo = new UndoManager();
+//        Listen for undo and redo events
+        doc.addUndoableEditListener(new UndoableEditListener() {
+            public void undoableEditHappened(UndoableEditEvent evt) {
+                undo.addEdit(evt.getEdit());
+            }
+        });
         // Определение стилей редактора
-        createStyles();
+//        createStyles();
     }
     /**
      * Процедура формирования стилей редактора
      */
+    public void undo(){
+        try {
+            if (undo.canUndo()) { undo.undo(); }
+        } catch (CannotUndoException e) { };
+    }
+    public void redo(){
+        try {
+            if (undo.canRedo()) { undo.redo(); }
+        } catch (CannotRedoException e) { }
+    }
     private void createStyles()
     {
         // Создание стилей
