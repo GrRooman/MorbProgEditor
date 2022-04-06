@@ -1,7 +1,7 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,18 +11,28 @@ import java.util.List;
  * Time: 14:04
  */
 class ReadFile {
+    private static final Logger log = LoggerFactory.getLogger(ReadFile.class.getName());
 
-    ReadFile(){
-    }
-    List<String> readFile(String fileName){
+    List <String> readFile(String fileName){
         List<String> lis = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "Windows-1251"))){
             String s = "";
             while((s = reader.readLine()) != null){
                 lis.add(s);
             }
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (IOException e) { log.error("Ошибка чтения файла {}", e); }
         return lis;
+    }
+
+    String readFileString(String fileName){
+        String fileContent = "";
+        try(BufferedReader r = new BufferedReader(new FileReader(fileName))){
+            int c = 0;
+            while ((c = r.read()) != -1) {
+                fileContent += (char) c;
+            }
+        } catch (IOException e) {log.error("Ошибка чтения файла {}", e);}
+        return fileContent;
     }
 }
 

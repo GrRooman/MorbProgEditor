@@ -36,7 +36,7 @@ class MainWindow extends JFrame implements ActionListener {
     private ControlProgramFile controlProgramFile;
     private PrepareAndSaveData prepareAndSave;
     private AdditionalInformation additionalInformation;
-    private Action openFile, saveFile, undo, redo, settings;
+    private Action openFile, saveFile, undo, redo, searchInFile, settings;
     private static final Logger log = LoggerFactory.getLogger(MainWindow.class.getName());
 
     MainWindow() {
@@ -61,6 +61,10 @@ class MainWindow extends JFrame implements ActionListener {
                 KeyEvent.VK_R,  // не работает
                 KeyEvent.VK_Y, "Действие вперед (Ctrl+Y)",
                 false);
+        searchInFile = new EditAction("Поиск", new ImageIcon(getClass().getResource("Search-Icon.png")),
+                KeyEvent.VK_7,
+                KeyEvent.VK_F,"Поиск (Ctrl+F)" ,
+                false);
         settings = new EditAction("Настройки", new ImageIcon(getClass().getResource("Settings-Icon.png")),
                 KeyEvent.VK_R,  // не работает
                 KeyEvent.VK_M, "Настройки программ (Ctrl+M)",
@@ -74,6 +78,8 @@ class MainWindow extends JFrame implements ActionListener {
         jToolBar.addSeparator();
         jToolBar.add(undo);
         jToolBar.add(redo);
+        jToolBar.addSeparator();
+        jToolBar.add(searchInFile);
         jToolBar.addSeparator();
         jToolBar.add(settings);
 
@@ -112,9 +118,14 @@ class MainWindow extends JFrame implements ActionListener {
         mePaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
         mePaste.setEnabled(false);
 
+//        meSearch = new JMenuItem("Поиск");
+//        meSearch.setEnabled(false);
+
         mEdit.add(meCut);
         mEdit.add(meCopy);
         mEdit.add(mePaste);
+        mEdit.addSeparator();
+        mEdit.add(searchInFile);
 
 
         mHelp = new JMenu("Помощь");
@@ -152,7 +163,7 @@ class MainWindow extends JFrame implements ActionListener {
         commentBlockToggleButton = new JButton("Закомментировать блок\';\'");
         conditionToggleButton = new JButton("Условн. инстр. IF THEN");
         conditionOnBlockToggleButton = new JButton("Условн. инстр. блок IF THEN");
-        deleteBlockButton = new JButton("Удалить выделенный блок");
+        deleteBlockButton = new JButton("Резерв");
 
         commentToggleButton.setActionCommand("comLine");
         commentBlockToggleButton.setActionCommand("comBlock");
@@ -223,6 +234,11 @@ class MainWindow extends JFrame implements ActionListener {
             }
         });
 
+//        addWindowFocusListener(new WindowAdapter() {
+//            public void windowGainedFocus(WindowEvent e) {
+//                mainTextArea.requestFocusInWindow();
+//            }
+//        });
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -294,13 +310,14 @@ class MainWindow extends JFrame implements ActionListener {
     }
     private void setVisibleMenuItem(boolean visible){
         saveFile.setEnabled(visible);
+        mfSaveAs.setEnabled(visible);
+        mfClose.setEnabled(visible);
         undo.setEnabled(visible);
         redo.setEnabled(visible);
         meCut.setEnabled(visible);
         meCopy.setEnabled(visible);
         mePaste.setEnabled(visible);
-        mfSaveAs.setEnabled(visible);
-        mfClose.setEnabled(visible);
+        searchInFile.setEnabled(visible);
     }
     void clearAndCloseTextPane(){
         mainTextArea.clearTextPane();
@@ -319,6 +336,7 @@ class MainWindow extends JFrame implements ActionListener {
         setCenterTextArea();
         setAddTitle(controlProgramFile.getFileName());
         setVisibleMenuItem(true);
+//        mainTextArea.requestFocusInWindow();
     }
 
     @Override
@@ -336,11 +354,11 @@ class MainWindow extends JFrame implements ActionListener {
                     DeleteTrash.setFileName(saveFile);
                 }
                 break;
-            case "Закрыть":
+            case "Закрыть файл":
                 clearAndCloseTextPane();
                 break;
             case "Вырезать":
-//                new DefaultEditorKit.CutAction();
+                new DefaultEditorKit.CutAction();
                 break;
             case "Копировать":
                 new DefaultEditorKit.CopyAction();
@@ -362,6 +380,9 @@ class MainWindow extends JFrame implements ActionListener {
                 }
                 JOptionPane.showMessageDialog(this, s);
                 break;
+            default:
+                System.out.println(ae.getActionCommand());
+
         }
     }
 
@@ -399,6 +420,9 @@ class MainWindow extends JFrame implements ActionListener {
                     break;
                 case "Сохранить":
                     prepareAndSave.workingWithFile(MainWindow.this.getTextFromTextArea());
+                    break;
+                case "Поиск":
+                    mainTextArea.fin();
                     break;
                 case "Настройки":
                     Settings settings = new Settings(MainWindow.this);

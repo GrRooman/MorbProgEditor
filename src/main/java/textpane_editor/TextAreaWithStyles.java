@@ -68,6 +68,9 @@ public class TextAreaWithStyles extends JTextPane{
             if (undo.canRedo()) { undo.redo(); }
         } catch (CannotRedoException e) { }
     }
+    public void fin(){
+        new Search(this);
+    }
     private void createStyles()
     {
         // Создание стилей
@@ -100,7 +103,14 @@ public class TextAreaWithStyles extends JTextPane{
     /**
      * Процедура загрузки текста в редактор
      */
-    public void loadText() {
+    public void loadText(){
+        String str="";
+        for (String s : listGCommands) {
+             str += s+"\n";
+        }
+        this.setText(str);
+    }
+    public void loadTex() {
         int n=1;
         Style style=null;
         // Загружаем в документ содержимое
@@ -108,11 +118,11 @@ public class TextAreaWithStyles extends JTextPane{
             if(s.startsWith("H")) style = heading;
             else if(s.startsWith(";")) style = comment;
             else style = normal;
-            insertText( n < listGCommands.size() ? s+"\n" : s, style );   // Запрет перевода каретки на новую строку
+            insertText( n < listGCommands.size() ? s+"\n" : s, null );   // Запрет перевода каретки на новую строку
             n++;
         }
-        //  Определение функции для зменение стиля части текста
-        changeDocumentStyle();
+        //  Определение функции для именения стиля части текста
+//        changeDocumentStyle();
 //        setListenerForTextPane();
     }
     /**
@@ -177,14 +187,6 @@ public class TextAreaWithStyles extends JTextPane{
         loadText();
         RXTextUtilities.gotoStartOfLine(this, 1);
     }
-//    public void deleteBlockOfCode(){
-//        System.out.println("delete");
-//        int[] val = defineBlockOfCodeByCaret();
-//        System.out.println(Arrays.toString(val));
-//        textAreaReset();
-//        loadText();
-//        RXTextUtilities.gotoStartOfLine(this, 1);
-//    }
 
     private boolean isComments(int line){
         if(listGCommands.get(line).charAt(0) == ';') return true;
@@ -233,8 +235,7 @@ public class TextAreaWithStyles extends JTextPane{
         this.addCaretListener(new CaretListener() {
             @Override
             public void caretUpdate(CaretEvent e) {
-//                getStartAndEndSelectedText();
-//                System.out.println(startText+"  "+endText);
+
             }
         });
     }
