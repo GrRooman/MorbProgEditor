@@ -18,35 +18,34 @@ import java.util.Arrays;
 import java.util.List;
 
 
-
-
-public class TextAreaWithStyles extends JTextPane{
+public class TextAreaWithStyles extends JTextPane {
     private List<String> listGCommands;
+    private String strData;
     // Стили редактора
     private String[] firstLetterOfComandString =
-            {"H","G0", "G1", "G2", "G3", "B", "GIN", "GOUT",
+            {"H", "G0", "G1", "G2", "G3", "B", "GIN", "GOUT",
                     "C", "XG0", "XB", "XGIN", "XGOUT",
                     "XL2P", "XAR", "", "MSG", "N"};
-    private  Style     heading    = null; // стиль заголовка
-    private  Style     normal     = null; // стиль текста
-    private  Style     comment    = null; // стиль коментария
-    private  final  String STYLE_heading = "heading",
-            STYLE_normal  = "normal" ,
-            STYLE_comment = "comment" ,
-            FONT_style    = "Times New Roman";
+    private Style heading = null; // стиль заголовка
+    private Style normal = null; // стиль текста
+    private Style comment = null; // стиль коментария
+    private final String STYLE_heading = "heading",
+            STYLE_normal = "normal",
+            STYLE_comment = "comment",
+            FONT_style = "Times New Roman";
     private Document doc;
     private final UndoManager undo;
     private static final Logger log = LoggerFactory.getLogger(TextAreaWithStyles.class.getName());
 
-    static int n=0;
+    static int n = 0;
 
     public TextAreaWithStyles(List<String> list) {
         listGCommands = list;
 
-//        // Привязка Undo Redo функций к JTextPane
+        // Привязка Undo Redo функций к JTextPane
         doc = this.getDocument();
         undo = new UndoManager();
-//        Listen for undo and redo events
+
         doc.addUndoableEditListener(new UndoableEditListener() {
             public void undoableEditHappened(UndoableEditEvent evt) {
                 undo.addEdit(evt.getEdit());
@@ -55,24 +54,50 @@ public class TextAreaWithStyles extends JTextPane{
         // Определение стилей редактора
 //        createStyles();
     }
+
+    public TextAreaWithStyles(String strData) {
+        this.strData = strData;
+
+        listGCommands = Arrays.asList(strData.split("\n"));
+
+        // Привязка Undo Redo функций к JTextPane
+        doc = this.getDocument();
+        undo = new UndoManager();
+
+        doc.addUndoableEditListener(new UndoableEditListener() {
+            public void undoableEditHappened(UndoableEditEvent evt) {
+                undo.addEdit(evt.getEdit());
+            }
+        });
+//        setListenerForTextPane();
+    }
+
     /**
      * Процедура формирования стилей редактора
      */
-    public void undo(){
+    public void undo() {
         try {
-            if (undo.canUndo()) { undo.undo(); }
-        } catch (CannotUndoException e) { };
+            if (undo.canUndo()) {
+                undo.undo();
+            }
+        } catch (CannotUndoException e) {
+        }
     }
-    public void redo(){
+
+    public void redo() {
         try {
-            if (undo.canRedo()) { undo.redo(); }
-        } catch (CannotRedoException e) { }
+            if (undo.canRedo()) {
+                undo.redo();
+            }
+        } catch (CannotRedoException e) {
+        }
     }
-    public void fin(){
+
+    public void fin() {
         new Search(this);
     }
-    private void createStyles()
-    {
+
+    private void createStyles() {
         // Создание стилей
         comment = this.addStyle(STYLE_comment, null);
         StyleConstants.setFontSize(comment, 15);
@@ -80,7 +105,7 @@ public class TextAreaWithStyles extends JTextPane{
         StyleConstants.setStrikeThrough(comment, true);
 
         normal = this.addStyle(STYLE_normal, null);
-        StyleConstants.setFontFamily(normal ,FONT_style);
+        StyleConstants.setFontFamily(normal, FONT_style);
         StyleConstants.setFontSize(normal, 15);
 
         // Наследуем свойстdо FontFamily
@@ -89,91 +114,96 @@ public class TextAreaWithStyles extends JTextPane{
         StyleConstants.setBold(heading, true);
         StyleConstants.setBackground(heading, new Color(171, 171, 171));
     }
+
     /**
      * Процедура изменения стиля документа
      */
-    private void changeDocumentStyle()
-    {
+    private void changeDocumentStyle() {
         // Изменение стиля части текста
         SimpleAttributeSet blue = new SimpleAttributeSet();
         StyleConstants.setForeground(blue, Color.blue);
         StyledDocument doc = this.getStyledDocument();
         doc.setCharacterAttributes(30, 9, blue, false);
     }
+
     /**
      * Процедура загрузки текста в редактор
      */
-    public void loadText(){
-        String str="";
-        for (String s : listGCommands) {
-             str += s+"\n";
-        }
-        this.setText(str);
+    public void loadTex(String s) {
+        this.setText(s);
+        changeDocumentStyle();
     }
-    public void loadTex() {
-        int n=1;
-        Style style=null;
+
+    public void loadText() {
+        int n = 1;
+        String str="";
+        Style style = null;
         // Загружаем в документ содержимое
         for (String s : listGCommands) {
-            if(s.startsWith("H")) style = heading;
-            else if(s.startsWith(";")) style = comment;
-            else style = normal;
-            insertText( n < listGCommands.size() ? s+"\n" : s, null );   // Запрет перевода каретки на новую строку
-            n++;
+            str+= n < listGCommands.size() ? s + "\n" : s;
+//            if (s.startsWith("H")) style = heading;
+//            else if (s.startsWith(";")) style = comment;
+//            else style = normal;
+//            insertText(n < listGCommands.size() ? s + "\n" : s, null);   // Запрет перевода каретки на новую строку
+//            n++;
+            loadTex(str);
         }
         //  Определение функции для именения стиля части текста
 //        changeDocumentStyle();
 //        setListenerForTextPane();
     }
+
     /**
      * Процедура добавления в редактор строки определенного стиля
+     *
      * @param string строка
-     * @param style стиль
+     * @param style  стиль
      */
     private void insertText(String string, Style style) {
         try {
 //            doc = this.getDocument();
             doc.insertString(doc.getLength(), string, style);
         } catch (Exception e) {
-            log.error("Ошибка вставки данных в документ {}",e);
+            log.error("Ошибка вставки данных в документ {}", e);
         }
         repaint();
     }
-    public String getStyleText(){
+
+    public String getStyleText() {
         return this.getText();
     }
 
     // Метод позволяет появиться горизонтальному ScrollBar,
     // тем самым запрещает переноситься тексту на новую строку.
     @Override
-    public boolean getScrollableTracksViewportWidth(){
+    public boolean getScrollableTracksViewportWidth() {
         return getUI().getPreferredSize(this).width <= getParent().getSize().width;
     }
-    public void clearTextPane(){
+
+    public void clearTextPane() {
         textAreaReset();
     }
 
-    public void setCommentOfLines(ActionEvent ae){
-        int[] val = {0,0};
-        if (ae.getActionCommand().equals("comLine"))  val = getStartAndEndSelectedText();
+    public void setCommentOfLines(ActionEvent ae) {
+        int[] val = {0, 0};
+        if (ae.getActionCommand().equals("comLine")) val = getStartAndEndSelectedText();
         else if (ae.getActionCommand().equals("comBlock")) val = defineBlockOfCodeByCaret();
         else log.error("Был сделан какой-то неожиданный выбор при нажатии чего-то.");
         for (int i = val[0]; i <= val[1]; i++) {
-            if(!isComments(i)){
+            if (!isComments(i)) {
                 listGCommands.set(i, ";" + listGCommands.get(i));
-            }
-            else {
+            } else {
                 listGCommands.set(i, (listGCommands.get(i).substring(1)));
             }
             textAreaReset();
             loadText();
-            RXTextUtilities.gotoStartOfLine(this, i+1);
+            RXTextUtilities.gotoStartOfLine(this, i + 1);
         }
     }
 
-    public void setConditionAtCode(ActionEvent ae){
-        int[] val = {0,0};
-        if (ae.getActionCommand().equals("condiLines"))  val = getStartAndEndSelectedText();
+    public void setConditionAtCode(ActionEvent ae) {
+        int[] val = {0, 0};
+        if (ae.getActionCommand().equals("condiLines")) val = getStartAndEndSelectedText();
         else if (ae.getActionCommand().equals("condiBlock")) val = defineBlockOfCodeByCaret();
         System.out.println(Arrays.toString(val));
         if (IfThenQuestionDialog.defineIfThenBlock(listGCommands, val)) {
@@ -188,42 +218,56 @@ public class TextAreaWithStyles extends JTextPane{
         RXTextUtilities.gotoStartOfLine(this, 1);
     }
 
-    private boolean isComments(int line){
-        if(listGCommands.get(line).charAt(0) == ';') return true;
+    private boolean isComments(int line) {
+        if (listGCommands.get(line).charAt(0) == ';') return true;
         else return false;
     }
 
-    private void textAreaReset(){
+    private void textAreaReset() {
         this.setText("");
     }
 
-    private int[] getStartAndEndSelectedText(){      // пересмотрнеть возможно вывести один руут будет лучше
+    private int[] getStartAndEndSelectedText() {      // пересмотрнеть возможно вывести один руут будет лучше
         Element root = TextAreaWithStyles.this.getDocument().getDefaultRootElement();
-        int startText,endText;
-        int a = root.getElementIndex( TextAreaWithStyles.this.getSelectionStart() );  //Начало выделения
-        int b = root.getElementIndex( TextAreaWithStyles.this.getSelectionEnd()   );  //Конец выделения
-        if ( a<=b ) {
+        int startText, endText;
+        int a = root.getElementIndex(TextAreaWithStyles.this.getSelectionStart());  //Начало выделения
+        int b = root.getElementIndex(TextAreaWithStyles.this.getSelectionEnd());  //Конец выделения
+        if (a <= b) {
             startText = a;
-            endText   = b;
+            endText = b;
         } else {
             startText = b;
-            endText   = a;
+            endText = a;
         }
         return new int[]{startText, endText};
     }
 
-    private int[] defineBlockOfCodeByCaret(){
-        int n = RXTextUtilities.getLineAtCaret(this)-1;
+    private int[] defineBlockOfCodeByCaretS() {
+        int end = 0, start = 0;
+        int n = this.getCaretPosition();
+        start = strData.lastIndexOf("GIN", n);
+        end = strData.indexOf("GOUT", n);
+        if ((start == -1) || (end == -1)) {
+//            JOptionPane.showMessageDialog(null, "Блок не найден");
+        }
+        System.out.println(start + "  " + end);
+        return new int[]{start, end};
+    }
+
+    private int[] defineBlockOfCodeByCaret() {
+        int n = RXTextUtilities.getLineAtCaret(this) - 1;
         int end = 0, start = 0;
         for (int i = n; i > 0; i--) {
-            if( listGCommands.get(i).contains("GIN") ) {
-                if( listGCommands.get(i-1).contains("C") ) {start = i-1; break;}
-                else start = i;
+            if (listGCommands.get(i).contains("GIN")) {
+                if (listGCommands.get(i - 1).contains("C")) {
+                    start = i - 1;
+                    break;
+                } else start = i;
                 break;
             }
         }
         for (int i = n; i < listGCommands.size(); i++) {
-            if( listGCommands.get(i).contains("GOUT") ) {
+            if (listGCommands.get(i).contains("GOUT")) {
                 end = i;
                 break;
             }
@@ -231,13 +275,15 @@ public class TextAreaWithStyles extends JTextPane{
         return new int[]{start, end};
     }
 
-    void setListenerForTextPane(){
+    void setListenerForTextPane() {
         this.addCaretListener(new CaretListener() {
             @Override
             public void caretUpdate(CaretEvent e) {
-
+//                defineBlockOfCodeByCaretS();
+//                System.out.println(TextAreaWithStyles.this.getCaretPosition());
             }
         });
     }
+
 }
 

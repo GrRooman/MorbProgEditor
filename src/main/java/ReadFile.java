@@ -13,25 +13,29 @@ import java.util.List;
 class ReadFile {
     private static final Logger log = LoggerFactory.getLogger(ReadFile.class.getName());
 
-    List <String> readFile(String fileName){
+    List<String> getListFile(String fileName) {
         List<String> lis = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "Windows-1251"))){
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "Windows-1251"))) {
             String s = "";
-            while((s = reader.readLine()) != null){
+            while ((s = reader.readLine()) != null) {
                 lis.add(s);
             }
-        } catch (IOException e) { log.error("Ошибка чтения файла {}", e); }
+        } catch (IOException e) {
+            log.error("Ошибка чтения файла {}", e);
+        }
         return lis;
     }
 
-    String readFileString(String fileName){
+    String getStringFile(String fileName) {
         String fileContent = "";
-        try(BufferedReader r = new BufferedReader(new FileReader(fileName))){
+        try (BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "Windows-1251"))) {
             int c = 0;
             while ((c = r.read()) != -1) {
                 fileContent += (char) c;
             }
-        } catch (IOException e) {log.error("Ошибка чтения файла {}", e);}
+        } catch (IOException e) {
+            log.error("Ошибка чтения файла {}", e);
+        }
         return fileContent;
     }
 }

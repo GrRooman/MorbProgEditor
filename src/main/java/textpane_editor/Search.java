@@ -4,11 +4,11 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Search extends JDialog implements ActionListener {
+class Search extends JDialog implements ActionListener {
 
     private static final long serialVersionUID = 1L;
-    int startIndex=0;
-    int select_start=-1;
+    int startIndex = 0;
+    int select_start = -1;
     JLabel lab1, lab2;
     JTextField textF, textR;
     JButton findBtn, findNext, replace, replaceAll, cancel;
@@ -35,13 +35,13 @@ public class Search extends JDialog implements ActionListener {
         int labHeight = 20;
 
         // Adding labels
-        lab1.setBounds(10,10, labWidth, labHeight);
+        lab1.setBounds(10, 10, labWidth, labHeight);
         add(lab1);
-        textF.setBounds(10+labWidth, 10, 120, 20);
+        textF.setBounds(10 + labWidth, 10, 120, 20);
         add(textF);
-        lab2.setBounds(10, 10+labHeight+10, labWidth, labHeight);
+        lab2.setBounds(10, 10 + labHeight + 10, labWidth, labHeight);
         add(lab2);
-        textR.setBounds(10+labWidth, 10+labHeight+10, 120, 20);
+        textR.setBounds(10 + labWidth, 10 + labHeight + 10, 120, 20);
         add(textR);
 
         // Adding buttons
@@ -82,21 +82,21 @@ public class Search extends JDialog implements ActionListener {
 
     public void find() {
         select_start = txt.getText().toLowerCase().indexOf(textF.getText().toLowerCase());
-        if(select_start == -1)
-        {
+        if (select_start == -1) {
             startIndex = 0;
             JOptionPane.showMessageDialog(null, "Ничего не найдено \"" + textF.getText() + "\"!");
             return;
         }
-        if(select_start == txt.getText().toLowerCase().lastIndexOf(textF.getText().toLowerCase())) {
+        if (select_start == txt.getText().toLowerCase().lastIndexOf(textF.getText().toLowerCase())) {
             startIndex = 0;
         }
         int select_end = select_start + textF.getText().length();
         txt.select(select_start, select_end);
     }
+
     public void findn() {
         int pos;
-        int currentPos=0;
+        int currentPos = 0;
         if (findNext.getText().isEmpty())
             return;
         String context = txt.getText();
@@ -121,32 +121,27 @@ public class Search extends JDialog implements ActionListener {
         String selection = txt.getSelectedText();
         try {
             selection.equals("");
-        }
-        catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             selection = textF.getText();
-            try
-            {
+            try {
                 selection.equals("");
-            }
-            catch(NullPointerException e2)
-            {
+            } catch (NullPointerException e2) {
                 selection = JOptionPane.showInputDialog("Поиск:");
                 textF.setText(selection);
             }
         }
         try {
             int select_start = txt.getText().toLowerCase().indexOf(selection.toLowerCase(), startIndex);
-            int select_end = select_start+selection.length();
+            int select_end = select_start + selection.length();
             txt.select(select_start, select_end);
-            System.out.println(select_start+"  "+ select_end);
-            startIndex = select_end+1;
+            System.out.println(select_start + "  " + select_end);
+            startIndex = select_end + 1;
 
-            if(select_start == txt.getText().toLowerCase().lastIndexOf(selection.toLowerCase()))
-            {
+            if (select_start == txt.getText().toLowerCase().lastIndexOf(selection.toLowerCase())) {
                 startIndex = 0;
             }
+        } catch (NullPointerException e) {
         }
-        catch(NullPointerException e) {}
     }
 
     public void replace() {
@@ -154,31 +149,25 @@ public class Search extends JDialog implements ActionListener {
             find();
             if (select_start != -1)
                 txt.replaceSelection(textR.getText());
-        }
-        catch(NullPointerException e)
-        {
-            System.out.print("Null Pointer Exception: "+e);
+        } catch (NullPointerException e) {
+            System.out.print("Null Pointer Exception: " + e);
         }
     }
 
-    public void replaceAll(){
+    public void replaceAll() {
         txt.setText(txt.getText().toLowerCase().replaceAll(textF.getText().toLowerCase(), textR.getText()));
     }
 
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == findBtn){
+        if (e.getSource() == findBtn) {
             find();
-        }
-        else if(e.getSource() == findNext){
+        } else if (e.getSource() == findNext) {
             findNext();
-        }
-        else if(e.getSource() == replace){
+        } else if (e.getSource() == replace) {
             replace();
-        }
-        else if(e.getSource() == replaceAll){
+        } else if (e.getSource() == replaceAll) {
             replaceAll();
-        }
-        else if(e.getSource() == cancel){
+        } else if (e.getSource() == cancel) {
             this.setVisible(false);
         }
     }

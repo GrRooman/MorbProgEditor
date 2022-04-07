@@ -63,7 +63,7 @@ class MainWindow extends JFrame implements ActionListener {
                 false);
         searchInFile = new EditAction("Поиск", new ImageIcon(getClass().getResource("Search-Icon.png")),
                 KeyEvent.VK_7,
-                KeyEvent.VK_F,"Поиск (Ctrl+F)" ,
+                KeyEvent.VK_F, "Поиск (Ctrl+F)",
                 false);
         settings = new EditAction("Настройки", new ImageIcon(getClass().getResource("Settings-Icon.png")),
                 KeyEvent.VK_R,  // не работает
@@ -85,11 +85,11 @@ class MainWindow extends JFrame implements ActionListener {
 
         mFile = new JMenu("Файл");
 
-        mfSaveAs =  new  JMenuItem("Сохранить как...");
+        mfSaveAs = new JMenuItem("Сохранить как...");
         mfSaveAs.setEnabled(false);
-        mfClose =  new  JMenuItem("Закрыть файл", new ImageIcon(getClass().getResource("Erase-Icon.png")));
+        mfClose = new JMenuItem("Закрыть файл", new ImageIcon(getClass().getResource("Erase-Icon.png")));
         mfClose.setEnabled(false);
-        mhExit =  new  JMenuItem("Выход", new ImageIcon(getClass().getResource("Exit-Icon.png")));
+        mhExit = new JMenuItem("Выход", new ImageIcon(getClass().getResource("Exit-Icon.png")));
         mFile.add(openFile);
         mFile.add(saveFile);
         mFile.add(mfSaveAs);
@@ -100,19 +100,19 @@ class MainWindow extends JFrame implements ActionListener {
         mEdit.add(undo);
         mEdit.add(redo);
         mEdit.addSeparator();
-        meCut  =  new  JMenuItem(new DefaultEditorKit.CutAction());
+        meCut = new JMenuItem(new DefaultEditorKit.CutAction());
         meCut.setText("Вырезать");
         meCut.setIcon(new ImageIcon(getClass().getResource("Cut-Icon.png")));
         meCut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
         meCut.setEnabled(false);
 
-        meCopy  =  new  JMenuItem(new DefaultEditorKit.CopyAction());
+        meCopy = new JMenuItem(new DefaultEditorKit.CopyAction());
         meCopy.setText("Копировать");
         meCopy.setIcon(new ImageIcon(getClass().getResource("Copy-Icon.png")));
         meCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
         meCopy.setEnabled(false);
 
-        mePaste  =  new  JMenuItem(new DefaultEditorKit.PasteAction());
+        mePaste = new JMenuItem(new DefaultEditorKit.PasteAction());
         mePaste.setText("Вставить");
         mePaste.setIcon(new ImageIcon(getClass().getResource("Paste-Icon.png")));
         mePaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
@@ -129,7 +129,7 @@ class MainWindow extends JFrame implements ActionListener {
 
 
         mHelp = new JMenu("Помощь");
-        mhAbout =  new  JMenuItem("О программе");
+        mhAbout = new JMenuItem("О программе");
         mHelp.add(settings);
         mHelp.add(mhAbout);
 
@@ -250,13 +250,14 @@ class MainWindow extends JFrame implements ActionListener {
         setJMenuBar(menuBar);
         setVisible(true);
     }
-    private void setAddTitle(String name){
-        setTitle(name + "     | "  + "     [ Length: " + mainTextArea.getText().length()
+
+    private void setAddTitle(String name) {
+        setTitle(name + "     | " + "     [ Length: " + mainTextArea.getText().length()
                 + "    Lines: " + (mainTextArea.getText() + "|").split("\n").length
                 + "    Words: " + mainTextArea.getText().trim().split("\\s+").length + " ]");
     }
 
-    private void setCenterTextArea(){
+    private void setCenterTextArea() {
         jPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
@@ -273,18 +274,20 @@ class MainWindow extends JFrame implements ActionListener {
         frame.setLocation(x, y);
     }
 
-    private void setTextToCommentButton(boolean b){
-        if(b) commentToggleButton.setText("Раскомментировать строку");
+    private void setTextToCommentButton(boolean b) {
+        if (b) commentToggleButton.setText("Раскомментировать строку");
         else commentToggleButton.setText("Закомментировать строку");
     }
 
-    String getTextFromTextArea(){
+    String getTextFromTextArea() {
         return mainTextArea.getStyleText();
     }
-    private void showImageOfProgram(){
-        imageLabel.setIcon( controlProgramFile.getImage());
+
+    private void showImageOfProgram() {
+        imageLabel.setIcon(controlProgramFile.getImage());
     }
-    private void createBottomLabels(JTextArea bottomTextArea, String text, Color color){
+
+    private void createBottomLabels(JTextArea bottomTextArea, String text, Color color) {
         bottomTextArea.setText(text);
         bottomTextArea.setEditable(false);
         bottomTextArea.setBackground(color);
@@ -292,13 +295,15 @@ class MainWindow extends JFrame implements ActionListener {
         bottomTextArea.setFont(new Font("Tahoma", Font.BOLD, 11));
         bottomPanel.add(bottomTextArea);
     }
-    void setInfoTextToBottomLabels(AdditionalInformation info){
+
+    void setInfoTextToBottomLabels(AdditionalInformation info) {
         ArrayList<String> arrayList = info.getDataFromAdditionalFiles();
         List<Color> errorColor = info.getColorOfError();
         createBottomLabels(leftBottomTextArea, arrayList.get(0), errorColor.get(0));
         createBottomLabels(rightBottomTextArea, arrayList.get(1), errorColor.get(1));
     }
-    private void setVisualStyleOfProgram(int n){
+
+    private void setVisualStyleOfProgram(int n) {
         UIManager.LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
         try {
             UIManager.setLookAndFeel(infos[n].getClassName());
@@ -308,7 +313,8 @@ class MainWindow extends JFrame implements ActionListener {
             e.printStackTrace();
         }
     }
-    private void setVisibleMenuItem(boolean visible){
+
+    private void setVisibleMenuItem(boolean visible) {
         saveFile.setEnabled(visible);
         mfSaveAs.setEnabled(visible);
         mfClose.setEnabled(visible);
@@ -319,7 +325,8 @@ class MainWindow extends JFrame implements ActionListener {
         mePaste.setEnabled(visible);
         searchInFile.setEnabled(visible);
     }
-    void clearAndCloseTextPane(){
+
+    void clearAndCloseTextPane() {
         mainTextArea.clearTextPane();
         mainTextArea = null;
         jPanel.remove(scrollPane);
@@ -327,24 +334,24 @@ class MainWindow extends JFrame implements ActionListener {
         MainWindow.this.repaint();
         setVisibleMenuItem(false);
     }
-    void setProgram(ControlProgramFile c){
-        controlProgramFile  = c;
-        mainTextArea = new TextAreaWithStyles(controlProgramFile.getDataFromFile());
+
+    void setProgram(ControlProgramFile c) {
+        controlProgramFile = c;
+        mainTextArea = new TextAreaWithStyles(controlProgramFile.getStringDataFromFile());
         scrollPane = new JScrollPane(mainTextArea);
         mainTextArea.loadText();
         showImageOfProgram();
         setCenterTextArea();
         setAddTitle(controlProgramFile.getFileName());
         setVisibleMenuItem(true);
-//        mainTextArea.requestFocusInWindow();
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        switch (ae.getActionCommand()){
+        switch (ae.getActionCommand()) {
             case "Сохранить как...":
                 int result = fc.showSaveDialog(this);
-                if (result == JFileChooser.APPROVE_OPTION ){
+                if (result == JFileChooser.APPROVE_OPTION) {
                     File saveFile = fc.getSelectedFile();
                     prepareAndSave.workingWithFile(saveFile, this.getTextFromTextArea());
 
@@ -372,11 +379,10 @@ class MainWindow extends JFrame implements ActionListener {
                 break;
             case "О программе":
                 InputStream inputStream = getClass().getResourceAsStream("About.txt");
-                String s="";
-                try (Scanner in =new Scanner(inputStream, "UTF-8"))
-                {
+                String s = "";
+                try (Scanner in = new Scanner(inputStream, "UTF-8")) {
                     while (in.hasNext())
-                        s+=(in.nextLine() + "\n");
+                        s += (in.nextLine() + "\n");
                 }
                 JOptionPane.showMessageDialog(this, s);
                 break;
@@ -388,21 +394,20 @@ class MainWindow extends JFrame implements ActionListener {
 
 
     class EditAction extends AbstractAction {
-        public EditAction(String  name,  Icon  image,  int  mnem, int  accel,  String  tTip, boolean visible) {
-            super(name,  image);
+        public EditAction(String name, Icon image, int mnem, int accel, String tTip, boolean visible) {
+            super(name, image);
             putValue(ACTION_COMMAND_KEY, name);
-            putValue(ACCELERATOR_KEY,  KeyStroke.getKeyStroke(accel, InputEvent.CTRL_DOWN_MASK));
-            putValue(MNEMONIC_KEY, new  Integer(mnem));
-            putValue(SHORT_DESCRIPTION,  tTip);
+            putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(accel, InputEvent.CTRL_DOWN_MASK));
+            putValue(MNEMONIC_KEY, new Integer(mnem));
+            putValue(SHORT_DESCRIPTION, tTip);
             setEnabled(visible);
         }
 
-        public void actionPerformed(ActionEvent ae)  {
-
-            switch(ae.getActionCommand()) {
+        public void actionPerformed(ActionEvent ae) {
+            switch (ae.getActionCommand()) {
                 case "Открыть":
                     if (fc.openDialog(MainWindow.this) == JFileChooser.APPROVE_OPTION) {
-                        File selectedFile =  fc.getSelectedFile();
+                        File selectedFile = fc.getSelectedFile();
                         prepareAndSave = new PrepareAndSaveData(selectedFile);
                         controlProgramFile = new ControlProgramFile(selectedFile);
 

@@ -3,9 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -15,43 +12,48 @@ import java.util.List;
  * Time: 14:04
  */
 class ControlProgramFile {
-    private ReadFile rf;
+    private ReadFile readFile;
     private NativeFileConverter nfc;
     private Image image;
     private File pathToFile;
 
-    ControlProgramFile(File file){
+    ControlProgramFile(File file) {
         pathToFile = file;
         nfc = new NativeFileConverter();
-        rf = new ReadFile();
+        readFile = new ReadFile();
     }
 
-    List<String> getDataFromFile(){
-        if(ExtensionHelper.getFileExtension(pathToFile.getName()).equalsIgnoreCase("pgm")) {
+    List<String> getDataFromFile() {
+        if (ExtensionHelper.getFileExtension(pathToFile.getName()).equalsIgnoreCase("pgm")) {
             nfc.convertPGM_to_XXL(pathToFile);
-            return  rf.readFile(ExtensionHelper.changeNameExtensionPGMtoXXL(pathToFile));
+            return readFile.getListFile(ExtensionHelper.changeNameExtensionPGMtoXXL(pathToFile));
         } else {
-            return  rf.readFile(pathToFile.getAbsolutePath());
+            return readFile.getListFile(pathToFile.getAbsolutePath());
         }
     }
-    String getFileName(){
+
+    String getStringDataFromFile() {
+        if (ExtensionHelper.getFileExtension(pathToFile.getName()).equalsIgnoreCase("pgm")) {
+            nfc.convertPGM_to_XXL(pathToFile);
+            return readFile.getStringFile(ExtensionHelper.changeNameExtensionPGMtoXXL(pathToFile));
+        } else {
+            return readFile.getStringFile(pathToFile.getAbsolutePath());
+        }
+    }
+
+    String getFileName() {
         return pathToFile.getName();
     }
 
-    ImageIcon getImage(){
+    ImageIcon getImage() {
         try {
             image = ImageIO.read(pathToFile);
-            if( image == null) {
+            if (image == null) {
                 image = ImageIO.read(getClass().getResource("unknownXXL.png"));
             }
         } catch (IOException ex) {
         }
         return new ImageIcon(image);
-    }
-    private String listIntoText(List<String> list){
-        String s="";
-        s = list.stream().map(q -> q+"\n").reduce(s, String::concat);
-        return s;
     }
 }
 
