@@ -21,6 +21,7 @@ import java.util.List;
 public class TextAreaWithStyles extends JTextPane {
     private List<String> listGCommands;
     private String strData;
+    private IfThenQuestionDialog ifThenQuestionDialog;
     // Стили редактора
     private String[] firstLetterOfComandString =
             {"H", "G0", "G1", "G2", "G3", "B", "GIN", "GOUT",
@@ -41,6 +42,7 @@ public class TextAreaWithStyles extends JTextPane {
 
     public TextAreaWithStyles(List<String> list) {
         listGCommands = list;
+        ifThenQuestionDialog = new IfThenQuestionDialog(listGCommands);
 
         // Привязка Undo Redo функций к JTextPane
         doc = this.getDocument();
@@ -53,6 +55,7 @@ public class TextAreaWithStyles extends JTextPane {
         });
         // Определение стилей редактора
 //        createStyles();
+        setListenerForTextPane();
     }
 
     public TextAreaWithStyles(String strData) {
@@ -69,7 +72,8 @@ public class TextAreaWithStyles extends JTextPane {
                 undo.addEdit(evt.getEdit());
             }
         });
-//        setListenerForTextPane();
+
+
     }
 
     /**
@@ -136,11 +140,11 @@ public class TextAreaWithStyles extends JTextPane {
 
     public void loadText() {
         int n = 1;
-        String str="";
+        String str = "";
         Style style = null;
         // Загружаем в документ содержимое
         for (String s : listGCommands) {
-            str+= n < listGCommands.size() ? s + "\n" : s;
+            str += n < listGCommands.size() ? s + "\n" : s;
 //            if (s.startsWith("H")) style = heading;
 //            else if (s.startsWith(";")) style = comment;
 //            else style = normal;
@@ -195,7 +199,7 @@ public class TextAreaWithStyles extends JTextPane {
             } else {
                 listGCommands.set(i, (listGCommands.get(i).substring(1)));
             }
-            textAreaReset();
+//            textAreaReset();
             loadText();
             RXTextUtilities.gotoStartOfLine(this, i + 1);
         }
@@ -205,14 +209,12 @@ public class TextAreaWithStyles extends JTextPane {
         int[] val = {0, 0};
         if (ae.getActionCommand().equals("condiLines")) val = getStartAndEndSelectedText();
         else if (ae.getActionCommand().equals("condiBlock")) val = defineBlockOfCodeByCaret();
-        System.out.println(Arrays.toString(val));
-        if (IfThenQuestionDialog.defineIfThenBlock(listGCommands, val)) {
-            System.out.println("*");
-            IfThenQuestionDialog.deleteCondition(listGCommands, val);
+        if (ifThenQuestionDialog.defineIfThenBlock(listGCommands, val)) {
+            ifThenQuestionDialog.deleteCondition(listGCommands, val);
         } else {
-            System.out.println("**");
-            IfThenQuestionDialog.setConditionAtCode(listGCommands, val);
+            ifThenQuestionDialog.setConditionAtCode(val);
         }
+        System.out.println(listGCommands);
         textAreaReset();
         loadText();
         RXTextUtilities.gotoStartOfLine(this, 1);
@@ -280,7 +282,9 @@ public class TextAreaWithStyles extends JTextPane {
             @Override
             public void caretUpdate(CaretEvent e) {
 //                defineBlockOfCodeByCaretS();
-//                System.out.println(TextAreaWithStyles.this.getCaretPosition());
+//                int n;
+//                n = RXTextUtilities.getLineAtCaret(TextAreaWithStyles.this);
+//                System.out.println(ifThenQuestionDialog.defineIfThenBlock(listGCommands,new int[]{n,n}));
             }
         });
     }

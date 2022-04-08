@@ -162,7 +162,9 @@ class MainWindow extends JFrame implements ActionListener {
         commentToggleButton = new JButton("Закомментировать строки\';\'");
         commentBlockToggleButton = new JButton("Закомментировать блок\';\'");
         conditionToggleButton = new JButton("Условн. инстр. IF THEN");
+        conditionToggleButton.setToolTipText("Оборачивает строку или выделенные строки IF THEN ... IF");
         conditionOnBlockToggleButton = new JButton("Условн. инстр. блок IF THEN");
+        conditionOnBlockToggleButton.setToolTipText("Оборачивает блок кода IF THEN ... IF");
         deleteBlockButton = new JButton("Резерв");
 
         commentToggleButton.setActionCommand("comLine");
@@ -230,15 +232,8 @@ class MainWindow extends JFrame implements ActionListener {
         deleteBlockButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                mainTextArea.deleteBlockOfCode();
             }
         });
-
-//        addWindowFocusListener(new WindowAdapter() {
-//            public void windowGainedFocus(WindowEvent e) {
-//                mainTextArea.requestFocusInWindow();
-//            }
-//        });
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -337,7 +332,7 @@ class MainWindow extends JFrame implements ActionListener {
 
     void setProgram(ControlProgramFile c) {
         controlProgramFile = c;
-        mainTextArea = new TextAreaWithStyles(controlProgramFile.getStringDataFromFile());
+        mainTextArea = new TextAreaWithStyles(controlProgramFile.getDataFromFile());    //getDataFromFile  читает файл в список, getStringDataFromFile читает в строку
         scrollPane = new JScrollPane(mainTextArea);
         mainTextArea.loadText();
         showImageOfProgram();

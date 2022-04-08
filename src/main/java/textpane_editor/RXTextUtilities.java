@@ -17,14 +17,14 @@ class RXTextUtilities {
      *
      *  @param component the text component in the sroll pane
      */
-    public static void centerLineInScrollPane(JTextComponent component)	{
+    public static void centerLineInScrollPane(JTextComponent component) {
         Container container = SwingUtilities.getAncestorOfClass(JViewport.class, component);
 
         if (container == null) return;
 
         try {
             Rectangle r = component.modelToView(component.getCaretPosition());
-            JViewport viewport = (JViewport)container;
+            JViewport viewport = (JViewport) container;
             int extentHeight = viewport.getExtentSize().height;
             int viewHeight = viewport.getViewSize().height;
 
@@ -32,7 +32,8 @@ class RXTextUtilities {
             y = Math.min(y, viewHeight - extentHeight);
 
             viewport.setViewPosition(new Point(0, y));
-        } catch(BadLocationException ble) {}
+        } catch (BadLocationException ble) {
+        }
     }
 
     /*
@@ -45,17 +46,16 @@ class RXTextUtilities {
         //  Since we assume a monospaced font we can use the width of a single
         //  character to represent the width of each character
 
-        FontMetrics fm = component.getFontMetrics( component.getFont() );
-        int characterWidth = fm.stringWidth( "0" );
+        FontMetrics fm = component.getFontMetrics(component.getFont());
+        int characterWidth = fm.stringWidth("0");
         int column = 0;
 
-        try
-        {
-            Rectangle r = component.modelToView( component.getCaretPosition() );
+        try {
+            Rectangle r = component.modelToView(component.getCaretPosition());
             int width = r.x - component.getInsets().left;
             column = width / characterWidth;
+        } catch (BadLocationException ble) {
         }
-        catch(BadLocationException ble) {}
 
         return column + 1;
     }
@@ -66,7 +66,7 @@ class RXTextUtilities {
     public static int getLineAtCaret(JTextComponent component) {
         int caretPosition = component.getCaretPosition();
         Element root = component.getDocument().getDefaultRootElement();
-        return root.getElementIndex( caretPosition ) + 1;
+        return root.getElementIndex(caretPosition) + 1;
     }
 
     /*
@@ -84,8 +84,8 @@ class RXTextUtilities {
         Element root = component.getDocument().getDefaultRootElement();
         line = Math.max(line, 1);
         line = Math.min(line, root.getElementCount());
-        int startOfLineOffset = root.getElement( line - 1 ).getStartOffset();
-        component.setCaretPosition( startOfLineOffset );
+        int startOfLineOffset = root.getElement(line - 1).getStartOffset();
+        component.setCaretPosition(startOfLineOffset);
     }
 
     /*
@@ -96,15 +96,15 @@ class RXTextUtilities {
 
         //  The following will position the caret at the start of the first word
 
-        try	{
+        try {
             int position = component.getCaretPosition();
             String first = component.getDocument().getText(position, 1);
 
-            if (Character.isWhitespace(first.charAt(0)))
-            {
+            if (Character.isWhitespace(first.charAt(0))) {
                 component.setCaretPosition(Utilities.getNextWord(component, position));
             }
-        } catch(Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     /*
@@ -112,15 +112,15 @@ class RXTextUtilities {
      */
     public static int getWrappedLines(JTextArea component) {
         View view = component.getUI().getRootView(component).getView(0);
-        int preferredHeight = (int)view.getPreferredSpan(View.Y_AXIS);
-        int lineHeight = component.getFontMetrics( component.getFont() ).getHeight();
+        int preferredHeight = (int) view.getPreferredSpan(View.Y_AXIS);
+        int lineHeight = component.getFontMetrics(component.getFont()).getHeight();
         return preferredHeight / lineHeight;
     }
 
     /*
      *  Return the number of lines of text, including wrapped lines.
      */
-    public static int getWrappedLines(JTextComponent component)	{
+    public static int getWrappedLines(JTextComponent component) {
         int lines = 0;
 
         View view = component.getUI().getRootView(component).getView(0);

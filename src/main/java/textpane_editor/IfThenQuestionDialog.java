@@ -14,18 +14,21 @@ class IfThenQuestionDialog extends JDialog {
     private JTextField tfText0, tfText1;
     private JButton btBut0, btBut1;
     private String[] sArray;
+    List<String> list;
 
 
-    IfThenQuestionDialog() {
+    IfThenQuestionDialog(List<String> list) {
         super();
+        this.list = list;
     }
-    private void initComponents() {
+
+    private void initComponents(int[] val) {
         pnPanel0 = new JPanel();
         GridBagLayout gbPanel0 = new GridBagLayout();
         GridBagConstraints gbcPanel0 = new GridBagConstraints();
-        pnPanel0.setLayout( gbPanel0 );
+        pnPanel0.setLayout(gbPanel0);
 
-        cbBox0 = new JCheckBox( "Добавить переменную в параметры программы"  );
+        cbBox0 = new JCheckBox("Добавить переменную в параметры программы");
         gbcPanel0.gridx = 0;
         gbcPanel0.gridy = 0;
         gbcPanel0.gridwidth = 3;
@@ -34,11 +37,11 @@ class IfThenQuestionDialog extends JDialog {
         gbcPanel0.weightx = 1;
         gbcPanel0.weighty = 0;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
-        gbcPanel0.insets = new Insets( 8,0,0,0 );
-        gbPanel0.setConstraints( cbBox0, gbcPanel0 );
-        pnPanel0.add( cbBox0 );
+        gbcPanel0.insets = new Insets(8, 0, 0, 0);
+        gbPanel0.setConstraints(cbBox0, gbcPanel0);
+        pnPanel0.add(cbBox0);
 
-        lbLabel1 = new JLabel( "Имя переменной параметра"  );
+        lbLabel1 = new JLabel("Имя переменной параметра");
         gbcPanel0.gridx = 0;
         gbcPanel0.gridy = 1;
         gbcPanel0.gridwidth = 3;
@@ -47,11 +50,11 @@ class IfThenQuestionDialog extends JDialog {
         gbcPanel0.weightx = 1;
         gbcPanel0.weighty = 1;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
-        gbcPanel0.insets = new Insets( 8,0,0,0 );
-        gbPanel0.setConstraints( lbLabel1, gbcPanel0 );
-        pnPanel0.add( lbLabel1 );
+        gbcPanel0.insets = new Insets(8, 0, 0, 0);
+        gbPanel0.setConstraints(lbLabel1, gbcPanel0);
+        pnPanel0.add(lbLabel1);
 
-        tfText0 = new JTextField( "number" );
+        tfText0 = new JTextField("number");
         gbcPanel0.gridx = 0;
         gbcPanel0.gridy = 2;
         gbcPanel0.gridwidth = 3;
@@ -60,10 +63,10 @@ class IfThenQuestionDialog extends JDialog {
         gbcPanel0.weightx = 1;
         gbcPanel0.weighty = 0;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
-        gbPanel0.setConstraints( tfText0, gbcPanel0 );
-        pnPanel0.add( tfText0 );
+        gbPanel0.setConstraints(tfText0, gbcPanel0);
+        pnPanel0.add(tfText0);
 
-        lbLabel2 = new JLabel( "Значение переменной параметра"  );
+        lbLabel2 = new JLabel("Значение переменной параметра");
         gbcPanel0.gridx = 0;
         gbcPanel0.gridy = 3;
         gbcPanel0.gridwidth = 3;
@@ -72,11 +75,11 @@ class IfThenQuestionDialog extends JDialog {
         gbcPanel0.weightx = 1;
         gbcPanel0.weighty = 1;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
-        gbcPanel0.insets = new Insets( 6,0,0,0 );
-        gbPanel0.setConstraints( lbLabel2, gbcPanel0 );
-        pnPanel0.add( lbLabel2 );
+        gbcPanel0.insets = new Insets(6, 0, 0, 0);
+        gbPanel0.setConstraints(lbLabel2, gbcPanel0);
+        pnPanel0.add(lbLabel2);
 
-        tfText1 = new JTextField( "1" );
+        tfText1 = new JTextField("1");
         gbcPanel0.gridx = 0;
         gbcPanel0.gridy = 4;
         gbcPanel0.gridwidth = 3;
@@ -85,10 +88,10 @@ class IfThenQuestionDialog extends JDialog {
         gbcPanel0.weightx = 1;
         gbcPanel0.weighty = 0;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
-        gbPanel0.setConstraints( tfText1, gbcPanel0 );
-        pnPanel0.add( tfText1 );
+        gbPanel0.setConstraints(tfText1, gbcPanel0);
+        pnPanel0.add(tfText1);
 
-        btBut0 = new JButton( "OK"  );
+        btBut0 = new JButton("OK");
         gbcPanel0.gridx = 1;
         gbcPanel0.gridy = 5;
         gbcPanel0.gridwidth = 1;
@@ -97,11 +100,11 @@ class IfThenQuestionDialog extends JDialog {
         gbcPanel0.weightx = 1;
         gbcPanel0.weighty = 0;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
-        gbcPanel0.insets = new Insets( 5,0,0,0 );
-        gbPanel0.setConstraints( btBut0, gbcPanel0 );
-        pnPanel0.add( btBut0 );
+        gbcPanel0.insets = new Insets(5, 0, 0, 0);
+        gbPanel0.setConstraints(btBut0, gbcPanel0);
+        pnPanel0.add(btBut0);
 
-        btBut1 = new JButton( "Cancel"  );
+        btBut1 = new JButton("Cancel");
         gbcPanel0.gridx = 2;
         gbcPanel0.gridy = 5;
         gbcPanel0.gridwidth = 1;
@@ -110,43 +113,50 @@ class IfThenQuestionDialog extends JDialog {
         gbcPanel0.weightx = 1;
         gbcPanel0.weighty = 0;
         gbcPanel0.anchor = GridBagConstraints.NORTH;
-        gbcPanel0.insets = new Insets( 5,0,0,0 );
-        gbPanel0.setConstraints( btBut1, gbcPanel0 );
-        pnPanel0.add( btBut1 );
+        gbcPanel0.insets = new Insets(5, 0, 0, 0);
+        gbPanel0.setConstraints(btBut1, gbcPanel0);
+        pnPanel0.add(btBut1);
 
-        setDefaultCloseOperation( DISPOSE_ON_CLOSE );
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        setContentPane( pnPanel0 );
+        setContentPane(pnPanel0);
         pack();
-        setVisible( true );
+        setVisible(true);
 
         btBut0.addActionListener((ActionEvent ae) -> {
-            sArray = new String[2];
-            sArray[0] = tfText0.getText();
-            sArray[1] = tfText1.getText();
+//            sArray = new String[2];
+//            sArray[0] = tfText0.getText();
+//            sArray[1] = tfText1.getText();
+            setCondition(cbBox0.isSelected(), tfText0.getText(), tfText1.getText(), val);
             setVisible(false);
         });
 
         btBut1.addActionListener((ActionEvent ae) -> {
-            setVisible(false);
+            dispose();
+//            setVisible(false);
         });
 
     }
 
-    static void setConditionAtCode(List<String> list, int[] val){
-        String s = JOptionPane.showInputDialog("Введите условие вида+" + " \'word(слово) = 1(число)\'");
-        if (s != null) {
-            if (!s.isEmpty()) {
-                list.add(val[0], "IF " + s + " THEN");
-                list.add(val[1] + 2, "FI");
-                list.add(1, "PAR " + s + "\" \"");
-            }
-        }
-        else return;
+    void setConditionAtCode(int[] val) {
+        initComponents(val);
     }
+
+    private void setCondition(boolean checkBox, String fText, String sText, int[] val) {
+        if (fText != null) {
+            if (!fText.isEmpty()) {
+                list.add(val[0], "IF " + fText + " THEN");
+                list.add(val[1] + 2, "FI");
+                if (checkBox == true) {
+                    list.add(1, "PAR " + fText + "\" \"");
+                }
+            }
+        } else return;
+    }
+
     // Функция для определения нахождения каретки или выделенного текста в блоке  IF THEN.
     // Если каретка или выделенный текст находится в блоке возвращает TRUE, иначе FALSE.
-    static boolean defineIfThenBlock(List<String> list, int[] n){
+    boolean defineIfThenBlock(List<String> list, int[] n) {
         int start = -1, end = -1;
         for (int i = n[0]; i > 0; i--) {
             if (list.get(i).contains("FI")) {
@@ -172,8 +182,8 @@ class IfThenQuestionDialog extends JDialog {
         else return false;
     }
 
-    static void deleteCondition(List<String> list, int[] n){
-        int start = -1 , end = -1;
+    void deleteCondition(List<String> list, int[] n) {
+        int start = -1, end = -1;
         for (int i = n[0]; i > 0; i--) {
             if (list.get(i).contains("IF")) {
                 start = i;
@@ -183,7 +193,7 @@ class IfThenQuestionDialog extends JDialog {
         for (int i = n[1]; i < list.size(); i++) {
             if (list.get(i).contains("FI")) end = i;
         }
-        if ((start != -1) &&(end != -1)) {
+        if ((start != -1) && (end != -1)) {
             list.remove(end);     //Удаляем с конца. Т.к. если удалить с начала массива
             list.remove(start);   //элементы сдвинутся и будут удалена другая строка
         } else {
