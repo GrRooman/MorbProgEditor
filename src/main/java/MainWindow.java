@@ -161,9 +161,9 @@ class MainWindow extends JFrame implements ActionListener {
 
         commentToggleButton = new JButton("Закомментировать строки\';\'");
         commentBlockToggleButton = new JButton("Закомментировать блок\';\'");
-        conditionToggleButton = new JButton("Условн. инстр. IF THEN");
+        conditionToggleButton = new JButton("Вкл\\Выкл условн. инстр. IF THEN");
         conditionToggleButton.setToolTipText("Оборачивает строку или выделенные строки IF THEN ... IF");
-        conditionOnBlockToggleButton = new JButton("Условн. инстр. блок IF THEN");
+        conditionOnBlockToggleButton = new JButton("Вкл\\Выкл условн. инстр. блок IF THEN");
         conditionOnBlockToggleButton.setToolTipText("Оборачивает блок кода IF THEN ... IF");
         deleteBlockButton = new JButton("Резерв");
 

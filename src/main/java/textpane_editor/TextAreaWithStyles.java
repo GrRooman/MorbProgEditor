@@ -53,27 +53,11 @@ public class TextAreaWithStyles extends JTextPane {
                 undo.addEdit(evt.getEdit());
             }
         });
+
+
         // Определение стилей редактора
 //        createStyles();
         setListenerForTextPane();
-    }
-
-    public TextAreaWithStyles(String strData) {
-        this.strData = strData;
-
-        listGCommands = Arrays.asList(strData.split("\n"));
-
-        // Привязка Undo Redo функций к JTextPane
-        doc = this.getDocument();
-        undo = new UndoManager();
-
-        doc.addUndoableEditListener(new UndoableEditListener() {
-            public void undoableEditHappened(UndoableEditEvent evt) {
-                undo.addEdit(evt.getEdit());
-            }
-        });
-
-
     }
 
     /**
@@ -133,10 +117,6 @@ public class TextAreaWithStyles extends JTextPane {
     /**
      * Процедура загрузки текста в редактор
      */
-    public void loadTex(String s) {
-        this.setText(s);
-        changeDocumentStyle();
-    }
 
     public void loadText() {
         int n = 1;
@@ -150,8 +130,9 @@ public class TextAreaWithStyles extends JTextPane {
 //            else style = normal;
 //            insertText(n < listGCommands.size() ? s + "\n" : s, null);   // Запрет перевода каретки на новую строку
 //            n++;
-            loadTex(str);
+
         }
+        setText(str);
         //  Определение функции для именения стиля части текста
 //        changeDocumentStyle();
 //        setListenerForTextPane();
@@ -190,19 +171,19 @@ public class TextAreaWithStyles extends JTextPane {
 
     public void setCommentOfLines(ActionEvent ae) {
         int[] val = {0, 0};
+        int i;
         if (ae.getActionCommand().equals("comLine")) val = getStartAndEndSelectedText();
         else if (ae.getActionCommand().equals("comBlock")) val = defineBlockOfCodeByCaret();
         else log.error("Был сделан какой-то неожиданный выбор при нажатии чего-то.");
-        for (int i = val[0]; i <= val[1]; i++) {
+        for (i = val[0]; i <= val[1]; i++) {
             if (!isComments(i)) {
                 listGCommands.set(i, ";" + listGCommands.get(i));
             } else {
                 listGCommands.set(i, (listGCommands.get(i).substring(1)));
             }
-//            textAreaReset();
-            loadText();
-            RXTextUtilities.gotoStartOfLine(this, i + 1);
         }
+        loadText();
+        RXTextUtilities.gotoStartOfLine(this, i + 1);
     }
 
     public void setConditionAtCode(ActionEvent ae) {
@@ -210,12 +191,19 @@ public class TextAreaWithStyles extends JTextPane {
         if (ae.getActionCommand().equals("condiLines")) val = getStartAndEndSelectedText();
         else if (ae.getActionCommand().equals("condiBlock")) val = defineBlockOfCodeByCaret();
         if (ifThenQuestionDialog.defineIfThenBlock(listGCommands, val)) {
-            ifThenQuestionDialog.deleteCondition(listGCommands, val);
+            int answer = JOptionPane.showConfirmDialog(null,
+                    "Удалить условие IF THEN ?",
+                    "Предупреждение!",
+                    JOptionPane.YES_NO_CANCEL_OPTION);
+            if (answer == 0) {
+                ifThenQuestionDialog.deleteCondition(listGCommands, val);
+            }
+            if (answer == 1) {
+                ifThenQuestionDialog.setConditionAtCode(val);
+            }
         } else {
             ifThenQuestionDialog.setConditionAtCode(val);
         }
-        System.out.println(listGCommands);
-        textAreaReset();
         loadText();
         RXTextUtilities.gotoStartOfLine(this, 1);
     }
@@ -288,6 +276,222 @@ public class TextAreaWithStyles extends JTextPane {
             }
         });
     }
+
+    class IfThenQuestionDialog extends JDialog {
+
+        private JPanel pnPanel0;
+        private JCheckBox cbBox0;
+        private JLabel lbLabel1, lbLabel2;
+        private JTextField tfText0, tfText1;
+        private JButton btBut0, btBut1;
+        private String[] sArray;
+        List<String> list;
+
+
+        IfThenQuestionDialog(List<String> list) {
+            super();
+            this.list = list;
+        }
+
+        private void initComponents(int[] val) {
+            pnPanel0 = new JPanel();
+            GridBagLayout gbPanel0 = new GridBagLayout();
+            GridBagConstraints gbcPanel0 = new GridBagConstraints();
+            pnPanel0.setLayout(gbPanel0);
+
+            cbBox0 = new JCheckBox("Добавить переменную в параметры программы");
+            gbcPanel0.gridx = 0;
+            gbcPanel0.gridy = 0;
+            gbcPanel0.gridwidth = 3;
+            gbcPanel0.gridheight = 1;
+            gbcPanel0.fill = GridBagConstraints.BOTH;
+            gbcPanel0.weightx = 1;
+            gbcPanel0.weighty = 0;
+            gbcPanel0.anchor = GridBagConstraints.NORTH;
+            gbcPanel0.insets = new Insets(8, 0, 0, 0);
+            gbPanel0.setConstraints(cbBox0, gbcPanel0);
+            pnPanel0.add(cbBox0);
+
+            lbLabel1 = new JLabel("Имя переменной параметра");
+            gbcPanel0.gridx = 0;
+            gbcPanel0.gridy = 1;
+            gbcPanel0.gridwidth = 3;
+            gbcPanel0.gridheight = 1;
+            gbcPanel0.fill = GridBagConstraints.BOTH;
+            gbcPanel0.weightx = 1;
+            gbcPanel0.weighty = 1;
+            gbcPanel0.anchor = GridBagConstraints.NORTH;
+            gbcPanel0.insets = new Insets(8, 0, 0, 0);
+            gbPanel0.setConstraints(lbLabel1, gbcPanel0);
+            pnPanel0.add(lbLabel1);
+
+            tfText0 = new JTextField("number");
+            gbcPanel0.gridx = 0;
+            gbcPanel0.gridy = 2;
+            gbcPanel0.gridwidth = 3;
+            gbcPanel0.gridheight = 1;
+            gbcPanel0.fill = GridBagConstraints.BOTH;
+            gbcPanel0.weightx = 1;
+            gbcPanel0.weighty = 0;
+            gbcPanel0.anchor = GridBagConstraints.NORTH;
+            gbPanel0.setConstraints(tfText0, gbcPanel0);
+            pnPanel0.add(tfText0);
+
+            lbLabel2 = new JLabel("Значение переменной параметра");
+            gbcPanel0.gridx = 0;
+            gbcPanel0.gridy = 3;
+            gbcPanel0.gridwidth = 3;
+            gbcPanel0.gridheight = 1;
+            gbcPanel0.fill = GridBagConstraints.BOTH;
+            gbcPanel0.weightx = 1;
+            gbcPanel0.weighty = 1;
+            gbcPanel0.anchor = GridBagConstraints.NORTH;
+            gbcPanel0.insets = new Insets(6, 0, 0, 0);
+            gbPanel0.setConstraints(lbLabel2, gbcPanel0);
+            pnPanel0.add(lbLabel2);
+
+            tfText1 = new JTextField("1");
+            gbcPanel0.gridx = 0;
+            gbcPanel0.gridy = 4;
+            gbcPanel0.gridwidth = 3;
+            gbcPanel0.gridheight = 1;
+            gbcPanel0.fill = GridBagConstraints.BOTH;
+            gbcPanel0.weightx = 1;
+            gbcPanel0.weighty = 0;
+            gbcPanel0.anchor = GridBagConstraints.NORTH;
+            gbPanel0.setConstraints(tfText1, gbcPanel0);
+            pnPanel0.add(tfText1);
+
+            btBut0 = new JButton("OK");
+            gbcPanel0.gridx = 1;
+            gbcPanel0.gridy = 5;
+            gbcPanel0.gridwidth = 1;
+            gbcPanel0.gridheight = 1;
+            gbcPanel0.fill = GridBagConstraints.BOTH;
+            gbcPanel0.weightx = 1;
+            gbcPanel0.weighty = 0;
+            gbcPanel0.anchor = GridBagConstraints.NORTH;
+            gbcPanel0.insets = new Insets(5, 0, 0, 0);
+            gbPanel0.setConstraints(btBut0, gbcPanel0);
+            pnPanel0.add(btBut0);
+
+            btBut1 = new JButton("Cancel");
+            gbcPanel0.gridx = 2;
+            gbcPanel0.gridy = 5;
+            gbcPanel0.gridwidth = 1;
+            gbcPanel0.gridheight = 1;
+            gbcPanel0.fill = GridBagConstraints.BOTH;
+            gbcPanel0.weightx = 1;
+            gbcPanel0.weighty = 0;
+            gbcPanel0.anchor = GridBagConstraints.NORTH;
+            gbcPanel0.insets = new Insets(5, 0, 0, 0);
+            gbPanel0.setConstraints(btBut1, gbcPanel0);
+            pnPanel0.add(btBut1);
+
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+            setContentPane(pnPanel0);
+            pack();
+            setVisible(true);
+
+            btBut0.addActionListener((ActionEvent ae) -> {
+                setCondition(cbBox0.isSelected(), tfText0.getText(), tfText1.getText(), val);
+                setVisible(false);
+            });
+
+            btBut1.addActionListener((ActionEvent ae) -> {
+                dispose();
+            });
+
+        }
+
+        void setConditionAtCode(int[] val) {
+            initComponents(val);
+        }
+
+        private void setCondition(boolean checkBox, String fText, String sText, int[] val) {
+            if (!fText.isEmpty()) {
+                list.add(val[0], "IF " + fText + "=" + sText + " THEN");
+                list.add(val[1] + 2, "FI");
+                if (checkBox == true) {
+                    list.add(1, "PAR " + fText + "=" + sText + "\" \"");
+                }
+                TextAreaWithStyles.this.loadText();
+            } else {
+                JOptionPane.showMessageDialog(null, "Не ввели значение в первой строке.");
+            }
+        }
+
+        // Функция для определения нахождения каретки или выделенного текста в блоке  IF THEN.
+        // Если каретка или выделенный текст находится в блоке возвращает TRUE, иначе FALSE.
+        boolean defineIfThenBlock(List<String> list, int[] n) {
+            int start = -1, end = -1;
+            for (int i = n[0]; i > 0; i--) {
+                if (list.get(i).contains("FI")) {
+//                start = -1;
+                    break;
+                }
+                if (list.get(i).contains("IF")) {
+                    start = i;
+                    break;
+                }
+            }
+            for (int i = n[1]; i < list.size(); i++) {
+                if (list.get(i).contains("IF")) {
+//                end = -1;
+                    break;
+                }
+                if (list.get(i).contains("FI")) {
+                    end = i;
+                    break;
+                }
+            }
+            if ((start != -1) && (end != -1)) return true;
+            else return false;
+        }
+
+        void deleteCondition(List<String> list, int[] n) {
+            int start = -1, end = -1;
+            for (int i = n[0]; i > 0; i--) {
+                if (list.get(i).contains("IF")) {
+                    start = i;
+                    break;
+                }
+            }
+            for (int i = n[1]; i < list.size(); i++) {
+                if (list.get(i).contains("FI")) {
+                    end = i;
+                }
+            }
+
+            if ((start != -1) && (end != -1)) {
+                String string = list.get(start);   //Получаем строку заранее, т.к. она потом будет удалена
+
+                list.remove(end);     //Удаляем с конца. Т.к. если удалить с начала массива
+                list.remove(start);   //элементы сдвинутся и будут удалена другая строка
+
+                String condName = string.substring(3, string.indexOf("THEN"));
+                String[] val = condName.split("[<>=]");
+
+
+                for (int i = 1; i < list.size() / 3; i++) {         // Если цикл не находит " PAR ", он проходит весь массив до конца
+                    if (list.get(i).startsWith("PAR")) {          // В управляющей программе может быть  не больше 20 строк " PAR "
+                        if (list.get(i).indexOf(val[0]) != -1) {
+                            list.remove(i);
+                            break;
+                        }
+                    }
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "\"Правильный\" блок IF THEN не обнаружен. Используйте другую кнопку.",
+                        "Внимание!",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
 
 }
 
