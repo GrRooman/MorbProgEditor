@@ -14,13 +14,13 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
 public class TextAreaWithStyles extends JTextPane {
     private List<String> listGCommands;
-    private String strData;
     private IfThenQuestionDialog ifThenQuestionDialog;
     // Стили редактора
     private String[] firstLetterOfComandString =
@@ -38,11 +38,10 @@ public class TextAreaWithStyles extends JTextPane {
     private final UndoManager undo;
     private static final Logger log = LoggerFactory.getLogger(TextAreaWithStyles.class.getName());
 
-    static int n = 0;
 
     public TextAreaWithStyles(List<String> list) {
         listGCommands = list;
-        ifThenQuestionDialog = new IfThenQuestionDialog(listGCommands);
+        ifThenQuestionDialog = new IfThenQuestionDialog();
 
         // Привязка Undo Redo функций к JTextPane
         doc = this.getDocument();
@@ -53,7 +52,6 @@ public class TextAreaWithStyles extends JTextPane {
                 undo.addEdit(evt.getEdit());
             }
         });
-
 
         // Определение стилей редактора
 //        createStyles();
@@ -158,6 +156,10 @@ public class TextAreaWithStyles extends JTextPane {
         return this.getText();
     }
 
+    public List<String> getListText() {
+        return new ArrayList<>(Arrays.asList(getText().split("\\n")));
+    }
+
     // Метод позволяет появиться горизонтальному ScrollBar,
     // тем самым запрещает переноситься тексту на новую строку.
     @Override
@@ -166,14 +168,15 @@ public class TextAreaWithStyles extends JTextPane {
     }
 
     public void clearTextPane() {
-        textAreaReset();
+        this.setText("");
     }
 
     public void setCommentOfLines(ActionEvent ae) {
-        int[] val = {0, 0};
         int i;
-        if (ae.getActionCommand().equals("comLine")) val = getStartAndEndSelectedText();
-        else if (ae.getActionCommand().equals("comBlock")) val = defineBlockOfCodeByCaret();
+        int[] val = {0, 0};
+        listGCommands = getListText();
+        if (ae.getActionCommand().equals("commLine")) val = getStartAndEndSelectedText();
+        else if (ae.getActionCommand().equals("commBlock")) val = defineBlockOfCodeByCaret();
         else log.error("Был сделан какой-то неожиданный выбор при нажатии чего-то.");
         for (i = val[0]; i <= val[1]; i++) {
             if (!isComments(i)) {
@@ -186,8 +189,14 @@ public class TextAreaWithStyles extends JTextPane {
         RXTextUtilities.gotoStartOfLine(this, i + 1);
     }
 
+    private boolean isComments(int line) {
+        return listGCommands.get(line).charAt(0) == ';';
+    }
+
+
     public void setConditionAtCode(ActionEvent ae) {
         int[] val = {0, 0};
+        listGCommands = getListText();
         if (ae.getActionCommand().equals("condiLines")) val = getStartAndEndSelectedText();
         else if (ae.getActionCommand().equals("condiBlock")) val = defineBlockOfCodeByCaret();
         if (ifThenQuestionDialog.defineIfThenBlock(listGCommands, val)) {
@@ -208,14 +217,6 @@ public class TextAreaWithStyles extends JTextPane {
         RXTextUtilities.gotoStartOfLine(this, 1);
     }
 
-    private boolean isComments(int line) {
-        if (listGCommands.get(line).charAt(0) == ';') return true;
-        else return false;
-    }
-
-    private void textAreaReset() {
-        this.setText("");
-    }
 
     private int[] getStartAndEndSelectedText() {      // пересмотрнеть возможно вывести один руут будет лучше
         Element root = TextAreaWithStyles.this.getDocument().getDefaultRootElement();
@@ -232,19 +233,8 @@ public class TextAreaWithStyles extends JTextPane {
         return new int[]{startText, endText};
     }
 
-    private int[] defineBlockOfCodeByCaretS() {
-        int end = 0, start = 0;
-        int n = this.getCaretPosition();
-        start = strData.lastIndexOf("GIN", n);
-        end = strData.indexOf("GOUT", n);
-        if ((start == -1) || (end == -1)) {
-//            JOptionPane.showMessageDialog(null, "Блок не найден");
-        }
-        System.out.println(start + "  " + end);
-        return new int[]{start, end};
-    }
-
     private int[] defineBlockOfCodeByCaret() {
+        listGCommands = getListText();
         int n = RXTextUtilities.getLineAtCaret(this) - 1;
         int end = 0, start = 0;
         for (int i = n; i > 0; i--) {
@@ -272,7 +262,7 @@ public class TextAreaWithStyles extends JTextPane {
 //                defineBlockOfCodeByCaretS();
 //                int n;
 //                n = RXTextUtilities.getLineAtCaret(TextAreaWithStyles.this);
-//                System.out.println(ifThenQuestionDialog.defineIfThenBlock(listGCommands,new int[]{n,n}));
+                System.out.println("*");
             }
         });
     }
@@ -284,13 +274,9 @@ public class TextAreaWithStyles extends JTextPane {
         private JLabel lbLabel1, lbLabel2;
         private JTextField tfText0, tfText1;
         private JButton btBut0, btBut1;
-        private String[] sArray;
-        List<String> list;
 
-
-        IfThenQuestionDialog(List<String> list) {
+        IfThenQuestionDialog() {
             super();
-            this.list = list;
         }
 
         private void initComponents(int[] val) {
@@ -399,9 +385,7 @@ public class TextAreaWithStyles extends JTextPane {
                 setVisible(false);
             });
 
-            btBut1.addActionListener((ActionEvent ae) -> {
-                dispose();
-            });
+            btBut1.addActionListener((ActionEvent ae) -> dispose());
 
         }
 
@@ -410,11 +394,12 @@ public class TextAreaWithStyles extends JTextPane {
         }
 
         private void setCondition(boolean checkBox, String fText, String sText, int[] val) {
+            listGCommands = getListText();
             if (!fText.isEmpty()) {
-                list.add(val[0], "IF " + fText + "=" + sText + " THEN");
-                list.add(val[1] + 2, "FI");
+                listGCommands.add(val[0], "IF " + fText + "=" + sText + " THEN");
+                listGCommands.add(val[1] + 2, "FI");
                 if (checkBox == true) {
-                    list.add(1, "PAR " + fText + "=" + sText + "\" \"");
+                    listGCommands.add(1, "PAR " + fText + "=" + sText + "\" \"");
                 }
                 TextAreaWithStyles.this.loadText();
             } else {
@@ -428,7 +413,6 @@ public class TextAreaWithStyles extends JTextPane {
             int start = -1, end = -1;
             for (int i = n[0]; i > 0; i--) {
                 if (list.get(i).contains("FI")) {
-//                start = -1;
                     break;
                 }
                 if (list.get(i).contains("IF")) {
@@ -438,7 +422,6 @@ public class TextAreaWithStyles extends JTextPane {
             }
             for (int i = n[1]; i < list.size(); i++) {
                 if (list.get(i).contains("IF")) {
-//                end = -1;
                     break;
                 }
                 if (list.get(i).contains("FI")) {
@@ -446,8 +429,7 @@ public class TextAreaWithStyles extends JTextPane {
                     break;
                 }
             }
-            if ((start != -1) && (end != -1)) return true;
-            else return false;
+            return (start != -1) && (end != -1);
         }
 
         void deleteCondition(List<String> list, int[] n) {
