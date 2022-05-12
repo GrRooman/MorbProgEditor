@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.List;
 
 
-class MainWindow extends JFrame implements ActionListener {
+public class MainWindow extends JFrame implements ActionListener {
 
     private final JPanel rightPanel;
     private UserPreferences up;
@@ -30,6 +30,15 @@ class MainWindow extends JFrame implements ActionListener {
             deleteBlockButton;
     private JLabel imageLabel;
     private JToolBar jToolBar;
+    private JSplitPane main;
+    private JPanel topPanel;
+    private JTextPane textPane1;
+    private JSeparator sepa2;
+    private JPanel bottomInfoPanel;
+    private JButton button2;
+    private JButton button3;
+    private JButton button4;
+    private JProgressBar progressBar1;
     //    private JLabel textInfoLabel;
     private JScrollPane scrollPane;
     private FileChooser fc;
@@ -71,7 +80,7 @@ class MainWindow extends JFrame implements ActionListener {
                 true);
 
 
-        jToolBar = new JToolBar();
+//        jToolBar = new JToolBar();
         jToolBar.add(openFile);
         jToolBar.addSeparator();
         jToolBar.add(saveFile);
@@ -145,7 +154,7 @@ class MainWindow extends JFrame implements ActionListener {
         mhAbout.addActionListener(this);
 
 
-        mainPanel = new JPanel();
+//        mainPanel = new JPanel();
         leftBottomTextArea = new JTextArea();
         rightBottomTextArea = new JTextArea();
 
@@ -192,11 +201,11 @@ class MainWindow extends JFrame implements ActionListener {
         bottomPanel.setLayout(new GridLayout(1, 2));
 
         //  Указываем диспечер компановки
-        mainPanel.setLayout(new BorderLayout());
-
-        mainPanel.add(jToolBar, BorderLayout.NORTH);
-        mainPanel.add(rightPanel, BorderLayout.EAST);
-        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+//        mainPanel.setLayout(new BorderLayout());
+//
+//        mainPanel.add(jToolBar, BorderLayout.NORTH);
+//        mainPanel.add(rightPanel, BorderLayout.EAST);
+//        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
         setVisualStyleOfProgram(3);    //  Введите число от 0 до 3 для смены внешнего вида программы
