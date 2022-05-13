@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MainWindow extends JFrame implements ActionListener {
 
-    private final JPanel rightPanel;
+    private JPanel rightPanel;
     private UserPreferences up;
     private JMenu mFile, mEdit, mHelp;
     private JMenuItem mfSaveAs, mfClose, meCut, meCopy, mePaste, mhExit, mhAbout;
@@ -32,15 +32,13 @@ public class MainWindow extends JFrame implements ActionListener {
     private JToolBar jToolBar;
     private JSplitPane main;
     private JPanel topPanel;
-    private JTextPane textPane1;
     private JSeparator sepa2;
-    private JPanel bottomInfoPanel;
-    private JButton button2;
-    private JButton button3;
     private JButton button4;
     private JProgressBar progressBar1;
+    private JPanel rr;
+    private JScrollPane mainScrollPane;
+    private JTextPane textPane1;
     //    private JLabel textInfoLabel;
-    private JScrollPane scrollPane;
     private FileChooser fc;
     private ControlProgramFile controlProgramFile;
     private PrepareAndSaveData prepareAndSave;
@@ -80,7 +78,6 @@ public class MainWindow extends JFrame implements ActionListener {
                 true);
 
 
-//        jToolBar = new JToolBar();
         jToolBar.add(openFile);
         jToolBar.addSeparator();
         jToolBar.add(saveFile);
@@ -168,37 +165,37 @@ public class MainWindow extends JFrame implements ActionListener {
 //        textInfoLabel.setPreferredSize(new Dimension(220, 105));
 //        textInfoLabel.setMaximumSize(new Dimension(220, 105));
 
-        commentToggleButton = new JButton("Закомментировать строки\';\'");
-        commentToggleButton.setMaximumSize(new Dimension(220, 30));
-        commentBlockToggleButton = new JButton("Закомментировать блок\';\'");
-        commentBlockToggleButton.setEnabled(false);
-        conditionToggleButton = new JButton("Вкл\\Выкл условн. инстр. IF THEN");
-        conditionToggleButton.setToolTipText("Оборачивает строку или выделенные строки IF THEN ... IF");
-        conditionOnBlockToggleButton = new JButton("Вкл\\Выкл условн. инстр. блок IF THEN");
-        conditionOnBlockToggleButton.setMaximumSize(new Dimension(220, 30));
-        conditionOnBlockToggleButton.setToolTipText("Оборачивает блок кода IF THEN ... IF");
-        deleteBlockButton = new JButton("Резерв");
+//        commentToggleButton = new JButton("Закомментировать строки\';\'");
+//        commentToggleButton.setMaximumSize(new Dimension(220, 30));
+//        commentBlockToggleButton = new JButton("Закомментировать блок\';\'");
+//        commentBlockToggleButton.setEnabled(false);
+//        conditionToggleButton = new JButton("Вкл\\Выкл условн. инстр. IF THEN");
+//        conditionToggleButton.setToolTipText("Оборачивает строку или выделенные строки IF THEN ... IF");
+//        conditionOnBlockToggleButton = new JButton("Вкл\\Выкл условн. инстр. блок IF THEN");
+//        conditionOnBlockToggleButton.setMaximumSize(new Dimension(220, 30));
+//        conditionOnBlockToggleButton.setToolTipText("Оборачивает блок кода IF THEN ... IF");
+//        deleteBlockButton = new JButton("Резерв");
 
         commentToggleButton.setActionCommand("commLine");
         commentBlockToggleButton.setActionCommand("commBlock");
         conditionToggleButton.setActionCommand("condiLines");
         conditionOnBlockToggleButton.setActionCommand("condiBlock");
 
-        rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS)); //   new BoxLayout(rightPanel, BoxLayout.Y_AXIS)
-        rightPanel.setBackground(new Color(176, 181, 176));
-
-        rightPanel.add(imageLabel);
-        rightPanel.add(commentToggleButton);
-        rightPanel.add(commentBlockToggleButton);
-        rightPanel.add(conditionToggleButton);
-        rightPanel.add(conditionOnBlockToggleButton);
-        rightPanel.add(deleteBlockButton);
+//        rightPanel = new JPanel();
+//        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS)); //   new BoxLayout(rightPanel, BoxLayout.Y_AXIS)
+//        rightPanel.setBackground(new Color(176, 181, 176));
+//
+//        rightPanel.add(imageLabel);
+//        rightPanel.add(commentToggleButton);
+//        rightPanel.add(commentBlockToggleButton);
+//        rightPanel.add(conditionToggleButton);
+//        rightPanel.add(conditionOnBlockToggleButton);
+//        rightPanel.add(deleteBlockButton);
 //        rightPanel.add(textInfoLabel);
 //
         //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
-        bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridLayout(1, 2));
+//        bottomPanel = new JPanel();
+//        bottomPanel.setLayout(new GridLayout(1, 2));
 
         //  Указываем диспечер компановки
 //        mainPanel.setLayout(new BorderLayout());
@@ -235,9 +232,9 @@ public class MainWindow extends JFrame implements ActionListener {
         conditionOnBlockToggleButton.addActionListener(ae -> {
             mainTextArea.setConditionAtCode(ae);
         });
-        deleteBlockButton.addActionListener(e -> {
-            mainTextArea.getListText();
-        });
+//        deleteBlockButton.addActionListener(e -> {
+//            mainTextArea.getListText();
+//        });
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -257,7 +254,8 @@ public class MainWindow extends JFrame implements ActionListener {
     }
 
     private void setCenterTextArea() {
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
+//        mainPanel.add(scrollPane, BorderLayout.CENTER);
+          mainScrollPane.add(mainTextArea);
     }
 
     private void setToPreferredSizeFrame() {
@@ -292,7 +290,7 @@ public class MainWindow extends JFrame implements ActionListener {
         bottomTextArea.setBackground(color);
         bottomTextArea.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         bottomTextArea.setFont(new Font("Tahoma", Font.BOLD, 11));
-        bottomPanel.add(bottomTextArea);
+//        bottomPanel.add(bottomTextArea);
     }
 
     void setInfoTextToBottomLabels(AdditionalInformation info) {
@@ -328,8 +326,8 @@ public class MainWindow extends JFrame implements ActionListener {
     void clearAndCloseTextPane() {
         mainTextArea.clearTextPane();
         mainTextArea = null;
-        mainPanel.remove(scrollPane);
-        scrollPane = null;
+        mainPanel.remove(mainScrollPane);
+        mainScrollPane = null;
         MainWindow.this.repaint();
         setVisibleMenuItem(false);
     }
@@ -337,10 +335,14 @@ public class MainWindow extends JFrame implements ActionListener {
     void setProgram(ControlProgramFile c) {
         controlProgramFile = c;
         mainTextArea = new TextAreaWithStyles(controlProgramFile.getDataFromFile());    //getDataFromFile  читает файл в список, getStringDataFromFile читает в строку
-        scrollPane = new JScrollPane(mainTextArea);
+//        mainScrollPane = new JScrollPane(mainTextArea);
+//        textArea1.setText(",f,fufkf vfuff");
+        JTextArea t = new JTextArea("asdfasf") ;
+//        textPane1.setText("afkhaf;aogf;jha;gf;ajhgf;ahg;ha;klgag");
+//        mainScrollPane.add(t);
         mainTextArea.loadText();
         showImageOfProgram();
-        setCenterTextArea();
+//        setCenterTextArea();
         setAddTitle(controlProgramFile.getFileName());
         setVisibleMenuItem(true);
     }
