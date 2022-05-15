@@ -16,11 +16,10 @@ import java.util.List;
 
 public class MainWindow extends JFrame implements ActionListener {
 
-    private JPanel rightPanel;
     private UserPreferences up;
     private JMenu mFile, mEdit, mHelp;
     private JMenuItem mfSaveAs, mfClose, meCut, meCopy, mePaste, mhExit, mhAbout;
-    private JPanel mainPanel, bottomPanel;
+    private JPanel mainPanel;
     private TextAreaWithStyles mainTextArea;
     private JTextArea leftBottomTextArea, rightBottomTextArea;
     private JButton commentToggleButton,
@@ -35,10 +34,10 @@ public class MainWindow extends JFrame implements ActionListener {
     private JSeparator sepa2;
     private JButton button4;
     private JProgressBar progressBar1;
-    private JPanel rr;
     private JScrollPane mainScrollPane;
-    private JTextPane textPane1;
-    //    private JLabel textInfoLabel;
+    private JSplitPane bottomInfoPanel;
+    private JLabel leftInfoAboutGProgram;
+    private JLabel rightInfoAboutGProgram;
     private FileChooser fc;
     private ControlProgramFile controlProgramFile;
     private PrepareAndSaveData prepareAndSave;
@@ -151,30 +150,9 @@ public class MainWindow extends JFrame implements ActionListener {
         mhAbout.addActionListener(this);
 
 
-//        mainPanel = new JPanel();
         leftBottomTextArea = new JTextArea();
         rightBottomTextArea = new JTextArea();
 
-        imageLabel = new JLabel();
-        imageLabel.setBackground(new Color(200,10,10));
-        imageLabel.setForeground(new Color(20,10,10));
-        imageLabel.setPreferredSize(new Dimension(220, 105));
-        imageLabel.setMaximumSize(new Dimension(220, 105));
-
-//        textInfoLabel = new JLabel("new data");
-//        textInfoLabel.setPreferredSize(new Dimension(220, 105));
-//        textInfoLabel.setMaximumSize(new Dimension(220, 105));
-
-//        commentToggleButton = new JButton("Закомментировать строки\';\'");
-//        commentToggleButton.setMaximumSize(new Dimension(220, 30));
-//        commentBlockToggleButton = new JButton("Закомментировать блок\';\'");
-//        commentBlockToggleButton.setEnabled(false);
-//        conditionToggleButton = new JButton("Вкл\\Выкл условн. инстр. IF THEN");
-//        conditionToggleButton.setToolTipText("Оборачивает строку или выделенные строки IF THEN ... IF");
-//        conditionOnBlockToggleButton = new JButton("Вкл\\Выкл условн. инстр. блок IF THEN");
-//        conditionOnBlockToggleButton.setMaximumSize(new Dimension(220, 30));
-//        conditionOnBlockToggleButton.setToolTipText("Оборачивает блок кода IF THEN ... IF");
-//        deleteBlockButton = new JButton("Резерв");
 
         commentToggleButton.setActionCommand("commLine");
         commentBlockToggleButton.setActionCommand("commBlock");
@@ -253,9 +231,14 @@ public class MainWindow extends JFrame implements ActionListener {
                 + "    Words: " + mainTextArea.getText().trim().split("\\s+").length + " ]");
     }
 
+    private void setInfoAboutGProgram() {
+        leftInfoAboutGProgram.setText("Length: " + mainTextArea.getText().length()
+                + "    Lines: " + (mainTextArea.getText() + "|").split("\n").length);
+    }
+
     private void setCenterTextArea() {
 //        mainPanel.add(scrollPane, BorderLayout.CENTER);
-          mainScrollPane.add(mainTextArea);
+        mainScrollPane.add(mainTextArea);
     }
 
     private void setToPreferredSizeFrame() {
@@ -290,14 +273,17 @@ public class MainWindow extends JFrame implements ActionListener {
         bottomTextArea.setBackground(color);
         bottomTextArea.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         bottomTextArea.setFont(new Font("Tahoma", Font.BOLD, 11));
-//        bottomPanel.add(bottomTextArea);
     }
 
     void setInfoTextToBottomLabels(AdditionalInformation info) {
         ArrayList<String> arrayList = info.getDataFromAdditionalFiles();
         List<Color> errorColor = info.getColorOfError();
+
         createBottomLabels(leftBottomTextArea, arrayList.get(0), errorColor.get(0));
+        bottomInfoPanel.setLeftComponent(leftBottomTextArea);
         createBottomLabels(rightBottomTextArea, arrayList.get(1), errorColor.get(1));
+        bottomInfoPanel.setRightComponent(rightBottomTextArea);
+
     }
 
     private void setVisualStyleOfProgram(int n) {
@@ -307,7 +293,7 @@ public class MainWindow extends JFrame implements ActionListener {
             SwingUtilities.updateComponentTreeUI(this);
             pack();
         } catch (Exception e) {
-            log.error("",e);
+            log.error("", e);
         }
     }
 
@@ -335,14 +321,10 @@ public class MainWindow extends JFrame implements ActionListener {
     void setProgram(ControlProgramFile c) {
         controlProgramFile = c;
         mainTextArea = new TextAreaWithStyles(controlProgramFile.getDataFromFile());    //getDataFromFile  читает файл в список, getStringDataFromFile читает в строку
-//        mainScrollPane = new JScrollPane(mainTextArea);
-//        textArea1.setText(",f,fufkf vfuff");
-        JTextArea t = new JTextArea("asdfasf") ;
-//        textPane1.setText("afkhaf;aogf;jha;gf;ajhgf;ahg;ha;klgag");
-//        mainScrollPane.add(t);
+        mainScrollPane.setViewportView(mainTextArea);
         mainTextArea.loadText();
         showImageOfProgram();
-//        setCenterTextArea();
+        setInfoAboutGProgram();
         setAddTitle(controlProgramFile.getFileName());
         setVisibleMenuItem(true);
     }
