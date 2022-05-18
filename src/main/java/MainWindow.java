@@ -159,28 +159,6 @@ public class MainWindow extends JFrame implements ActionListener {
         conditionToggleButton.setActionCommand("condiLines");
         conditionOnBlockToggleButton.setActionCommand("condiBlock");
 
-//        rightPanel = new JPanel();
-//        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS)); //   new BoxLayout(rightPanel, BoxLayout.Y_AXIS)
-//        rightPanel.setBackground(new Color(176, 181, 176));
-//
-//        rightPanel.add(imageLabel);
-//        rightPanel.add(commentToggleButton);
-//        rightPanel.add(commentBlockToggleButton);
-//        rightPanel.add(conditionToggleButton);
-//        rightPanel.add(conditionOnBlockToggleButton);
-//        rightPanel.add(deleteBlockButton);
-//        rightPanel.add(textInfoLabel);
-//
-        //ОПРЕДЕЛЕНИЕ НИЖНЕГО ПОЛЯ . Boreder SOUTH
-//        bottomPanel = new JPanel();
-//        bottomPanel.setLayout(new GridLayout(1, 2));
-
-        //  Указываем диспечер компановки
-//        mainPanel.setLayout(new BorderLayout());
-//
-//        mainPanel.add(jToolBar, BorderLayout.NORTH);
-//        mainPanel.add(rightPanel, BorderLayout.EAST);
-//        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
         setVisualStyleOfProgram(3);    //  Введите число от 0 до 3 для смены внешнего вида программы
@@ -225,15 +203,14 @@ public class MainWindow extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private void setAddTitle(String name) {
-        setTitle(name + "     | " + "     [ Length: " + mainTextArea.getText().length()
-                + "    Lines: " + (mainTextArea.getText() + "|").split("\n").length
-                + "    Words: " + mainTextArea.getText().trim().split("\\s+").length + " ]");
+    private void setAddTitle() {
+        setTitle("MorbProgEditor"+"         [  "+fc.getSelectedFile()+"  ]");
     }
 
     private void setInfoAboutGProgram() {
         leftInfoAboutGProgram.setText("Length: " + mainTextArea.getText().length()
-                + "    Lines: " + (mainTextArea.getText() + "|").split("\n").length);
+                + "    Lines: " + (mainTextArea.getText() + "|").split("\n").length
+                + "    Words: " + mainTextArea.getText().trim().split("\\s+").length );
     }
 
     private void setCenterTextArea() {
@@ -310,10 +287,9 @@ public class MainWindow extends JFrame implements ActionListener {
     }
 
     void clearAndCloseTextPane() {
-        mainTextArea.clearTextPane();
-        mainTextArea = null;
-        mainPanel.remove(mainScrollPane);
-        mainScrollPane = null;
+//        mainTextArea.clearTextPane();
+//        System.out.println("*****");
+        mainScrollPane.removeAll();
         MainWindow.this.repaint();
         setVisibleMenuItem(false);
     }
@@ -325,7 +301,7 @@ public class MainWindow extends JFrame implements ActionListener {
         mainTextArea.loadText();
         showImageOfProgram();
         setInfoAboutGProgram();
-        setAddTitle(controlProgramFile.getFileName());
+        setAddTitle();
         setVisibleMenuItem(true);
     }
 
