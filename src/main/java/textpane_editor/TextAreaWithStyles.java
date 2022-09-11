@@ -398,7 +398,7 @@ public class TextAreaWithStyles extends JTextPane {
             if (!fText.isEmpty()) {
                 listGCommands.add(val[0], "IF " + fText + "=" + sText + " THEN");
                 listGCommands.add(val[1] + 2, "FI");
-                if (checkBox == true) {
+                if (checkBox) {
                     listGCommands.add(1, "PAR " + fText + "=" + sText + "\" \"");
                 }
                 TextAreaWithStyles.this.loadText();
